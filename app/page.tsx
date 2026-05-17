@@ -6,11 +6,22 @@ export default function Home() {
 
       <section className="relative h-screen overflow-hidden">
 
-        <img
-          src="/hero.jpg"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover object-[65%_center] md:object-center"
-        />
+        <>
+  {/* DESKTOP */}
+  <img
+    src="/hero.jpg"
+    alt=""
+    className="absolute inset-0 hidden h-full w-full object-cover object-center md:block"
+  />
+
+  {/* MOBILE */}
+  <img
+    src="/hero-mobile.jpg"
+    alt=""
+    className="absolute inset-0 block h-full w-full object-cover object-center md:hidden"
+  />
+</>
+    
 
         <div className="absolute inset-0 bg-black/55" />
 
