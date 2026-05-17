@@ -9,7 +9,7 @@ export default function Home() {
         <img
           src="/hero.jpg"
           alt=""
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          className="absolute inset-0 h-full w-full object-cover object-[65%_center] md:object-center"
         />
 
         <div className="absolute inset-0 bg-black/55" />
