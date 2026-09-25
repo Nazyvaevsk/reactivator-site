@@ -169,31 +169,34 @@ export default function Home() {
     setIsSending(true);
 
     try {
-      const formData = new FormData();
-
-      formData.append("name", name.trim());
-      formData.append("phone", phone.trim());
-      formData.append("description", description.trim());
-
-      for (const photo of photos) {
+      for (let i = 0; i < photos.length; i++) {
+        const photo = photos[i];
         const preparedPhoto = await preparePhotoForUpload(photo);
 
         console.log(
-          `Фото ${photo.name}: ${(photo.size / 1024 / 1024).toFixed(2)} MB → ${(preparedPhoto.size / 1024 / 1024).toFixed(2)} MB`
+          `Фото ${i + 1}/${photos.length} ${photo.name}: ${(photo.size / 1024 / 1024).toFixed(2)} MB → ${(preparedPhoto.size / 1024 / 1024).toFixed(2)} MB`
         );
 
-        formData.append("photos", preparedPhoto);
-      }
+        const formData = new FormData();
 
-      const response = await fetch("/api/send-telegram", {
-        method: "POST",
-        body: formData,
-      });
+        formData.append("name", name.trim());
+        formData.append("phone", phone.trim());
+        formData.append("description", description.trim());
+        formData.append("photo", preparedPhoto);
+        formData.append("sendMessage", i === 0 ? "true" : "false");
 
-      const result = await response.json();
+        const response = await fetch("/api/send-telegram", {
+          method: "POST",
+          body: formData,
+        });
 
-      if (!response.ok) {
-        throw new Error(result.error || "Ошибка отправки");
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            result.error || `Не удалось отправить фотографию ${i + 1}`
+          );
+        }
       }
 
       setIsSent(true);
@@ -210,12 +213,15 @@ export default function Home() {
       });
     } catch (error) {
       console.error(error);
-      alert("Не удалось отправить заявку. Попробуйте ещё раз.");
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Не удалось отправить заявку. Попробуйте ещё раз."
+      );
     } finally {
       setIsSending(false);
     }
   };
-
   const closeForm = () => {
     if (isSending) return;
 
