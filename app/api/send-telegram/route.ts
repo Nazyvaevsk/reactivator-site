@@ -1,77 +1,4 @@
 ﻿import { NextRequest, NextResponse } from "next/server";
-import sharp from "sharp";
-
-const MAX_TELEGRAM_PHOTO_SIZE = 9 * 1024 * 1024;
-
-async function preparePhoto(file: File): Promise<File> {
-  const originalBuffer = Buffer.from(await file.arrayBuffer());
-
-  if (originalBuffer.length <= MAX_TELEGRAM_PHOTO_SIZE) {
-    return file;
-  }
-
-  let width = 2560;
-
-  const qualities = [82, 75, 68, 60, 52, 45];
-
-  for (const quality of qualities) {
-    const compressed = await sharp(originalBuffer)
-      .rotate()
-      .resize({
-        width,
-        height: width,
-        fit: "inside",
-        withoutEnlargement: true,
-      })
-      .jpeg({
-        quality,
-        mozjpeg: true,
-      })
-      .toBuffer();
-
-    if (compressed.length <= MAX_TELEGRAM_PHOTO_SIZE) {
-      return new File(
-        [compressed],
-        `${file.name.replace(/\.[^.]+$/, "")}.jpg`,
-        {
-          type: "image/jpeg",
-        }
-      );
-    }
-  }
-
-  width = 2048;
-
-  for (const quality of [70, 60, 50, 40]) {
-    const compressed = await sharp(originalBuffer)
-      .rotate()
-      .resize({
-        width,
-        height: width,
-        fit: "inside",
-        withoutEnlargement: true,
-      })
-      .jpeg({
-        quality,
-        mozjpeg: true,
-      })
-      .toBuffer();
-
-    if (compressed.length <= MAX_TELEGRAM_PHOTO_SIZE) {
-      return new File(
-        [compressed],
-        `${file.name.replace(/\.[^.]+$/, "")}.jpg`,
-        {
-          type: "image/jpeg",
-        }
-      );
-    }
-  }
-
-  throw new Error(
-    `Не удалось сжать фотографию "${file.name}" до допустимого размера`
-  );
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -132,20 +59,14 @@ export async function POST(request: NextRequest) {
 
     for (const photo of photos) {
       try {
-        const preparedPhoto = await preparePhoto(photo);
-
         console.log(
-          `Фото ${photo.name}: ${(photo.size / 1024 / 1024).toFixed(2)} MB → ${(preparedPhoto.size / 1024 / 1024).toFixed(2)} MB`
+          `Фото ${photo.name}: ${(photo.size / 1024 / 1024).toFixed(2)} MB`
         );
 
         const telegramForm = new FormData();
 
         telegramForm.append("chat_id", chatId);
-        telegramForm.append(
-          "photo",
-          preparedPhoto,
-          preparedPhoto.name
-        );
+        telegramForm.append("photo", photo, photo.name);
 
         const photoResponse = await fetch(
           `https://api.telegram.org/bot${token}/sendPhoto`,
