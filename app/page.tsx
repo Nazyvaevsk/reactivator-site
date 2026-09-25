@@ -12,6 +12,9 @@ export default function Home() {
   const [description, setDescription] = useState("");
   const [photos, setPhotos] = useState<File[]>([]);
 
+  const MAX_PHOTOS = 10;
+  const MAX_TOTAL_PHOTO_SIZE = 100 * 1024 * 1024;
+
   const [errors, setErrors] = useState({
     name: "",
     phone: "",
@@ -22,14 +25,39 @@ export default function Home() {
   const handlePhotosChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
 
+    const totalSize = files.reduce(
+      (sum, file) => sum + file.size,
+      0
+    );
+
+    if (files.length > MAX_PHOTOS) {
+      setPhotos([]);
+      setErrors((prev) => ({
+        ...prev,
+        photos: "Можно выбрать не более 10 фотографий",
+      }));
+      return;
+    }
+
+    if (totalSize > MAX_TOTAL_PHOTO_SIZE) {
+      setPhotos([]);
+      setErrors((prev) => ({
+        ...prev,
+        photos: "Общий размер фотографий не должен превышать 100 МБ",
+      }));
+      return;
+    }
+
     setPhotos(files);
 
     setErrors((prev) => ({
       ...prev,
-      photos: files.length > 0 ? "" : "Добавьте хотя бы одну фотографию",
+      photos:
+        files.length > 0
+          ? ""
+          : "Добавьте хотя бы одну фотографию",
     }));
   };
-
   const validateForm = () => {
     const newErrors = {
       name: "",
@@ -50,8 +78,18 @@ export default function Home() {
       newErrors.phone = "Введите корректный номер телефона";
     }
 
+    const totalPhotoSize = photos.reduce(
+      (sum, file) => sum + file.size,
+      0
+    );
+
     if (photos.length === 0) {
       newErrors.photos = "Добавьте хотя бы одну фотографию";
+    } else if (photos.length > MAX_PHOTOS) {
+      newErrors.photos = "Можно выбрать не более 10 фотографий";
+    } else if (totalPhotoSize > MAX_TOTAL_PHOTO_SIZE) {
+      newErrors.photos =
+        "Общий размер фотографий не должен превышать 100 МБ";
     }
 
     if (!description.trim()) {
@@ -521,7 +559,7 @@ export default function Home() {
                     </p>
                   ) : (
                     <p className="mt-2 text-sm text-zinc-600">
-                      Можно выбрать несколько фотографий.
+                      До 10 фотографий, общий размер — до 100 МБ.
                     </p>
                   )}
 

@@ -1,4 +1,8 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+
+const MAX_PHOTOS = 10;
+const MAX_TOTAL_PHOTO_SIZE = 100 * 1024 * 1024;
+const MAX_SINGLE_PHOTO_SIZE = 10 * 1024 * 1024;
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,6 +28,32 @@ export async function POST(request: NextRequest) {
         (item): item is File =>
           item instanceof File && item.size > 0
       );
+
+    if (photos.length > MAX_PHOTOS) {
+      return NextResponse.json(
+        { error: "Можно отправить не более 10 фотографий" },
+        { status: 400 }
+      );
+    }
+
+    const totalPhotoSize = photos.reduce(
+      (sum, photo) => sum + photo.size,
+      0
+    );
+
+    if (totalPhotoSize > MAX_TOTAL_PHOTO_SIZE) {
+      return NextResponse.json(
+        { error: "Общий размер фотографий не должен превышать 100 МБ" },
+        { status: 400 }
+      );
+    }
+
+    if (photos.some((photo) => photo.size > MAX_SINGLE_PHOTO_SIZE)) {
+      return NextResponse.json(
+        { error: "Размер одной фотографии не должен превышать 10 МБ" },
+        { status: 400 }
+      );
+    }
 
     let message = "🚗 НОВАЯ ЗАЯВКА С САЙТА\n\n";
     message += `👤 Имя: ${name || "не указано"}\n`;
