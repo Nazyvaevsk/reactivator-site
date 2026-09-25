@@ -63,6 +63,64 @@ export default function Home() {
     return !Object.values(newErrors).some(Boolean);
   };
 
+  const preparePhotoForUpload = async (file: File): Promise<File> => {
+    const MAX_SIZE = 8 * 1024 * 1024;
+
+    if (file.size <= MAX_SIZE) {
+      return file;
+    }
+
+    const bitmap = await createImageBitmap(file, {
+      imageOrientation: "from-image",
+    });
+
+    const qualities = [0.82, 0.75, 0.68, 0.60, 0.52, 0.45];
+    const sizes = [2560, 2304, 2048, 1800];
+
+    for (const maxSize of sizes) {
+      const scale = Math.min(1, maxSize / Math.max(bitmap.width, bitmap.height));
+
+      const width = Math.round(bitmap.width * scale);
+      const height = Math.round(bitmap.height * scale);
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext("2d");
+
+      if (!ctx) {
+        bitmap.close();
+        throw new Error("Не удалось подготовить фотографию");
+      }
+
+      ctx.drawImage(bitmap, 0, 0, width, height);
+
+      for (const quality of qualities) {
+        const blob = await new Promise<Blob | null>((resolve) =>
+          canvas.toBlob(resolve, "image/jpeg", quality)
+        );
+
+        if (blob && blob.size <= MAX_SIZE) {
+          bitmap.close();
+
+          return new File(
+            [blob],
+            `${file.name.replace(/\.[^.]+$/, "")}.jpg`,
+            {
+              type: "image/jpeg",
+            }
+          );
+        }
+      }
+    }
+
+    bitmap.close();
+
+    throw new Error(
+      `Не удалось уменьшить фотографию "${file.name}" до допустимого размера`
+    );
+  };
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -79,9 +137,15 @@ export default function Home() {
       formData.append("phone", phone.trim());
       formData.append("description", description.trim());
 
-      photos.forEach((photo) => {
-        formData.append("photos", photo);
-      });
+      for (const photo of photos) {
+        const preparedPhoto = await preparePhotoForUpload(photo);
+
+        console.log(
+          `Фото ${photo.name}: ${(photo.size / 1024 / 1024).toFixed(2)} MB → ${(preparedPhoto.size / 1024 / 1024).toFixed(2)} MB`
+        );
+
+        formData.append("photos", preparedPhoto);
+      }
 
       const response = await fetch("/api/send-telegram", {
         method: "POST",
