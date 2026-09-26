@@ -245,6 +245,46 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/55" />
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        <header className="absolute inset-x-0 top-0 z-20">
+          <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5">
+            <a
+              href="/"
+              className="text-2xl font-black tracking-tight text-white"
+            >
+              <span className="text-orange-500">R</span>ЕАКТИВАТОР
+            </a>
+
+            <nav className="hidden items-center gap-10 md:flex">
+              <a href="/services" className="text-sm text-white transition hover:text-orange-500">
+                Услуги
+              </a>
+              <a href="/technology" className="text-sm text-white transition hover:text-orange-500">
+                Технология
+              </a>
+              <a href="/works" className="text-sm text-white transition hover:text-orange-500">
+                Примеры работ
+              </a>
+              <a href="/about" className="text-sm text-white transition hover:text-orange-500">
+                О нас
+              </a>
+              <a href="/contacts" className="text-sm text-white transition hover:text-orange-500">
+                Контакты
+              </a>
+            </nav>
+
+            <button
+              type="button"
+              onClick={() => {
+                setIsFormOpen(true);
+                setIsSent(false);
+              }}
+              className="rounded-2xl bg-orange-500 px-7 py-3 text-sm font-semibold text-white transition hover:bg-orange-400"
+            >
+              Записаться
+            </button>
+          </div>
+        </header>
+
 
         <div className="relative z-10 flex h-full items-end">
 
@@ -281,120 +321,6 @@ export default function Home() {
             <p className="mt-4 max-w-md text-sm leading-relaxed text-zinc-400">
               Предварительная оценка повреждений и стоимости восстановления по фото
             </p>
-
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* CASES */}
-
-      <section className="bg-black px-6 py-20">
-
-        <div className="mx-auto max-w-7xl">
-
-          <div className="mb-12">
-
-            <p className="mb-3 text-xs uppercase tracking-[0.3em] text-zinc-500">
-              Реальные случаи
-            </p>
-
-            <h2 className="text-4xl font-bold md:text-5xl">
-              Геометрия кузова
-            </h2>
-
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2">
-
-            <div className="overflow-hidden rounded-3xl bg-zinc-950">
-              <img
-                src="/case1.jpg"
-                alt=""
-                className="block w-full transition duration-500 hover:scale-[1.02]"
-              />
-            </div>
-
-            <div className="overflow-hidden rounded-3xl bg-zinc-950">
-              <img
-                src="/case2.jpg"
-                alt=""
-                className="block w-full transition duration-500 hover:scale-[1.02]"
-              />
-            </div>
-
-            <div className="overflow-hidden rounded-3xl bg-zinc-950">
-              <img
-                src="/case3.jpg"
-                alt=""
-                className="block w-full transition duration-500 hover:scale-[1.02]"
-              />
-            </div>
-
-            <div className="overflow-hidden rounded-3xl bg-zinc-950">
-              <img
-                src="/case4.jpg"
-                alt=""
-                className="block w-full transition duration-500 hover:scale-[1.02]"
-              />
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* CONTACTS */}
-
-      <section className="bg-black px-6 py-24">
-
-        <div className="mx-auto max-w-7xl">
-
-          <p className="mb-4 text-xs uppercase tracking-[0.4em] text-zinc-500">
-            Контакты
-          </p>
-
-          <h2 className="mb-16 text-4xl font-bold md:text-6xl">
-            Реактиватор
-          </h2>
-
-          <div className="space-y-6 text-lg text-zinc-300">
-
-            <a
-              href="https://2gis.ru/omsk/geo/70000001105268013"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block transition hover:text-white"
-            >
-              📍 Омск, 3-я Молодежная 81/2
-            </a>
-
-            <a
-              href="https://t.me/reaktivator_IA"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block transition hover:text-white"
-            >
-              ✈️ Telegram — @reaktivator_IA
-            </a>
-
-            <a
-              href="https://wa.me/79994547470"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block transition hover:text-white"
-            >
-              💬 WhatsApp — 89994547470
-            </a>
-
-            <a
-              href="tel:+79994547470"
-              className="block transition hover:text-white"
-            >
-              📞 Телефон — 89994547470
-            </a>
 
           </div>
 
