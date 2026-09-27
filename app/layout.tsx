@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "",
+  title: "Реактиватор",
   description: "Восстановление геометрии кузова после ДТП",
 };
 

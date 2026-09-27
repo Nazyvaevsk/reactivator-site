@@ -315,15 +315,27 @@ export default function Home() {
               восстановление геометрии и контроль размеров.
             </p>
 
-            <button
+                        <button
               type="button"
               onClick={() => {
                 setIsFormOpen(true);
                 setIsSent(false);
               }}
-              className="w-full rounded-2xl bg-white px-8 py-5 text-lg text-black transition hover:bg-zinc-300 sm:w-auto"
+              className="group flex w-full items-center justify-center gap-4 rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)] sm:w-auto"
             >
-              Отправить фото повреждений
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="h-6 w-6">
+                  <path d="M4 8h3l1.5-2h7L17 8h3v10H4V8Z" />
+                  <circle cx="12" cy="13" r="3.2" />
+                </svg>
+              </span>
+
+              <span>Отправить фото повреждений</span>
+
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 text-orange-500 transition-colors group-hover:text-white">
+                <path d="M5 12h13" />
+                <path d="m13 6 6 6-6 6" />
+              </svg>
             </button>
 
             <p className="mt-4 max-w-md text-sm leading-relaxed text-zinc-400">
