@@ -299,7 +299,7 @@ export default function Home() {
             </p>
 
             <h1 className="mb-8 text-5xl font-black leading-none tracking-[-0.03em] md:text-7xl">
-              Реактиватор
+              <span className="text-orange-500">R</span>еактиватор
             </h1>
 
             <h2 className="mb-6 max-w-3xl text-4xl font-bold leading-[1.02] tracking-[-0.02em] md:text-6xl">
