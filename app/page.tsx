@@ -288,19 +288,21 @@ export default function Home() {
 
         <div className="relative z-10 flex h-full items-end">
 
-          <div className="mx-auto w-full max-w-7xl px-6 pb-16 md:pb-24">
+          <div className="mx-auto w-full max-w-7xl px-6 pb-10 md:pb-16">
 
             <p className="mb-5 text-xs uppercase tracking-[0.45em] text-zinc-300">
               Омск
             </p>
 
-            <h1 className="mb-6 text-5xl font-bold leading-none md:text-8xl">
+            <h1 className="mb-4 text-5xl font-black leading-none tracking-[-0.03em] md:text-7xl">
               Реактиватор
             </h1>
 
-            <p className="mb-5 max-w-4xl text-2xl text-zinc-100 md:text-5xl">
-              Восстановление геометрии кузова после ДТП
-            </p>
+            <h2 className="mb-6 max-w-3xl text-4xl font-bold leading-[1.02] tracking-[-0.02em] md:text-6xl">
+              <span className="block text-white">Восстановление</span>
+              <span className="block text-orange-500">геометрии кузова</span>
+              <span className="block text-white md:text-5xl">после ДТП</span>
+            </h2>
 
             <p className="mb-10 max-w-2xl text-base leading-relaxed text-zinc-200 md:text-lg">
               Сложные ДТП, перекосы кузова, нарушение силовой структуры,
