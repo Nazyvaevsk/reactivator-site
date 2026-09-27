@@ -254,7 +254,7 @@ export default function Home() {
               <img
                 src="/logo.png"
                 alt="Reactivator"
-                className="h-16 w-auto object-contain"
+                className="h-12 w-auto translate-x-32 object-contain"
               />
             </a>
 
