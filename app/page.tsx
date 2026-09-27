@@ -288,13 +288,13 @@ export default function Home() {
 
         <div className="relative z-10 flex h-full items-end">
 
-          <div className="mx-auto w-full max-w-7xl px-6 pb-10 md:pb-16">
+          <div className="mx-auto w-full max-w-7xl px-6 pb-10 md:pb-16 md:pl-20">
 
             <p className="mb-5 text-xs uppercase tracking-[0.45em] text-zinc-300">
               Омск
             </p>
 
-            <h1 className="mb-4 text-5xl font-black leading-none tracking-[-0.03em] md:text-7xl">
+            <h1 className="mb-8 text-5xl font-black leading-none tracking-[-0.03em] md:text-7xl">
               Реактиватор
             </h1>
 
