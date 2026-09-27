@@ -249,9 +249,13 @@ export default function Home() {
           <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5">
             <a
               href="/"
-              className="text-2xl font-black tracking-tight text-white"
+              className="block"
             >
-              <span className="text-orange-500">R</span>ЕАКТИВАТОР
+              <img
+                src="/logo.png"
+                alt="Reactivator"
+                className="h-16 w-auto object-contain"
+              />
             </a>
 
             <nav className="hidden items-center gap-10 md:flex">
