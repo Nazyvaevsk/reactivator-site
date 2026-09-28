@@ -1,4 +1,34 @@
-﻿export default function ServicesPage() {
+"use client";
+
+import { useEffect, useState } from "react";
+
+export default function ServicesPage() {
+  const [pageViewport, setPageViewport] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
+
+  useEffect(() => {
+    const baseDpr = window.devicePixelRatio || 1;
+
+    const syncPageViewport = () => {
+      const currentDpr = window.devicePixelRatio || baseDpr;
+      const zoomRatio = currentDpr / baseDpr;
+
+      setPageViewport({
+        width: Math.round(window.innerWidth * zoomRatio),
+        height: Math.round(window.innerHeight * zoomRatio),
+      });
+    };
+
+    syncPageViewport();
+
+    window.addEventListener("resize", syncPageViewport);
+
+    return () => {
+      window.removeEventListener("resize", syncPageViewport);
+    };
+  }, []);
   const services = [
     {
       number: "01",
@@ -29,8 +59,12 @@
   return (
     <main className="min-h-screen bg-black text-white">
       <section
-        className="relative min-h-[56.25vw] w-full overflow-hidden bg-black"
+        className="relative mx-auto overflow-hidden bg-black"
         style={{
+          width: pageViewport ? `${pageViewport.width}px` : "100vw",
+          minHeight: pageViewport
+            ? `${Math.round(pageViewport.width * 0.5625)}px`
+            : "56.25vw",
           backgroundImage: "url('/hero.jpg')",
           backgroundSize: "100% 100%",
           backgroundPosition: "center top",
