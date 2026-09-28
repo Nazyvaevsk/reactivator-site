@@ -70,9 +70,14 @@ export default function ServicesPage() {
           backgroundPosition: "center top",
         }}
       >
-        <div className="absolute inset-x-0 top-0 z-0 h-[620px] bg-gradient-to-b from-black/70 via-black/52 to-black/35" />
-
-        <div className="absolute inset-x-0 bottom-0 top-[55%] z-0 bg-gradient-to-r from-black via-black/95 to-black/50" />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, #000 0%, rgba(0,0,0,0.85) 12%, rgba(0,0,0,0.45) 32%, transparent 65%), linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.85) 100%)",
+          }}
+        />
 
         <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-8 pt-32 md:px-10 md:pt-32">
           <div className="max-w-[900px]">
