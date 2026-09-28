@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useApplicationForm } from "../ApplicationFormProvider";
 
 export default function ServicesPage() {
+  const openForm = useApplicationForm();
   const [pageViewport, setPageViewport] = useState<{
     width: number;
     height: number;
@@ -92,21 +94,19 @@ export default function ServicesPage() {
               и контролируем размеры автомобиля на каждом этапе ремонта.
             </p>
 
-            <a
-              href="/"
-              className="group mt-6 inline-flex items-center gap-4 rounded-2xl bg-white px-6 py-4 font-semibold text-black shadow-[0_0_30px_rgba(255,105,0,0.22)] transition-all duration-200 hover:bg-orange-500 hover:text-white"
+            <button type="button" onClick={openForm}
+              className="group mt-6 inline-flex items-center justify-center gap-4 rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)]"
             >
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-orange-500 text-white transition-colors duration-200 group-hover:bg-white group-hover:text-orange-500">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500">
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
-                  className="h-7 w-7"
+                  strokeWidth="2.2"
+                  className="h-6 w-6"
                 >
-                  <rect x="3" y="6" width="18" height="14" rx="3" />
-                  <circle cx="12" cy="13" r="3.5" />
-                  <path d="M8 6l1.5-2h5L16 6" />
+                  <path d="M4 8h3l1.5-2h7L17 8h3v10H4V8Z" />
+                  <circle cx="12" cy="13" r="3.2" />
                 </svg>
               </span>
 
@@ -117,12 +117,12 @@ export default function ServicesPage() {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
-                className="h-6 w-6 text-orange-500 transition-colors duration-200 group-hover:text-white group-hover:translate-x-1"
+                className="h-5 w-5 text-orange-500 transition-colors group-hover:text-white"
               >
-                <path d="M5 12h14" />
+                <path d="M5 12h13" />
                 <path d="m13 6 6 6-6 6" />
               </svg>
-            </a>
+            </button>
           </div>
 
           <div className="mt-3 grid gap-3 md:grid-cols-2">
@@ -213,21 +213,19 @@ export default function ServicesPage() {
                 </div>
               </div>
 
-              <a
-                href="/"
-                className="group hidden shrink-0 items-center gap-4 rounded-2xl bg-white px-7 py-4 font-semibold text-black transition-all duration-200 hover:bg-orange-500 hover:text-white md:flex"
+              <button type="button" onClick={openForm}
+                className="group hidden shrink-0 items-center justify-center gap-4 rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)] md:flex"
               >
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500">
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="2"
-                    className="h-7 w-7"
+                    strokeWidth="2.2"
+                    className="h-6 w-6"
                   >
-                    <rect x="3" y="6" width="18" height="14" rx="3" />
-                    <circle cx="12" cy="13" r="3.5" />
-                    <path d="M8 6l1.5-2h5L16 6" />
+                    <path d="M4 8h3l1.5-2h7L17 8h3v10H4V8Z" />
+                    <circle cx="12" cy="13" r="3.2" />
                   </svg>
                 </span>
 
@@ -238,12 +236,12 @@ export default function ServicesPage() {
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
-                  className="h-6 w-6 text-orange-500 transition-colors group-hover:text-white group-hover:translate-x-1"
+                  className="h-5 w-5 text-orange-500 transition-colors group-hover:text-white"
                 >
-                  <path d="M5 12h14" />
+                  <path d="M5 12h13" />
                   <path d="m13 6 6 6-6 6" />
                 </svg>
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -251,18 +249,6 @@ export default function ServicesPage() {
     </main>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

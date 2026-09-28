@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useApplicationForm } from "../ApplicationFormProvider";
 
 export default function ContactsPage() {
+  const openForm = useApplicationForm();
   const [pageViewport, setPageViewport] = useState<{
     width: number;
     height: number;
@@ -102,12 +104,11 @@ export default function ContactsPage() {
             обсудить автомобиль и дальнейшие действия.
           </p>
 
-          <a
-            href="/"
+          <button type="button" onClick={openForm}
             className="mt-6 inline-flex items-center justify-center rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)]"
           >
             Отправить фото повреждений
-          </a>
+          </button>
         </div>
         </div>
       </section>
