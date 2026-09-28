@@ -36,7 +36,11 @@
           backgroundPosition: "center top",
         }}
       >
-        <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-8 pt-40 md:px-10 md:pt-44">
+        <div className="absolute inset-x-0 top-0 z-0 h-[620px] bg-gradient-to-b from-black/70 via-black/52 to-black/35" />
+
+        <div className="absolute inset-x-0 bottom-0 top-[560px] z-0 bg-gradient-to-r from-black via-black/95 to-black/50" />
+
+        <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-8 pt-32 md:px-10 md:pt-32">
           <div className="max-w-[900px]">
             <p className="text-xs uppercase tracking-[0.45em] text-orange-500 md:text-sm">
               Реактиватор · Омск
@@ -86,7 +90,7 @@
             </a>
           </div>
 
-          <div className="mt-10 grid gap-3 md:grid-cols-2">
+          <div className="mt-3 grid gap-3 md:grid-cols-2">
             {services.map((service) => (
               <article
                 key={service.number}
@@ -210,4 +214,24 @@
     </main>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
