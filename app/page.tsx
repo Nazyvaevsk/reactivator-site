@@ -1,11 +1,42 @@
 "use client";
 
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 
 export default function Home() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [isSent, setIsSent] = useState(false);
+
+  const [heroViewport, setHeroViewport] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
+
+  useEffect(() => {
+    const baseDpr = window.devicePixelRatio || 1;
+
+    const syncHeroViewport = () => {
+      const currentDpr = window.devicePixelRatio || baseDpr;
+
+      // При browser zoom innerWidth/innerHeight меняются,
+      // а devicePixelRatio меняется в противоположную сторону.
+      // Их произведение сохраняет реальный размер окна.
+      const zoomRatio = currentDpr / baseDpr;
+
+      setHeroViewport({
+        width: Math.round(window.innerWidth * zoomRatio),
+        height: Math.round(window.innerHeight * zoomRatio),
+      });
+    };
+
+    syncHeroViewport();
+
+    window.addEventListener("resize", syncHeroViewport);
+
+    return () => {
+      window.removeEventListener("resize", syncHeroViewport);
+    };
+  }, []);
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -234,7 +265,20 @@ export default function Home() {
 
       {/* HERO */}
 
-      <section className="relative h-screen overflow-hidden">
+      <section
+        className="relative mx-auto overflow-hidden"
+        style={
+          heroViewport
+            ? {
+                width: `${heroViewport.width}px`,
+                height: `${heroViewport.height}px`,
+              }
+            : {
+                width: "100vw",
+                height: "100vh",
+              }
+        }
+      >
 
         <img
           src="/hero.jpg"
