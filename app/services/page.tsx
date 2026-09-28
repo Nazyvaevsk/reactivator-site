@@ -55,9 +55,9 @@
 
             <a
               href="/"
-              className="group mt-6 inline-flex items-center gap-3 rounded-2xl bg-orange-500 px-6 py-4 font-semibold text-white shadow-[0_0_30px_rgba(255,105,0,0.22)] transition-all duration-200 hover:bg-white hover:text-orange-500"
+              className="group mt-6 inline-flex items-center gap-4 rounded-2xl bg-white px-6 py-4 font-semibold text-black shadow-[0_0_30px_rgba(255,105,0,0.22)] transition-all duration-200 hover:bg-orange-500 hover:text-white"
             >
-              <span className="flex h-9 w-9 items-center justify-center">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-orange-500 text-white transition-colors duration-200 group-hover:bg-white group-hover:text-orange-500">
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -78,7 +78,7 @@
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
-                className="h-6 w-6 transition-transform duration-200 group-hover:translate-x-1"
+                className="h-6 w-6 text-orange-500 transition-colors duration-200 group-hover:text-white group-hover:translate-x-1"
               >
                 <path d="M5 12h14" />
                 <path d="m13 6 6 6-6 6" />
@@ -176,19 +176,21 @@
 
               <a
                 href="/"
-                className="group hidden shrink-0 items-center gap-4 rounded-2xl bg-orange-500 px-7 py-4 font-semibold text-white transition-all duration-200 hover:bg-white hover:text-orange-500 md:flex"
+                className="group hidden shrink-0 items-center gap-4 rounded-2xl bg-white px-7 py-4 font-semibold text-black transition-all duration-200 hover:bg-orange-500 hover:text-white md:flex"
               >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  className="h-7 w-7"
-                >
-                  <rect x="3" y="6" width="18" height="14" rx="3" />
-                  <circle cx="12" cy="13" r="3.5" />
-                  <path d="M8 6l1.5-2h5L16 6" />
-                </svg>
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="h-7 w-7"
+                  >
+                    <rect x="3" y="6" width="18" height="14" rx="3" />
+                    <circle cx="12" cy="13" r="3.5" />
+                    <path d="M8 6l1.5-2h5L16 6" />
+                  </svg>
+                </span>
 
                 <span>Отправить фото повреждений</span>
 
@@ -197,7 +199,7 @@
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
-                  className="h-6 w-6 transition-transform group-hover:translate-x-1"
+                  className="h-6 w-6 text-orange-500 transition-colors group-hover:text-white group-hover:translate-x-1"
                 >
                   <path d="M5 12h14" />
                   <path d="m13 6 6 6-6 6" />
@@ -210,6 +212,18 @@
     </main>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
