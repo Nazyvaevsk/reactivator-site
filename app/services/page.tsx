@@ -29,24 +29,20 @@
   return (
     <main className="min-h-screen bg-black text-white">
       <section
-        className="relative min-h-[1080px] w-full overflow-hidden"
+        className="relative min-h-[56.25vw] w-full overflow-hidden bg-black"
         style={{
           backgroundImage: "url('/hero.jpg')",
-          backgroundSize: "cover",
+          backgroundSize: "100% 100%",
           backgroundPosition: "center top",
         }}
       >
         <div className="absolute inset-x-0 top-0 z-0 h-[620px] bg-gradient-to-b from-black/70 via-black/52 to-black/35" />
 
-        <div className="absolute inset-x-0 bottom-0 top-[560px] z-0 bg-gradient-to-r from-black via-black/95 to-black/50" />
+        <div className="absolute inset-x-0 bottom-0 top-[55%] z-0 bg-gradient-to-r from-black via-black/95 to-black/50" />
 
         <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-8 pt-32 md:px-10 md:pt-32">
           <div className="max-w-[900px]">
-            <p className="text-xs uppercase tracking-[0.45em] text-orange-500 md:text-sm">
-              Реактиватор · Омск
-            </p>
-
-            <h1 className="mt-5 max-w-[900px] text-5xl font-bold leading-[0.95] tracking-tight md:text-[64px]">
+<h1 className="max-w-[900px] text-5xl font-bold leading-[0.95] tracking-tight md:text-[64px]">
               Услуги по
               <br />
               <span className="text-orange-500">восстановлению</span> кузова
@@ -143,7 +139,7 @@
               style={{
                 backgroundImage:
                   "url('/case4.jpg')",
-                backgroundSize: "cover",
+                backgroundSize: "100% 100%",
                 backgroundPosition: "center",
               }}
             />
@@ -214,6 +210,14 @@
     </main>
   );
 }
+
+
+
+
+
+
+
+
 
 
 
