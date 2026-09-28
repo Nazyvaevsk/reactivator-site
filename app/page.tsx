@@ -261,7 +261,7 @@ export default function Home() {
   };
 
   return (
-    <main className="bg-black text-white">
+    <main className="overflow-x-clip bg-black text-white">
 
       {/* HERO */}
 
@@ -271,11 +271,11 @@ export default function Home() {
           heroViewport
             ? {
                 width: `${heroViewport.width}px`,
-                height: `${heroViewport.height}px`,
+                minHeight: `${heroViewport.height}px`,
               }
             : {
                 width: "100vw",
-                height: "100vh",
+                minHeight: "100vh",
               }
         }
       >
@@ -291,14 +291,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         <header className="absolute inset-x-0 top-0 z-20">
           <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5">
-            <a
-              href="/"
-              className="block"
-            >
-              <span className="ml-[10.8rem] text-lg font-medium uppercase tracking-[0.55em] text-white">
-                ОМСК
-              </span>
-            </a>
+            <div aria-hidden="true" className="w-[250px] shrink min-w-0" />
 
             <nav className="hidden items-center gap-10 md:flex">
               <a href="/services" className="text-sm text-white transition hover:text-orange-500">
@@ -332,40 +325,41 @@ export default function Home() {
         </header>
 
 
-        <div className="relative z-10 flex h-full items-end">
-
-          <div className="mx-auto w-full max-w-7xl px-6 pb-10 md:pb-16 md:pl-20">
-
-            <div className="mb-5">
-              <img
-                src="/logo.png"
-                alt="Reactivator"
-                className="h-12 w-auto translate-x-0 object-contain"
-              />
-            </div>
-
-            <h1 className="mb-8 text-5xl font-black leading-none tracking-[-0.03em] md:text-7xl">
+        <div className="pointer-events-none absolute inset-x-0 top-2 z-10">
+          <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-6 sm:px-10 lg:px-16">
+            <img
+              src="/logo.png"
+              alt="Reactivator"
+              className="h-[66px] w-auto shrink-0 object-contain"
+            />
+            <span className="shrink-0 whitespace-nowrap text-[15px] font-medium uppercase leading-none tracking-[0.4em] text-zinc-300">
+              ОМСК
+            </span>
+          </div>
+        </div>
+        <div className="relative z-10 flex min-h-[inherit] items-center">
+          <div className="mx-auto w-full max-w-7xl px-6 pb-10 pt-28 sm:px-10 lg:px-16">
+            <p className="mb-4 text-[48px] font-black leading-none tracking-[-0.03em]">
               <span className="text-orange-500">R</span>еактиватор
-            </h1>
-
-            <h2 className="mb-6 max-w-3xl text-4xl font-bold leading-[1.02] tracking-[-0.02em] md:text-6xl">
+            </p>
+            <h1 className="max-w-[780px] text-[clamp(2rem,4.7vw,4.25rem)] font-bold leading-[1.04] tracking-[-0.035em]">
               <span className="block text-white">Восстановление</span>
               <span className="block text-orange-500">геометрии кузова</span>
-              <span className="block text-white md:text-5xl">после ДТП</span>
-            </h2>
+              <span className="block text-white">после ДТП</span>
+            </h1>
 
-            <p className="mb-10 max-w-2xl text-base leading-relaxed text-zinc-200 md:text-lg">
+            <p className="mb-6 mt-5 max-w-[540px] text-base leading-relaxed text-zinc-200 md:text-lg">
               Сложные ДТП, перекосы кузова, нарушение силовой структуры,
               восстановление геометрии и контроль размеров.
             </p>
 
-                        <button
+            <button
               type="button"
               onClick={() => {
                 setIsFormOpen(true);
                 setIsSent(false);
               }}
-              className="group flex w-full items-center justify-center gap-4 rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)] sm:w-auto"
+              className="group flex w-full items-center justify-center gap-3 rounded-2xl bg-white px-5 py-4 text-sm sm:gap-4 sm:px-7 sm:text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)] sm:w-auto"
             >
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="h-6 w-6">
@@ -382,7 +376,7 @@ export default function Home() {
               </svg>
             </button>
 
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-zinc-400">
+            <p className="mt-3 max-w-[380px] text-xs leading-relaxed text-zinc-400 sm:text-sm">
               Предварительная оценка повреждений и стоимости восстановления по фото
             </p>
 
