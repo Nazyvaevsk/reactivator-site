@@ -28,7 +28,7 @@
 
   return (
     <main className="min-h-screen bg-black text-white">
-      <section className="mx-auto max-w-[1440px] px-6 pb-8 pt-8 md:px-10 md:pb-10 md:pt-8">
+      <section className="mx-auto max-w-[1440px] px-6 pb-5 pt-0 md:px-10 md:pb-6 md:pt-0">
 
         {/* HERO */}
         <div
@@ -91,7 +91,7 @@
         </div>
 
         {/* SERVICES */}
-        <div className="mt-5 grid gap-4 md:grid-cols-2">
+        <div className="mt-3 grid gap-3 md:grid-cols-2">
           {services.map((service) => (
             <article
               key={service.number}
@@ -137,7 +137,7 @@
         </div>
 
         {/* CTA */}
-        <div className="relative mt-5 overflow-hidden rounded-[22px] border border-orange-500/60 bg-[#170900]">
+        <div className="relative mt-3 overflow-hidden rounded-[22px] border border-orange-500/60 bg-[#170900]">
           <div
             className="absolute inset-y-0 right-0 w-[48%] opacity-30"
             style={{
@@ -212,3 +212,7 @@
     </main>
   );
 }
+
+
+
+

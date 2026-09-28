@@ -2,37 +2,55 @@
 
 export default function PagesHeader() {
   return (
-    <header className="border-b border-white/10 bg-black text-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-        <Link href="/" className="text-2xl font-black tracking-tight">
+    <header className="absolute left-0 top-0 z-50 w-full border-b border-white/10 bg-black/20 text-white backdrop-blur-[2px]">
+      <div className="mx-auto flex h-[74px] max-w-[1440px] items-center justify-between px-6 md:px-0">
+        <Link
+          href="/"
+          className="text-[25px] font-black tracking-tight"
+        >
           <span className="text-orange-500">R</span>ЕАКТИВАТОР
         </Link>
 
-        <nav className="hidden items-center gap-7 md:flex">
-          <Link href="/services" className="text-sm text-zinc-400 hover:text-white">
+        <nav className="hidden items-center gap-8 md:flex">
+          <Link
+            href="/services"
+            className="text-sm text-zinc-300 transition-colors hover:text-white"
+          >
             Услуги
           </Link>
 
-          <Link href="/technology" className="text-sm text-zinc-400 hover:text-white">
+          <Link
+            href="/technology"
+            className="text-sm text-zinc-300 transition-colors hover:text-white"
+          >
             Технология
           </Link>
 
-          <Link href="/works" className="text-sm text-zinc-400 hover:text-white">
+          <Link
+            href="/works"
+            className="text-sm text-zinc-300 transition-colors hover:text-white"
+          >
             Примеры работ
           </Link>
 
-          <Link href="/about" className="text-sm text-zinc-400 hover:text-white">
+          <Link
+            href="/about"
+            className="text-sm text-zinc-300 transition-colors hover:text-white"
+          >
             О нас
           </Link>
 
-          <Link href="/contacts" className="text-sm text-zinc-400 hover:text-white">
+          <Link
+            href="/contacts"
+            className="text-sm text-zinc-300 transition-colors hover:text-white"
+          >
             Контакты
           </Link>
         </nav>
 
         <Link
-          href="/"
-          className="rounded-2xl bg-orange-500 px-6 py-3 text-sm font-semibold text-white hover:bg-orange-400"
+          href="/contacts"
+          className="rounded-[18px] bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-orange-400"
         >
           Записаться
         </Link>
