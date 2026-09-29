@@ -34,6 +34,7 @@ export default function ServicesPage() {
   const services = [
     {
       number: "01",
+      href: "/services/geometriya-kuzova",
       title: "Восстановление геометрии кузова",
       text: "Устраняем перекосы после серьёзных ДТП, возвращаем контрольные точки к заводским параметрам.",
       image: "/case1.jpg",
@@ -130,7 +131,14 @@ export default function ServicesPage() {
             {services.map((service) => (
               <article
                 key={service.number}
-                className="group relative h-[178px] overflow-hidden rounded-[22px] border border-white/15 bg-zinc-950"
+                onClick={() => {
+                  if (service.href) {
+                    window.location.href = service.href;
+                  }
+                }}
+                className={`group relative h-[178px] overflow-hidden rounded-[22px] border border-white/15 bg-zinc-950 ${
+                  service.href ? "cursor-pointer" : ""
+                }`}
               >
                 <div
                   className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
@@ -250,6 +258,8 @@ export default function ServicesPage() {
     </main>
   );
 }
+
+
 
 
 
