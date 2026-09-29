@@ -1,8 +1,10 @@
 ﻿"use client";
 
 import { useEffect, useState } from "react";
+import { useApplicationForm } from "../ApplicationFormProvider";
 
 export default function WorksPage() {
+  const openForm = useApplicationForm();
   const [pageViewport, setPageViewport] = useState<{
     width: number;
     height: number;
@@ -596,11 +598,63 @@ export default function WorksPage() {
               </article>
             </div>
           </section>
+
+          <section className="mt-12 overflow-hidden rounded-[28px] border border-orange-500/30 bg-gradient-to-br from-orange-500/10 via-zinc-950/95 to-black p-7 md:p-10">
+            <div className="flex flex-col gap-7 md:flex-row md:items-center md:justify-between">
+              <div className="max-w-[760px]">
+                <div className="text-sm font-bold uppercase tracking-[0.2em] text-orange-500">
+                  Оценка по фотографиям
+                </div>
+
+                <h2 className="mt-3 text-3xl font-bold leading-tight md:text-4xl">
+                  Есть похожие повреждения?
+                </h2>
+
+                <p className="mt-4 text-base leading-relaxed text-zinc-300 md:text-lg">
+                  Отправьте фотографии автомобиля. Предварительно оценим характер
+                  повреждений, объём работ и подскажем, с чего начать.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={openForm}
+                className="group inline-flex shrink-0 items-center justify-center gap-4 rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.45)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.75)]"
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    className="h-6 w-6"
+                  >
+                    <path d="M4 8h3l1.5-2h7L17 8h3v10H4V8Z" />
+                    <circle cx="12" cy="13" r="3.2" />
+                  </svg>
+                </span>
+
+                <span>Отправить фото повреждений</span>
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  className="h-5 w-5 text-orange-500 transition-colors group-hover:text-white"
+                >
+                  <path d="M5 12h13" />
+                  <path d="m13 6 6 6-6 6" />
+                </svg>
+              </button>
+            </div>
+          </section>
         </div>
       </section>
     </main>
   );
 }
+
 
 
 
