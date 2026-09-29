@@ -55,6 +55,7 @@ export default function ServicesPage() {
     },
     {
       number: "04",
+      href: "/services/lokalnye-kuzovnye-raboty",
       title: "Локальные кузовные работы",
       text: "Выполняем отдельные кузовные работы в зависимости от характера повреждений и состояния автомобиля.",
       image: "/case4.jpg",
@@ -260,6 +261,7 @@ export default function ServicesPage() {
     </main>
   );
 }
+
 
 
 
