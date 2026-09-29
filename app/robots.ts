@@ -6,7 +6,8 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://reactivator55.ru/sitemap.xml",
-    host: "https://reactivator55.ru",
+    sitemap: "https://www.reactivator55.ru/sitemap.xml",
+    host: "https://www.reactivator55.ru",
   };
 }
+

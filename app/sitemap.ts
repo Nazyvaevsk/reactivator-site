@@ -1,7 +1,7 @@
 ﻿import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://reactivator55.ru";
+  const baseUrl = "https://www.reactivator55.ru";
 
   return [
     {
@@ -66,6 +66,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 }
+
 
 
 

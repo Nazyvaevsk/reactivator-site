@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "Восстановление геометрии кузова после ДТП в Омске. Стапельные работы, устранение перекосов, восстановление положения силовых элементов и контроль размеров.",
   alternates: {
-    canonical: "https://reactivator55.ru/services/geometriya-kuzova",
+    canonical: "https://www.reactivator55.ru/services/geometriya-kuzova",
   },
 };
 
@@ -16,3 +16,4 @@ export default function GeometryLayout({
 }) {
   return children;
 }
+

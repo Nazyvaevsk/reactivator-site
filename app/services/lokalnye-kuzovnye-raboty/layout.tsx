@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "Локальные кузовные работы в Омске после ДТП: восстановление отдельных элементов кузова, повреждённых зон и подготовка кузова к дальнейшей сборке.",
   alternates: {
-    canonical: "https://reactivator55.ru/services/lokalnye-kuzovnye-raboty",
+    canonical: "https://www.reactivator55.ru/services/lokalnye-kuzovnye-raboty",
   },
 };
 
@@ -16,3 +16,4 @@ export default function LocalBodyRepairLayout({
 }) {
   return children;
 }
+

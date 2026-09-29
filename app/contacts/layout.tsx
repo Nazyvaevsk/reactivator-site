@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Реактиватор в Омске — восстановление геометрии кузова после ДТП, стапельные работы и ремонт силовых элементов. Отправьте фотографии автомобиля для предварительной оценки.",
   alternates: {
-    canonical: "https://reactivator55.ru/contacts",
+    canonical: "https://www.reactivator55.ru/contacts",
   },
 };
 
@@ -14,7 +14,7 @@ const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "AutoRepair",
   name: "Реактиватор",
-  url: "https://reactivator55.ru",
+  url: "https://www.reactivator55.ru",
   description:
     "Восстановление геометрии кузова после ДТП, стапельные работы и ремонт силовых элементов кузова в Омске.",
   address: {
@@ -27,7 +27,7 @@ const localBusinessSchema = {
     "@type": "City",
     name: "Омск",
   },
-  image: "https://reactivator55.ru/hero.jpg",
+  image: "https://www.reactivator55.ru/hero.jpg",
 };
 
 export default function PageLayout({
@@ -49,3 +49,4 @@ export default function PageLayout({
     </>
   );
 }
+

@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://reactivator55.ru"),
+  metadataBase: new URL("https://www.reactivator55.ru"),
 
   title: {
     default: "Реактиватор — восстановление геометрии кузова в Омске",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     "Восстановление геометрии кузова после ДТП в Омске. Стапельные работы, контроль размеров и ремонт силовых элементов кузова.",
 
   alternates: {
-    canonical: "https://reactivator55.ru",
+    canonical: "https://www.reactivator55.ru",
   },
 
   robots: {
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ru_RU",
-    url: "https://reactivator55.ru",
+    url: "https://www.reactivator55.ru",
     siteName: "Реактиватор",
     title: "Реактиватор — восстановление геометрии кузова в Омске",
     description:
@@ -74,3 +74,4 @@ export default function RootLayout({
     </html>
   );
 }
+

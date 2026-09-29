@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Реактиватор — мастерская восстановления геометрии кузова после ДТП в Омске. Работа со сложными повреждениями кузова и контроль размеров.",
   alternates: {
-    canonical: "https://reactivator55.ru/about",
+    canonical: "https://www.reactivator55.ru/about",
   },
 };
 
@@ -22,3 +22,4 @@ export default function PageLayout({
     </>
   );
 }
+

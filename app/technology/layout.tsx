@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Как выполняется восстановление геометрии кузова после ДТП: стапельные работы, контроль размеров и восстановление положения силовых элементов кузова.",
   alternates: {
-    canonical: "https://reactivator55.ru/technology",
+    canonical: "https://www.reactivator55.ru/technology",
   },
 };
 
@@ -22,3 +22,4 @@ export default function PageLayout({
     </>
   );
 }
+
