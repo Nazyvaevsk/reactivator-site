@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useApplicationForm } from "../ApplicationFormProvider";
@@ -84,13 +84,14 @@ export default function ServicesPage() {
         <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-8 pt-32 md:px-10 md:pt-32">
           <div className="max-w-[900px]">
 <h1 className="max-w-[900px] text-5xl font-bold leading-[0.95] tracking-tight md:text-[64px]">
-              Услуги по
+              Восстановление
               <br />
-              <span className="text-orange-500">восстановлению</span> кузова
+              <span className="text-orange-500">геометрии кузова</span> после ДТП
             </h1>
 
             <p className="mt-6 max-w-[760px] text-base leading-relaxed text-zinc-300 md:text-lg">
-              Восстанавливаем геометрию кузова после ДТП, устраняем перекосы
+              Восстанавливаем геометрию кузова после серьёзных ДТП в Омске:
+              устраняем перекосы, восстанавливаем положение силовых элементов
               и контролируем размеры автомобиля на каждом этапе ремонта.
             </p>
 
@@ -249,6 +250,8 @@ export default function ServicesPage() {
     </main>
   );
 }
+
+
 
 
 
