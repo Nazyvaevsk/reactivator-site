@@ -48,6 +48,7 @@ export default function ServicesPage() {
     },
     {
       number: "03",
+      href: "/services/kontrol-geometrii",
       title: "Контроль геометрии и размеров",
       text: "Проверяем контрольные точки и симметрию кузова, чтобы результат ремонта можно было проверить измерениями.",
       image: "/case3.jpg",
@@ -259,6 +260,7 @@ export default function ServicesPage() {
     </main>
   );
 }
+
 
 
 
