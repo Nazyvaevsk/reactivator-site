@@ -207,6 +207,13 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
         }
       }
 
+      // Count one application only after every upload has succeeded.
+      try {
+        window.ym?.(113174477, "reachGoal", "lead_success");
+      } catch {
+        // Analytics must not interrupt a successfully submitted application.
+      }
+
       setIsSent(true);
 
       setName("");
