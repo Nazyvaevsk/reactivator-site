@@ -14,11 +14,48 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://reactivator55.ru"),
+
   title: {
     default: "Реактиватор — восстановление геометрии кузова в Омске",
     template: "%s | Реактиватор",
   },
-  description: "Восстановление геометрии кузова после ДТП в Омске. Стапельные работы, контроль размеров и ремонт силовых элементов кузова.",
+
+  description:
+    "Восстановление геометрии кузова после ДТП в Омске. Стапельные работы, контроль размеров и ремонт силовых элементов кузова.",
+
+  alternates: {
+    canonical: "https://reactivator55.ru",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+
+  openGraph: {
+    type: "website",
+    locale: "ru_RU",
+    url: "https://reactivator55.ru",
+    siteName: "Реактиватор",
+    title: "Реактиватор — восстановление геометрии кузова в Омске",
+    description:
+      "Восстановление геометрии кузова после ДТП в Омске. Стапельные работы, контроль размеров и ремонт силовых элементов кузова.",
+    images: [
+      {
+        url: "/hero.jpg",
+        alt: "Реактиватор — восстановление геометрии кузова",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Реактиватор — восстановление геометрии кузова в Омске",
+    description:
+      "Восстановление геометрии кузова после ДТП в Омске.",
+    images: ["/hero.jpg"],
+  },
 };
 
 export default function RootLayout({
@@ -37,4 +74,3 @@ export default function RootLayout({
     </html>
   );
 }
-

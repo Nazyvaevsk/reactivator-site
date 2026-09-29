@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "Примеры восстановления кузова после ДТП",
   description:
     "Реальные примеры восстановления геометрии кузова после серьёзных ДТП в Омске. Фото автомобилей до ремонта, в процессе и после восстановления.",
+  alternates: {
+    canonical: "https://reactivator55.ru/works",
+  },
 };
 
 export default function PageLayout({
