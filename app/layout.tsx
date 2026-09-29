@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ApplicationFormProvider from "./ApplicationFormProvider";
@@ -14,8 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Реактиватор",
-  description: "Восстановление геометрии кузова после ДТП",
+  title: {
+    default: "Реактиватор — восстановление геометрии кузова в Омске",
+    template: "%s | Реактиватор",
+  },
+  description: "Восстановление геометрии кузова после ДТП в Омске. Стапельные работы, контроль размеров и ремонт силовых элементов кузова.",
 };
 
 export default function RootLayout({
@@ -25,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="ru"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
@@ -34,3 +37,4 @@ export default function RootLayout({
     </html>
   );
 }
+
