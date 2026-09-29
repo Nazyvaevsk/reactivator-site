@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
+import ServiceLinks from "../ServiceLinks";
 import { useApplicationForm } from "../../ApplicationFormProvider";
 
 export default function LocalBodyRepairPage() {
@@ -139,7 +140,10 @@ export default function LocalBodyRepairPage() {
             </Link>
           </div>
         </div>
+
+        <ServiceLinks current="/services/lokalnye-kuzovnye-raboty" />
       </section>
     </main>
   );
 }
+

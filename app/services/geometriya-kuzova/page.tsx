@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
+import ServiceLinks from "../ServiceLinks";
 import { useApplicationForm } from "../../ApplicationFormProvider";
 
 export default function GeometryPage() {
@@ -135,7 +136,10 @@ export default function GeometryPage() {
             </Link>
           </div>
         </div>
+
+        <ServiceLinks current="/services/geometriya-kuzova" />
       </section>
     </main>
   );
 }
+

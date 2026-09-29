@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
+import ServiceLinks from "../ServiceLinks";
 import { useApplicationForm } from "../../ApplicationFormProvider";
 
 export default function StapelPage() {
@@ -140,7 +141,10 @@ export default function StapelPage() {
             </Link>
           </div>
         </div>
+
+        <ServiceLinks current="/services/stapelnye-raboty" />
       </section>
     </main>
   );
 }
+

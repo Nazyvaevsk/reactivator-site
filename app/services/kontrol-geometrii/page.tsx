@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
+import ServiceLinks from "../ServiceLinks";
 import { useApplicationForm } from "../../ApplicationFormProvider";
 
 export default function GeometryControlPage() {
@@ -132,7 +133,10 @@ export default function GeometryControlPage() {
             </Link>
           </div>
         </div>
+
+        <ServiceLinks current="/services/kontrol-geometrii" />
       </section>
     </main>
   );
 }
+
