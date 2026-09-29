@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Script from "next/script";
 import { useEffect, useRef } from "react";
@@ -40,7 +40,7 @@ export default function YandexMetrika() {
             k.async=1;
             k.src=r;
             a.parentNode.insertBefore(k,a);
-          })(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');
+          })(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=113174477','ym');
 
           ym(${COUNTER_ID}, 'init', {
             ssr: true,
