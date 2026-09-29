@@ -41,6 +41,7 @@ export default function ServicesPage() {
     },
     {
       number: "02",
+      href: "/services/stapelnye-raboty",
       title: "Кузовной ремонт после ДТП",
       text: "Работаем с повреждениями силовых элементов кузова и подготавливаем автомобиль к дальнейшему ремонту.",
       image: "/case2.jpg",
@@ -258,6 +259,7 @@ export default function ServicesPage() {
     </main>
   );
 }
+
 
 
 
