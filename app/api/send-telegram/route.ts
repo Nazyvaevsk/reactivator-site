@@ -1,17 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const MAX_PHOTOS = 10;
-const MAX_TOTAL_PHOTO_SIZE = 100 * 1024 * 1024;
+const RELAY_URL =
+  "https://reactivator-telegram-relay.nazyvaevsk.workers.dev";
+
 const MAX_SINGLE_PHOTO_SIZE = 10 * 1024 * 1024;
 
 export async function POST(request: NextRequest) {
   try {
-    const token = process.env.TELEGRAM_TOKEN;
     const chatId = process.env.MASTER_CHAT_ID;
+    const relaySecret = process.env.RELAY_SECRET;
 
-    if (!token || !chatId) {
+    if (!chatId || !relaySecret) {
       return NextResponse.json(
-        { error: "Telegram не настроен на сервере" },
+        { error: "Сервер отправки заявок не настроен" },
         { status: 500 }
       );
     }
@@ -22,7 +23,8 @@ export async function POST(request: NextRequest) {
     const phone = String(formData.get("phone") || "").trim();
     const description = String(formData.get("description") || "").trim();
 
-    const sendMessage = String(formData.get("sendMessage") || "true") === "true";
+    const sendMessage =
+      String(formData.get("sendMessage") || "true") === "true";
 
     const photo = formData.get("photo");
 
@@ -49,57 +51,53 @@ export async function POST(request: NextRequest) {
         message += `\n📝 Что произошло:\n${description}`;
       }
 
-      const sendMessageResponse = await fetch(
-        `https://api.telegram.org/bot${token}/sendMessage`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: message,
-          }),
-        }
-      );
+      const messageForm = new FormData();
+      messageForm.append("method", "sendMessage");
+      messageForm.append("chat_id", chatId);
+      messageForm.append("text", message);
 
-      if (!sendMessageResponse.ok) {
-        const errorText = await sendMessageResponse.text();
-        console.error("Telegram sendMessage error:", errorText);
+      const messageResponse = await fetch(RELAY_URL, {
+        method: "POST",
+        headers: {
+          "X-Relay-Secret": relaySecret,
+        },
+        body: messageForm,
+      });
+
+      if (!messageResponse.ok) {
+        const errorText = await messageResponse.text();
+        console.error("Relay sendMessage error:", errorText);
 
         return NextResponse.json(
-          { error: "Не удалось отправить заявку в Telegram" },
+          { error: "Не удалось отправить заявку" },
           { status: 500 }
         );
       }
     }
 
-    console.log(
-      `Фото: ${photo.name}: ${(photo.size / 1024 / 1024).toFixed(2)} MB`
-    );
+    const photoForm = new FormData();
+    photoForm.append("method", "sendPhoto");
+    photoForm.append("chat_id", chatId);
+    photoForm.append("photo", photo, photo.name);
 
-    const telegramForm = new FormData();
-
-    telegramForm.append("chat_id", chatId);
-    telegramForm.append("photo", photo, photo.name);
-
-    const photoResponse = await fetch(
-      `https://api.telegram.org/bot${token}/sendPhoto`,
-      {
-        method: "POST",
-        body: telegramForm,
-      }
-    );
+    const photoResponse = await fetch(RELAY_URL, {
+      method: "POST",
+      headers: {
+        "X-Relay-Secret": relaySecret,
+      },
+      body: photoForm,
+    });
 
     if (!photoResponse.ok) {
       const errorText = await photoResponse.text();
-      console.error("Telegram sendPhoto error:", errorText);
+      console.error("Relay sendPhoto error:", errorText);
 
       return NextResponse.json(
-        { error: "Не удалось отправить фотографию в Telegram" },
+        { error: "Не удалось отправить фотографию" },
         { status: 500 }
       );
     }
+
     return NextResponse.json({
       success: true,
     });
