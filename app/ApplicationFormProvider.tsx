@@ -13,6 +13,7 @@ export function useApplicationForm() {
 export default function ApplicationFormProvider({ children }: { children: ReactNode }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [uploadedPhotos, setUploadedPhotos] = useState(0);
   const [isSent, setIsSent] = useState(false);
 
   const [name, setName] = useState("");
@@ -170,10 +171,13 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (isSending) return;
+
     if (!validateForm()) {
       return;
     }
 
+    setUploadedPhotos(0);
     setIsSending(true);
 
     try {
@@ -205,6 +209,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
             result.error || `Не удалось отправить фотографию ${i + 1}`
           );
         }
+        setUploadedPhotos(i + 1);
       }
 
       // Count one application only after every upload has succeeded.
@@ -319,6 +324,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
                   <input
                     type="text"
+                    disabled={isSending}
                     value={name}
                     onChange={(e) => {
                       setName(e.target.value);
@@ -350,6 +356,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
                   <input
                     type="tel"
+                    disabled={isSending}
                     value={phone}
                     onChange={(e) => {
                       setPhone(e.target.value);
@@ -399,6 +406,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
                     <input
                       type="file"
+                      disabled={isSending}
                       accept="image/*"
                       multiple
                       onChange={handlePhotosChange}
@@ -428,6 +436,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                   </label>
 
                   <textarea
+                    disabled={isSending}
                     value={description}
                     onChange={(e) => {
                       setDescription(e.target.value);
@@ -452,26 +461,39 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
                 {/* SUBMIT */}
 
-                <button
-                  type="submit"
-                  disabled={isSending}
-                  aria-busy={isSending}
-                  className="flex w-full items-center justify-center gap-3 rounded-2xl bg-white px-8 py-5 text-lg text-black transition hover:bg-zinc-300 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {isSending && (
-                    <span
-                      aria-hidden="true"
-                      className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-current border-t-transparent"
-                    />
-                  )}
-                  {isSending ? "Отправляем..." : "Отправить заявку"}
-                </button>
+                <div className={isSending ? "sticky bottom-0 z-10 rounded-2xl bg-zinc-950 p-3 ring-1 ring-orange-500/50 shadow-[0_0_30px_rgba(249,115,22,0.2)] sm:p-4" : ""}>
+                  <button
+                    type="submit"
+                    disabled={isSending}
+                    aria-busy={isSending}
+                    className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-5 text-base font-semibold transition sm:px-8 sm:text-lg disabled:cursor-wait ${isSending ? "bg-orange-500 text-black" : "bg-white text-black hover:bg-zinc-300"}`}
+                  >
+                    {isSending && (
+                      <span
+                        aria-hidden="true"
+                        className="h-8 w-8 shrink-0 animate-spin rounded-full border-4 border-black/25 border-t-black motion-reduce:animate-none"
+                      />
+                    )}
+                    {isSending ? "Отправляем фотографии..." : "Отправить заявку"}
+                  </button>
 
-                {isSending && (
-                  <p role="status" className="mt-3 text-center text-sm leading-relaxed text-zinc-400">
-                    Не закрывайте страницу, фотографии отправляются
-                  </p>
-                )}
+                  {isSending && (
+                    <div role="status" aria-live="polite" aria-atomic="true" className="mt-4 text-center">
+                      <p className="text-base font-semibold leading-relaxed text-orange-400">
+                        Не закрывайте страницу — идёт отправка
+                      </p>
+                      <p className="mt-2 text-sm text-white">
+                        Отправлено фотографий: {uploadedPhotos} из {photos.length}
+                      </p>
+                      <div aria-hidden="true" className="mt-3 h-2 overflow-hidden rounded-full bg-zinc-800">
+                        <div
+                          className="h-full rounded-full bg-orange-500 transition-[width] duration-300 motion-reduce:transition-none"
+                          style={{ width: `${(uploadedPhotos / photos.length) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
 
                 <p className="mt-4 text-center text-sm leading-relaxed text-zinc-600">
                   Нажимая кнопку, вы отправляете фотографии и контактные данные
