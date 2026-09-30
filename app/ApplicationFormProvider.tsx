@@ -455,10 +455,23 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                 <button
                   type="submit"
                   disabled={isSending}
-                  className="w-full rounded-2xl bg-white px-8 py-5 text-lg text-black transition hover:bg-zinc-300 disabled:cursor-not-allowed disabled:opacity-50"
+                  aria-busy={isSending}
+                  className="flex w-full items-center justify-center gap-3 rounded-2xl bg-white px-8 py-5 text-lg text-black transition hover:bg-zinc-300 disabled:cursor-not-allowed disabled:opacity-50"
                 >
+                  {isSending && (
+                    <span
+                      aria-hidden="true"
+                      className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-current border-t-transparent"
+                    />
+                  )}
                   {isSending ? "Отправляем..." : "Отправить заявку"}
                 </button>
+
+                {isSending && (
+                  <p role="status" className="mt-3 text-center text-sm leading-relaxed text-zinc-400">
+                    Не закрывайте страницу, фотографии отправляются
+                  </p>
+                )}
 
                 <p className="mt-4 text-center text-sm leading-relaxed text-zinc-600">
                   Нажимая кнопку, вы отправляете фотографии и контактные данные
