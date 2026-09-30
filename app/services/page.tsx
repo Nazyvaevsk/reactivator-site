@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { useApplicationForm } from "../ApplicationFormProvider";
@@ -36,29 +36,29 @@ export default function ServicesPage() {
       number: "01",
       href: "/services/geometriya-kuzova",
       title: "Восстановление геометрии кузова",
-      text: "Устраняем перекосы после серьёзных ДТП, возвращаем контрольные точки к заводским параметрам.",
-      image: "/case1.jpg",
+      text: "Устраняем перекосы после ДТП и возвращаем контрольные точки к правильным размерам.",
+      when: ["машину тянет", "не выставляется развал", "колесо ушло"],
     },
     {
       number: "02",
       href: "/services/stapelnye-raboty",
-      title: "Кузовной ремонт после ДТП",
-      text: "Работаем с повреждениями силовых элементов кузова и подготавливаем автомобиль к дальнейшему ремонту.",
-      image: "/case2.jpg",
+      title: "Стапельные работы после ДТП",
+      text: "Вытягиваем и восстанавливаем смещённые силовые элементы кузова на стапеле.",
+      when: ["сильный удар", "кузов повело", "смещены силовые элементы"],
     },
     {
       number: "03",
       href: "/services/kontrol-geometrii",
       title: "Контроль геометрии и размеров",
-      text: "Проверяем контрольные точки и симметрию кузова, чтобы результат ремонта можно было проверить измерениями.",
-      image: "/case3.jpg",
+      text: "Проверяем контрольные точки, диагонали и положение элементов кузова до и после ремонта.",
+      when: ["сомнения после ДТП", "неровные зазоры", "нужен финальный контроль"],
     },
     {
       number: "04",
       href: "/services/lokalnye-kuzovnye-raboty",
       title: "Локальные кузовные работы",
-      text: "Выполняем отдельные кузовные работы в зависимости от характера повреждений и состояния автомобиля.",
-      image: "/case4.jpg",
+      text: "Выполняем отдельные кузовные работы, когда повреждение не требует восстановления всей геометрии.",
+      when: ["локальное повреждение", "проём", "отдельный элемент кузова"],
     },
   ];
 
@@ -88,15 +88,15 @@ export default function ServicesPage() {
         <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-8 pt-32 md:px-10 md:pt-32">
           <div className="max-w-[900px]">
 <h1 className="max-w-[900px] text-5xl font-bold leading-[0.95] tracking-tight md:text-[64px]">
-              Восстановление
+              После ДТП важно понять
               <br />
-              <span className="text-orange-500">геометрии кузова</span> после ДТП
+              <span className="text-orange-500">не только что помято, а что сместилось</span>
             </h1>
 
             <p className="mt-6 max-w-[760px] text-base leading-relaxed text-zinc-300 md:text-lg">
-              Восстанавливаем геометрию кузова после серьёзных ДТП в Омске:
-              устраняем перекосы, восстанавливаем положение силовых элементов
-              и контролируем размеры автомобиля на каждом этапе ремонта.
+              Восстанавливаем геометрию и силовую структуру кузова после ДТП.
+              Проверяем размеры, устраняем перекосы и возвращаем элементы
+              в правильное положение.
             </p>
 
             <button type="button" onClick={openForm}
@@ -144,13 +144,16 @@ export default function ServicesPage() {
                 }`}
               >
                 <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 opacity-[0.14]"
                   style={{
-                    backgroundImage: `url('${service.image}')`,
+                    backgroundImage:
+                      "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
+                    backgroundSize: "38px 38px",
                   }}
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/75 to-black/15" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/40" />
 
                 <div className="relative flex h-full items-start justify-between px-6 py-5 md:px-7">
                   <div className="max-w-[75%]">
@@ -184,6 +187,52 @@ export default function ServicesPage() {
             ))}
           </div>
 
+          <div className="mt-3 grid gap-3 md:grid-cols-2">
+            <div className="relative overflow-hidden rounded-[22px] border border-white/10 bg-zinc-950/90 px-6 py-6 md:px-7">
+              <div
+                aria-hidden="true"
+                className="absolute right-5 top-5 text-5xl font-bold text-orange-500/10"
+              >
+                01
+              </div>
+
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-orange-500">
+                Наша специализация
+              </p>
+
+              <h2 className="mt-3 max-w-xl text-xl font-bold leading-tight md:text-2xl">
+                Геометрия и силовой кузовной ремонт
+              </h2>
+
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base">
+                Геометрию, стапельные работы, вытяжку и восстановление силовых
+                элементов выполняем сами и контролируем результат по размерам.
+              </p>
+            </div>
+
+            <div className="relative overflow-hidden rounded-[22px] border border-orange-500/20 bg-[#100d0b]/90 px-6 py-6 md:px-7">
+              <div
+                aria-hidden="true"
+                className="absolute right-5 top-5 text-5xl font-bold text-orange-500/10"
+              >
+                02
+              </div>
+
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-orange-500">
+                Если нужна окраска
+              </p>
+
+              <h2 className="mt-3 max-w-xl text-xl font-bold leading-tight md:text-2xl">
+                Мы не держим малярку ради галочки
+              </h2>
+
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base">
+                Наша специализация — геометрия и силовой кузовной ремонт.
+                Окраску подключаем отдельно у проверенного специалиста
+                после осмотра автомобиля.
+              </p>
+            </div>
+          </div>
           <div className="relative mt-3 overflow-hidden rounded-[22px] border border-orange-500/60 bg-[#170900]">
             <div
               className="absolute inset-0 opacity-30"
