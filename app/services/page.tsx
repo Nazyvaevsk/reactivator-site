@@ -145,14 +145,97 @@ export default function ServicesPage() {
               >
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 opacity-[0.14]"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
-                    backgroundSize: "38px 38px",
-                  }}
-                />
+                  className="pointer-events-none absolute inset-0 text-white opacity-[0.68]"
+                >
+                  <svg
+                    viewBox="0 0 620 220"
+                    fill="none"
+                    className="absolute right-[-30px] top-0 h-full w-[78%]"
+                  >
+                    <g stroke="currentColor" strokeWidth="0.7">
+  <path d="M20 20H600M20 45H600M20 70H600M20 95H600M20 120H600M20 145H600M20 170H600M20 195H600" opacity="0.28" />
+  <path d="M40 10V210M70 10V210M100 10V210M130 10V210M160 10V210M190 10V210M220 10V210M250 10V210M280 10V210M310 10V210M340 10V210M370 10V210M400 10V210M430 10V210M460 10V210M490 10V210M520 10V210M550 10V210M580 10V210" opacity="0.28" />
+                      <path d="M35 35H585M35 70H585M35 105H585M35 140H585M35 175H585" opacity="0.28" />
+                      <path d="M75 15V205M130 15V205M185 15V205M240 15V205M295 15V205M350 15V205M405 15V205M460 15V205M515 15V205" opacity="0.28" />
 
+                      {service.number === "01" && (
+                        <>
+                          <path d="M120 55H480V165H120Z" strokeDasharray="5 6" />
+                          <path d="M120 55L480 165M480 55L120 165" />
+                          <path d="M165 72L430 72L455 110L430 148H165L140 110Z" />
+                          <path d="M95 110H505M300 30V190" strokeDasharray="9 5 2 5" />
+                          <circle cx="165" cy="72" r="5" />
+                          <circle cx="430" cy="72" r="5" />
+                          <circle cx="455" cy="110" r="5" />
+                          <circle cx="430" cy="148" r="5" />
+                          <circle cx="165" cy="148" r="5" />
+                          <circle cx="140" cy="110" r="5" />
+                        </>
+                      )}
+
+                      {service.number === "02" && (
+                        <>
+                          <path d="M105 55H500V165H105Z" strokeDasharray="4 7" />
+                          <path d="M145 75H460M145 110H460M145 145H460" />
+                          <path d="M145 75L460 145M460 75L145 145" strokeDasharray="7 5" />
+                          <path d="M95 110H510" strokeDasharray="12 5" />
+                          <circle cx="145" cy="75" r="6" />
+                          <circle cx="460" cy="75" r="6" />
+                          <circle cx="460" cy="145" r="6" />
+                          <circle cx="145" cy="145" r="6" />
+                        </>
+                      )}
+
+                      {service.number === "03" && (
+                        <>
+                          <path d="M115 55H485V165H115Z" />
+                          <path d="M115 55L485 165M485 55L115 165" strokeDasharray="5 6" />
+                          <path d="M75 110H525M300 30V190" strokeDasharray="10 5 2 5" />
+                          <path d="M115 185H485M115 178V192M485 178V192" />
+                          <path d="M115 45V25M485 45V25M115 32H485" />
+                          <circle cx="115" cy="55" r="5" />
+                          <circle cx="485" cy="55" r="5" />
+                          <circle cx="115" cy="165" r="5" />
+                          <circle cx="485" cy="165" r="5" />
+                        </>
+                      )}
+
+                      {service.number === "04" && (
+                        <>
+                          <path d="M130 55H470V165H130Z" strokeDasharray="5 6" />
+                          <path d="M170 75H430V145H170Z" />
+                          <path d="M170 75L430 145M430 75L170 145" opacity="0.7" />
+                          <path d="M105 110H495" strokeDasharray="9 5 2 5" />
+                          <path d="M170 55V35M430 55V35M170 43H430" />
+                          <circle cx="170" cy="75" r="5" />
+                          <circle cx="430" cy="75" r="5" />
+                          <circle cx="430" cy="145" r="5" />
+                          <circle cx="170" cy="145" r="5" />
+                        </>
+                      )}
+                    </g>
+
+                    <g stroke="#f97316" strokeWidth="1.2">
+                      <circle cx="300" cy="104" r="9" />
+                      <path d="M288 104H312M300 92V116" />
+                    </g>
+
+                    <g fill="currentColor" fontFamily="monospace" fontSize="10">
+                      <text x="120" y="24">
+                        {service.number === "01"
+                          ? "ΔX / ΔY / ΔZ"
+                          : service.number === "02"
+                            ? "СИЛОВЫЕ ТОЧКИ"
+                            : service.number === "03"
+                              ? "L1 / L2 / ДИАГОНАЛИ"
+                              : "ЗАЗОР / ПОЛОЖЕНИЕ"}
+                      </text>
+                      <text x="405" y="196">мм</text>
+                    </g>
+                  </svg>
+                </div>
+
+                <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/65 to-black/25" />
                 <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/40" />
 
                 <div className="relative flex h-full items-start justify-between px-6 py-5 md:px-7">
