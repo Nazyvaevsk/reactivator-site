@@ -99,7 +99,7 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 flex min-h-[inherit] items-center">
-          <div className="mx-auto w-full max-w-7xl px-6 pb-10 pt-28 sm:px-10 lg:px-16 md:px-10 md:pb-8 md:pt-22.5 max-md:px-4 max-md:pt-28 max-md:pb-10">
+          <div className="mx-auto w-full max-w-7xl px-6 pb-10 pt-28 sm:px-10 lg:px-16 md:px-10 md:pb-8 md:pt-22.5 max-md:px-4 max-md:pt-28 max-md:pb-10 max-md:translate-y-[70px]">
 <h1 className="max-w-[780px] text-[clamp(2rem,4.7vw,4.25rem)] md:text-[clamp(1.75rem,3.95vw,3.57rem)] font-bold leading-[1.04] tracking-[-0.035em]">
               <span className="block text-white">Восстановление</span>
               <span className="block text-orange-500">геометрии кузова</span>
