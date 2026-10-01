@@ -134,14 +134,7 @@ export default function ServicesPage() {
             {services.map((service) => (
               <article
                 key={service.number}
-                onClick={() => {
-                  if (service.href) {
-                    window.location.href = service.href;
-                  }
-                }}
-                className={`group relative h-[178px] overflow-hidden rounded-[22px] border border-white/15 bg-zinc-950 ${
-                  service.href ? "cursor-pointer" : ""
-                }`}
+                className="group relative h-[178px] overflow-hidden rounded-[22px] border border-white/15 bg-zinc-950"
               >
                 <div
                   aria-hidden="true"
@@ -393,39 +386,3 @@ export default function ServicesPage() {
     </main>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
