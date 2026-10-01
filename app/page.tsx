@@ -136,7 +136,7 @@ export default function Home() {
 
           </div>
 
-          <div className="pointer-events-none absolute right-[-5%] top-[34%] w-[60%] -translate-y-1/2 sm:right-[-2%] sm:top-[44%] sm:w-[50%] lg:right-[3%] lg:top-1/2 lg:w-[50%]">
+          <div className="pointer-events-none absolute right-[-5%] top-[58%] w-[60%] -translate-y-1/2 sm:right-[-2%] sm:top-[44%] sm:w-[50%] lg:right-[3%] lg:top-1/2 lg:w-[50%]">
             <img
               src="/hero-car-overlay.png"
               alt=""
