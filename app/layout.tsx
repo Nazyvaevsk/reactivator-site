@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ApplicationFormProvider from "./ApplicationFormProvider";
 import YandexMetrika from "./YandexMetrika";
+import GoogleAnalytics from "./GoogleAnalytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -72,6 +73,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <ApplicationFormProvider>{children}</ApplicationFormProvider>
         <YandexMetrika />
+        <GoogleAnalytics />
       </body>
     </html>
   );
