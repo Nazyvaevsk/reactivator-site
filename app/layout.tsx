@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ApplicationFormProvider from "./ApplicationFormProvider";
@@ -18,12 +18,12 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.reactivator55.ru"),
 
   title: {
-    default: "Реактиватор — восстановление геометрии кузова в Омске",
+    default: "Кузовной ремонт после ДТП в Омске — Реактиватор",
     template: "%s | Реактиватор",
   },
 
   description:
-    "Восстановление геометрии кузова после ДТП в Омске. Стапельные работы, контроль размеров и ремонт силовых элементов кузова.",
+    "Кузовной ремонт после ДТП в Омске: восстановление геометрии кузова, стапельные работы, контроль размеров и ремонт силовых элементов.",
 
   alternates: {
     canonical: "https://www.reactivator55.ru",
@@ -39,9 +39,9 @@ export const metadata: Metadata = {
     locale: "ru_RU",
     url: "https://www.reactivator55.ru",
     siteName: "Реактиватор",
-    title: "Реактиватор — восстановление геометрии кузова в Омске",
+    title: "Кузовной ремонт после ДТП в Омске — Реактиватор",
     description:
-      "Восстановление геометрии кузова после ДТП в Омске. Стапельные работы, контроль размеров и ремонт силовых элементов кузова.",
+      "Кузовной ремонт после ДТП в Омске: восстановление геометрии кузова, стапельные работы, контроль размеров и ремонт силовых элементов.",
     images: [
       {
         url: "/hero.jpg",
@@ -52,9 +52,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Реактиватор — восстановление геометрии кузова в Омске",
+    title: "Кузовной ремонт после ДТП в Омске — Реактиватор",
     description:
-      "Восстановление геометрии кузова после ДТП в Омске.",
+      "Кузовной ремонт после ДТП в Омске: восстановление геометрии кузова, стапельные работы и контроль размеров.",
     images: ["/hero.jpg"],
   },
 };
