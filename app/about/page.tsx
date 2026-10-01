@@ -42,8 +42,8 @@ export default function AboutPage() {
             ? `${Math.round(pageViewport.width * 0.5625)}px`
             : "56.25vw",
           backgroundImage: "url('/hero.jpg')",
-          backgroundSize: "100% 100%",
-          backgroundPosition: "center top",
+          backgroundSize: pageViewport && pageViewport.width < 768 ? "cover" : "100% 100%",
+          backgroundPosition: pageViewport && pageViewport.width < 768 ? "60% top" : "center top",
         }}
       >
         <div
