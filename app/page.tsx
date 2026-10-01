@@ -114,7 +114,7 @@ export default function Home() {
               />
             </div>
 
-            <p className="mb-6 mt-2 max-w-[540px] md:max-w-[480px] text-base leading-relaxed text-zinc-200 md:text-[17px] md:mb-5 md:mt-4">
+            <p className="mb-6 mt-[-4px] max-w-[540px] md:max-w-[480px] text-base leading-relaxed text-zinc-200 md:text-[17px] md:mb-5 md:mt-4">
               Сложные ДТП, перекосы кузова и восстановление силовой геометрии с контролем размеров.
             </p>
 
@@ -159,6 +159,7 @@ export default function Home() {
     </main>
   );
 }
+
 
 
 
