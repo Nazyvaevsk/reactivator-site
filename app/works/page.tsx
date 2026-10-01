@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { useApplicationForm } from "../ApplicationFormProvider";
@@ -69,8 +69,8 @@ export default function WorksPage() {
           <article className="mt-10 overflow-hidden rounded-[28px] border border-white/15 bg-black/80 md:mt-8">
             <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
               <div className="relative min-h-[380px] overflow-hidden max-md:min-h-0 max-md:aspect-[4/3] lg:min-h-[520px]">
-                <img
-                  src="/works/sienta-2016-before.png"
+                <img loading="lazy"
+                  src="/works/sienta-2016-before.webp"
                   alt="Toyota Sienta 2016 до ремонта"
                   className="absolute inset-0 h-full w-full object-cover"
                 />
@@ -127,8 +127,8 @@ export default function WorksPage() {
               <div className="grid gap-5 lg:grid-cols-3 md:gap-4">
                 <div>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[22px] border border-white/10">
-                    <img
-                      src="/works/sienta-2016-process.png"
+                    <img loading="lazy"
+                      src="/works/sienta-2016-process.webp"
                       alt="Toyota Sienta 2016 Замена повреждённой части кузова"
                       className="h-full w-full object-cover"
                     />
@@ -149,8 +149,8 @@ export default function WorksPage() {
 
                 <div>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[22px] border border-white/10">
-                    <img
-                      src="/works/sienta-2016-process1.png"
+                    <img loading="lazy"
+                      src="/works/sienta-2016-process1.webp"
                       alt="Toyota Sienta 2016 на стапеле"
                       className="h-full w-full object-cover"
                     />
@@ -172,8 +172,8 @@ export default function WorksPage() {
 
                 <div>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[22px] border border-white/10">
-                    <img
-                      src="/works/sienta-2016-after.png"
+                    <img loading="lazy"
+                      src="/works/sienta-2016-after.webp"
                       alt="Toyota Sienta 2016 после восстановления кузова"
                       className="h-full w-full object-cover"
                     />
@@ -199,8 +199,8 @@ export default function WorksPage() {
           <article className="mt-10 overflow-hidden rounded-[28px] border border-white/15 bg-black/80 md:mt-8">
             <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
               <div className="relative min-h-[380px] overflow-hidden max-md:min-h-0 max-md:aspect-[4/3] lg:min-h-[520px]">
-                <img
-                  src="/works/mercedes-w211-2003-before.png"
+                <img loading="lazy"
+                  src="/works/mercedes-w211-2003-before.webp"
                   alt="Mercedes-Benz E320 W211 2003 до ремонта"
                   className="absolute inset-0 h-full w-full object-cover"
                 />
@@ -257,8 +257,8 @@ export default function WorksPage() {
               <div className="grid gap-5 lg:grid-cols-3 md:gap-4">
                 <div>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[22px] border border-white/10">
-                    <img
-                      src="/works/mercedes-w211-2003-process.png"
+                    <img loading="lazy"
+                      src="/works/mercedes-w211-2003-process.webp"
                       alt="Mercedes-Benz E320 W211 2003 в процессе ремонта"
                       className="h-full w-full object-cover"
                     />
@@ -281,8 +281,8 @@ export default function WorksPage() {
 
                 <div>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[22px] border border-white/10">
-                    <img
-                      src="/works/mercedes-w211-2003-after-1.png"
+                    <img loading="lazy"
+                      src="/works/mercedes-w211-2003-after-1.webp"
                       alt="Mercedes-Benz E320 W211 2003 после ремонта"
                       className="h-full w-full object-cover"
                     />
@@ -304,8 +304,8 @@ export default function WorksPage() {
 
                 <div>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[22px] border border-white/10">
-                    <img
-                      src="/works/mercedes-w211-2003-after-2.png"
+                    <img loading="lazy"
+                      src="/works/mercedes-w211-2003-after-2.webp"
                       alt="Mercedes-Benz E320 W211 2003 результат ремонта"
                       className="h-full w-full object-cover"
                     />
@@ -330,8 +330,8 @@ export default function WorksPage() {
           <article className="mt-10 overflow-hidden rounded-[28px] border border-white/15 bg-black/80 md:mt-8">
             <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
               <div className="relative min-h-[380px] overflow-hidden max-md:min-h-0 max-md:aspect-[4/3] lg:min-h-[520px]">
-                <img
-                  src="/works/santafe-2009-before.png"
+                <img loading="lazy"
+                  src="/works/santafe-2009-before.webp"
                   alt="Hyundai Santa Fe 2009 до ремонта"
                   className="absolute inset-0 h-full w-full object-cover"
                 />
@@ -388,8 +388,8 @@ export default function WorksPage() {
               <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 md:gap-4">
                 <div>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[22px] border border-white/10">
-                    <img
-                      src="/works/santafe-2009-process-1.png"
+                    <img loading="lazy"
+                      src="/works/santafe-2009-process-1.webp"
                       alt="Hyundai Santa Fe 2009 разборка передней части"
                       className="h-full w-full object-cover"
                     />
@@ -410,8 +410,8 @@ export default function WorksPage() {
 
                 <div>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[22px] border border-white/10">
-                    <img
-                      src="/works/santafe-2009-process-2.png"
+                    <img loading="lazy"
+                      src="/works/santafe-2009-process-2.webp"
                       alt="Hyundai Santa Fe 2009 восстановление силовых элементов"
                       className="h-full w-full object-cover"
                     />
@@ -432,8 +432,8 @@ export default function WorksPage() {
 
                 <div>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[22px] border border-white/10">
-                    <img
-                      src="/works/santafe-2009-process-3.png"
+                    <img loading="lazy"
+                      src="/works/santafe-2009-process-3.webp"
                       alt="Hyundai Santa Fe 2009 подготовка к сборке"
                       className="h-full w-full object-cover"
                     />
@@ -454,8 +454,8 @@ export default function WorksPage() {
 
                 <div>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[22px] border border-white/10">
-                    <img
-                      src="/works/santafe-2009-after-1.png"
+                    <img loading="lazy"
+                      src="/works/santafe-2009-after-1.webp"
                       alt="Hyundai Santa Fe 2009 после ремонта"
                       className="h-full w-full object-cover"
                     />
@@ -476,8 +476,8 @@ export default function WorksPage() {
 
                 <div>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[22px] border border-white/10">
-                    <img
-                      src="/works/santafe-2009-after-2.png"
+                    <img loading="lazy"
+                      src="/works/santafe-2009-after-2.webp"
                       alt="Hyundai Santa Fe 2009 итог ремонта"
                       className="h-full w-full object-cover"
                     />
@@ -513,8 +513,8 @@ export default function WorksPage() {
               <article className="overflow-hidden rounded-[24px] border border-white/15 bg-black/80">
                 <div className="grid grid-cols-2">
                   <div className="relative aspect-[4/3] overflow-hidden border-r border-white/10">
-                    <img
-                      src="/works/honda-orthia-2000-before.png"
+                    <img loading="lazy"
+                      src="/works/honda-orthia-2000-before.webp"
                       alt="Honda Orthia 2000 до ремонта"
                       className="h-full w-full object-cover"
                     />
@@ -525,8 +525,8 @@ export default function WorksPage() {
                   </div>
 
                   <div className="relative aspect-[4/3] overflow-hidden">
-                    <img
-                      src="/works/honda-orthia-2000-after.png"
+                    <img loading="lazy"
+                      src="/works/honda-orthia-2000-after.webp"
                       alt="Honda Orthia 2000 после ремонта"
                       className="h-full w-full object-cover"
                     />
@@ -557,8 +557,8 @@ export default function WorksPage() {
               <article className="overflow-hidden rounded-[24px] border border-white/15 bg-black/80">
                 <div className="grid grid-cols-2">
                   <div className="relative aspect-[4/3] overflow-hidden border-r border-white/10">
-                    <img
-                      src="/works/lada-granta-2016-before.png"
+                    <img loading="lazy"
+                      src="/works/lada-granta-2016-before.webp"
                       alt="Lada Granta 2016 до ремонта"
                       className="h-full w-full object-cover"
                     />
@@ -569,8 +569,8 @@ export default function WorksPage() {
                   </div>
 
                   <div className="relative aspect-[4/3] overflow-hidden">
-                    <img
-                      src="/works/lada-granta-2016-after.png"
+                    <img loading="lazy"
+                      src="/works/lada-granta-2016-after.webp"
                       alt="Lada Granta 2016 после ремонта"
                       className="h-full w-full object-cover"
                     />
