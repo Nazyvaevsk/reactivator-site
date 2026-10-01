@@ -215,6 +215,14 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
       // Count one application only after every upload has succeeded.
       try {
         window.ym?.(113174477, "reachGoal", "lead_success");
+
+        const gaWindow = window as typeof window & {
+          gtag?: (...args: unknown[]) => void;
+        };
+
+        gaWindow.gtag?.("event", "generate_lead", {
+          method: "application_form",
+        });
       } catch {
         // Analytics must not interrupt a successfully submitted application.
       }
