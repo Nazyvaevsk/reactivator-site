@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useApplicationForm } from "./ApplicationFormProvider";
@@ -99,12 +99,20 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 flex min-h-[inherit] items-center">
-          <div className="mx-auto w-full max-w-7xl px-6 pb-10 pt-28 sm:px-10 lg:px-16 md:px-10 md:pb-8 md:pt-22.5 max-md:px-4 max-md:pt-28 max-md:pb-10 max-md:translate-y-[70px]">
+          <div className="mx-auto w-full max-w-7xl px-6 pb-10 pt-28 sm:px-10 lg:px-16 md:px-10 md:pb-8 md:pt-22.5 max-md:px-4 max-md:pt-28 max-md:pb-10">
 <h1 className="max-w-[780px] text-[clamp(2rem,4.7vw,4.25rem)] md:text-[clamp(1.75rem,3.95vw,3.57rem)] font-bold leading-[1.04] tracking-[-0.035em]">
               <span className="block text-white">Восстановление</span>
               <span className="block text-orange-500">геометрии кузова</span>
               <span className="block text-white">после ДТП</span>
             </h1>
+
+            <div className="pointer-events-none mx-auto mt-4 mb-1 w-[72%] md:hidden">
+              <img
+                src="/hero-car-overlay.png"
+                alt=""
+                className="h-auto w-full opacity-75 drop-shadow-[0_0_18px_rgba(255,106,0,0.10)]"
+              />
+            </div>
 
             <p className="mb-6 mt-5 max-w-[540px] md:max-w-[480px] text-base leading-relaxed text-zinc-200 md:text-[17px] md:mb-5 md:mt-4">
               Сложные ДТП, перекосы кузова и восстановление силовой геометрии с контролем размеров.
@@ -136,7 +144,7 @@ export default function Home() {
 
           </div>
 
-          <div className="pointer-events-none absolute right-[-5%] top-[58%] w-[60%] -translate-y-1/2 sm:right-[-2%] sm:top-[44%] sm:w-[50%] lg:right-[3%] lg:top-1/2 lg:w-[50%]">
+          <div className="pointer-events-none absolute right-[-5%] top-[51%] w-[60%] -translate-y-1/2 sm:right-[-2%] sm:top-[44%] sm:w-[50%] lg:right-[3%] lg:top-1/2 lg:w-[50%] max-md:hidden">
             <img
               src="/hero-car-overlay.png"
               alt=""
@@ -151,3 +159,4 @@ export default function Home() {
     </main>
   );
 }
+
