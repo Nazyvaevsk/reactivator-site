@@ -43,7 +43,7 @@ export default function AboutPage() {
             : "56.25vw",
           backgroundImage: "url('/hero.jpg')",
           backgroundSize: pageViewport && pageViewport.width < 768 ? "cover" : "100% 100%",
-          backgroundPosition: pageViewport && pageViewport.width < 768 ? "60% top" : "center top",
+          backgroundPosition: pageViewport && pageViewport.width < 768 ? "47% top" : "center top",
         }}
       >
         <div
