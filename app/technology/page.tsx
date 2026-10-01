@@ -156,7 +156,44 @@ export default function TechnologyPage() {
             ))}
           </div>
 
-          <div className="relative mt-10">
+                    <section className="mt-9 border-y border-white/10 py-6">
+  <div className="grid gap-6 md:grid-cols-[0.7fr_1.3fr] md:items-center">
+    <div>
+      <p className="text-xs font-bold uppercase tracking-[0.22em] text-orange-500">
+        Измерение кузова
+      </p>
+
+      <h2 className="mt-2 text-2xl font-bold leading-tight tracking-[-0.025em] md:text-3xl">
+        Что контролируем
+        <br />
+        <span className="text-orange-500">при измерении кузова</span>
+      </h2>
+    </div>
+
+    <div className="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
+      {[
+        ["01", "Контрольные точки кузова"],
+        ["02", "Диагонали и взаимное положение"],
+        ["03", "Геометрия проёмов"],
+        ["04", "Точки подвески и подрамников"],
+      ].map(([number, title]) => (
+        <div key={title} className="flex items-center gap-3">
+          <span className="text-xs font-bold text-orange-500">{number}</span>
+          <span className="text-sm font-semibold text-white md:text-base">{title}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div className="mt-5 flex items-center gap-3 border-t border-white/10 pt-4">
+    <span className="h-2 w-2 shrink-0 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(255,106,0,0.8)]" />
+    <p className="text-sm text-zinc-300 md:text-base">
+      Собственная база контрольных размеров и схем кузовов по маркам и моделям автомобилей.
+    </p>
+  </div>
+</section>
+
+<div className="relative mt-10">
             <div
               aria-hidden="true"
               className="absolute bottom-0 left-[27px] top-0 hidden w-px bg-gradient-to-b from-orange-500 via-orange-500/40 to-white/10 md:block"
