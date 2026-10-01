@@ -85,33 +85,27 @@ export default function Home() {
           </div>
         </header>
 
-
-        <div className="pointer-events-none absolute inset-x-0 top-2 z-10">
-          <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-6 sm:px-10 lg:px-16">
-            <img
-              src="/logo.png"
-              alt="Reactivator"
-              className="h-[66px] w-auto shrink-0 object-contain"
-            />
-            <span className="shrink-0 whitespace-nowrap text-[15px] font-medium uppercase leading-none tracking-[0.4em] text-zinc-300">
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10">
+          <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-6 py-5 sm:px-10 lg:px-16">
+            <div className="text-[22px] font-black uppercase leading-none tracking-tight text-white">
+              <span className="text-orange-500">R</span>ЕАКТИВАТОР
+            </div>
+            <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-orange-500">
               ОМСК
             </span>
           </div>
         </div>
+
         <div className="relative z-10 flex min-h-[inherit] items-center">
           <div className="mx-auto w-full max-w-7xl px-6 pb-10 pt-28 sm:px-10 lg:px-16">
-            <p className="mb-4 text-[48px] font-black leading-none tracking-[-0.03em]">
-              <span className="text-orange-500">R</span>еактиватор
-            </p>
-            <h1 className="max-w-[780px] text-[clamp(2rem,4.7vw,4.25rem)] font-bold leading-[1.04] tracking-[-0.035em]">
+<h1 className="max-w-[780px] text-[clamp(2rem,4.7vw,4.25rem)] font-bold leading-[1.04] tracking-[-0.035em]">
               <span className="block text-white">Восстановление</span>
               <span className="block text-orange-500">геометрии кузова</span>
               <span className="block text-white">после ДТП</span>
             </h1>
 
             <p className="mb-6 mt-5 max-w-[540px] text-base leading-relaxed text-zinc-200 md:text-lg">
-              Сложные ДТП, перекосы кузова, нарушение силовой структуры,
-              восстановление геометрии и контроль размеров.
+              Сложные ДТП, перекосы кузова и восстановление силовой геометрии с контролем размеров.
             </p>
 
             <button
@@ -135,9 +129,17 @@ export default function Home() {
             </button>
 
             <p className="mt-3 max-w-[380px] text-xs leading-relaxed text-zinc-400 sm:text-sm">
-              Предварительная оценка повреждений и стоимости восстановления по фото
+              Предварительно посмотрим повреждения по фото
             </p>
 
+          </div>
+
+          <div className="pointer-events-none absolute right-[3%] top-1/2 hidden w-[50%] -translate-y-[50%] lg:block">
+            <img
+              src="/hero-car-overlay.png"
+              alt=""
+              className="h-auto w-full opacity-95 drop-shadow-[0_0_20px_rgba(255,106,0,0.12)]"
+            />
           </div>
 
         </div>
