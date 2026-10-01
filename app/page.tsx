@@ -106,7 +106,7 @@ export default function Home() {
               <span className="block text-white">после ДТП</span>
             </h1>
 
-            <div className="pointer-events-none mx-auto mt-4 mb-1 w-[80%] md:hidden">
+            <div className="pointer-events-none mx-auto mt-4 mb-1 w-[88%] md:hidden">
               <img
                 src="/hero-car-overlay.png"
                 alt=""
@@ -159,5 +159,6 @@ export default function Home() {
     </main>
   );
 }
+
 
 
