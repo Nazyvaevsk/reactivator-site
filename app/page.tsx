@@ -106,7 +106,7 @@ export default function Home() {
               <span className="block text-white">после ДТП</span>
             </h1>
 
-            <div className="pointer-events-none mx-auto mt-4 mb-1 w-[72%] md:hidden">
+            <div className="pointer-events-none mx-auto mt-4 mb-1 w-[80%] md:hidden">
               <img
                 src="/hero-car-overlay.png"
                 alt=""
@@ -114,7 +114,7 @@ export default function Home() {
               />
             </div>
 
-            <p className="mb-6 mt-5 max-w-[540px] md:max-w-[480px] text-base leading-relaxed text-zinc-200 md:text-[17px] md:mb-5 md:mt-4">
+            <p className="mb-6 mt-2 max-w-[540px] md:max-w-[480px] text-base leading-relaxed text-zinc-200 md:text-[17px] md:mb-5 md:mt-4">
               Сложные ДТП, перекосы кузова и восстановление силовой геометрии с контролем размеров.
             </p>
 
@@ -159,4 +159,5 @@ export default function Home() {
     </main>
   );
 }
+
 
