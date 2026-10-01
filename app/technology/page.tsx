@@ -131,24 +131,24 @@ export default function TechnologyPage() {
           }}
         />
 
-        <div className="relative z-10 mx-auto max-w-[1440px] px-5 pb-12 pt-28 sm:px-6 md:px-10 md:pb-16 md:pt-32">
+        <div className="relative z-10 mx-auto max-w-[1440px] px-5 pb-12 pt-28 sm:px-6 md:px-8 md:pb-13 md:pt-25.5">
           <div className="max-w-[1100px]">
-            <h1 className="text-[clamp(2rem,4.5vw,4rem)] font-bold leading-[1.08] tracking-[-0.035em]">
+            <h1 className="text-[clamp(2rem,4.5vw,4rem)] md:text-[clamp(1.75rem,3.78vw,3.36rem)] font-bold leading-[1.08] tracking-[-0.035em]">
               <span className="block">После ДТП машину тянет,</span>
               <span className="block text-orange-500">руль криво и зазоры ушли?</span>
             </h1>
 
-            <p className="mt-6 max-w-[680px] text-base leading-relaxed text-zinc-300 md:text-lg">
+            <p className="mt-6 max-w-[680px] text-base leading-relaxed text-zinc-300 md:text-[17px] md:mt-5">
               Значит проблема может быть не только в навесных деталях. Возможно,
               нарушена геометрия кузова — и это нужно проверить по измерениям.
             </p>
           </div>
 
-                    <div className="mt-8 flex flex-wrap gap-x-7 gap-y-4 border-y border-white/10 py-5">
+                    <div className="mt-8 flex flex-wrap gap-x-7 gap-y-4 border-y border-white/10 py-5 md:mt-6.5 md:gap-x-5.5 md:gap-y-3 md:py-4">
             {symptoms.map((symptom) => (
               <div
                 key={symptom}
-                className="flex items-center gap-2 text-sm font-medium text-zinc-300"
+                className="flex items-center gap-2 text-sm font-medium text-zinc-300 md:gap-1.5"
               >
                 <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-orange-500" />
                 {symptom}
@@ -156,28 +156,28 @@ export default function TechnologyPage() {
             ))}
           </div>
 
-                    <section className="mt-9 border-y border-white/10 py-6">
-  <div className="grid gap-6 md:grid-cols-[0.7fr_1.3fr] md:items-center">
+                    <section className="mt-9 border-y border-white/10 py-6 md:mt-7 md:py-5">
+  <div className="grid gap-6 md:grid-cols-[0.7fr_1.3fr] md:items-center md:gap-5">
     <div>
       <p className="text-xs font-bold uppercase tracking-[0.22em] text-orange-500">
         Измерение кузова
       </p>
 
-      <h2 className="mt-2 text-2xl font-bold leading-tight tracking-[-0.025em] md:text-3xl">
+      <h2 className="mt-2 text-2xl font-bold leading-tight tracking-[-0.025em] md:text-[25px] md:mt-1.5">
         Что контролируем
         <br />
         <span className="text-orange-500">при измерении кузова</span>
       </h2>
     </div>
 
-    <div className="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
+    <div className="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 md:gap-x-6.5 md:gap-y-3">
       {[
         ["01", "Контрольные точки кузова"],
         ["02", "Диагонали и взаимное положение"],
         ["03", "Геометрия проёмов"],
         ["04", "Точки подвески и подрамников"],
       ].map(([number, title]) => (
-        <div key={title} className="flex items-center gap-3">
+        <div key={title} className="flex items-center gap-3 md:gap-2.5">
           <span className="text-xs font-bold text-orange-500">{number}</span>
           <span className="text-sm font-semibold text-white md:text-base">{title}</span>
         </div>
@@ -185,7 +185,7 @@ export default function TechnologyPage() {
     </div>
   </div>
 
-  <div className="mt-5 flex items-center gap-3 border-t border-white/10 pt-4">
+  <div className="mt-5 flex items-center gap-3 border-t border-white/10 pt-4 md:mt-4 md:gap-2.5 md:pt-3">
     <span className="h-2 w-2 shrink-0 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(255,106,0,0.8)]" />
     <p className="text-sm text-zinc-300 md:text-base">
       Собственная база контрольных размеров и схем кузовов по маркам и моделям автомобилей.
@@ -193,10 +193,10 @@ export default function TechnologyPage() {
   </div>
 </section>
 
-<div className="relative mt-10">
+<div className="relative mt-10 md:mt-8">
             <div
               aria-hidden="true"
-              className="absolute bottom-0 left-[27px] top-0 hidden w-px bg-gradient-to-b from-orange-500 via-orange-500/40 to-white/10 md:block"
+              className="absolute bottom-0 left-[27px] md:left-[21px] top-0 hidden w-px bg-gradient-to-b from-orange-500 via-orange-500/40 to-white/10 md:block"
             />
 
             <div
@@ -224,19 +224,19 @@ export default function TechnologyPage() {
               {steps.map((step, index) => (
                 <section
                   key={step.number}
-                  className="relative grid gap-4 border-b border-white/10 py-5 md:grid-cols-[72px_minmax(0,1fr)] md:items-center md:gap-7"
+                  className="relative grid gap-4 border-b border-white/10 py-5 md:grid-cols-[58px_minmax(0,1fr)] md:items-center md:gap-5.5 md:py-4"
                 >
-                  <div className="relative z-10 flex items-center gap-3 md:block">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-full border border-orange-500/50 bg-black text-sm font-bold tracking-[0.14em] text-orange-500 shadow-[0_0_20px_rgba(255,106,0,0.10)]">
+                  <div className="relative z-10 flex items-center gap-3 md:block md:gap-2.5">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-full border border-orange-500/50 bg-black text-sm font-bold tracking-[0.14em] text-orange-500 shadow-[0_0_20px_rgba(255,106,0,0.10)] md:h-11 md:w-11">
                       {step.number}
                     </div>
                   </div>
 
-                  <div className="max-w-[620px]"><h2 className="text-2xl font-bold leading-tight tracking-[-0.025em] md:text-[30px]">
+                  <div className="max-w-[620px]"><h2 className="text-2xl font-bold leading-tight tracking-[-0.025em] md:text-[25px]">
                       {step.title}
                     </h2>
 
-                    <p className="mt-3 text-sm leading-relaxed text-zinc-300 md:text-base">
+                    <p className="mt-3 text-sm leading-relaxed text-zinc-300 md:text-base md:mt-2.5">
                       {step.text}
                     </p>
                   </div>
@@ -245,13 +245,13 @@ export default function TechnologyPage() {
             </div>
           </div>
 
-          <div className="mt-7 flex flex-col gap-5 border-y border-white/10 py-6 md:flex-row md:items-center md:justify-between">
+          <div className="mt-7 flex flex-col gap-5 border-y border-white/10 py-6 md:flex-row md:items-center md:justify-between md:mt-5.5 md:gap-4 md:py-5">
             <div className="max-w-[820px]">
-              <h2 className="text-xl font-bold tracking-[-0.02em] md:text-2xl">
+              <h2 className="text-xl font-bold tracking-[-0.02em] md:text-[20px] md:leading-[27px]">
                 Перекос кузова нужно найти и устранить
               </h2>
 
-              <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:text-base">
+              <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:text-base md:mt-1.5">
                 Важно не просто вытянуть металл, а понять причину отклонения,
                 вернуть кузов к правильным размерам и подтвердить результат измерениями.
               </p>
@@ -260,28 +260,28 @@ export default function TechnologyPage() {
             <button
               type="button"
               onClick={openForm}
-              className="shrink-0 rounded-2xl bg-orange-500 px-7 py-4 text-sm font-semibold text-white shadow-[0_0_18px_rgba(255,106,0,0.18)] transition-all hover:-translate-y-0.5 hover:bg-orange-400 sm:text-base"
+              className="shrink-0 rounded-2xl bg-orange-500 px-7 py-4 text-sm font-semibold text-white shadow-[0_0_18px_rgba(255,106,0,0.18)] transition-all hover:-translate-y-0.5 hover:bg-orange-400 sm:text-base md:px-5.5 md:py-3"
             >
               Отправить фото повреждений
             </button>
           </div>
 
-          <section className="mt-10 md:mt-14">
+          <section className="mt-10 md:mt-11">
             <div className="max-w-[900px]">
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-orange-500">
                 Вопросы и ответы
               </p>
 
-              <h2 className="mt-3 text-2xl font-bold leading-tight tracking-[-0.025em] sm:text-3xl md:text-[40px]">
+              <h2 className="mt-3 text-2xl font-bold leading-tight tracking-[-0.025em] sm:text-3xl md:text-[34px] md:mt-2.5">
                 Частые вопросы после ДТП
               </h2>
 
-              <p className="mt-4 max-w-[720px] text-sm leading-relaxed text-zinc-400 md:text-base">
+              <p className="mt-4 max-w-[720px] text-sm leading-relaxed text-zinc-400 md:text-base md:mt-3">
                 О симптомах, скрытых перекосах и восстановлении геометрии после удара.
               </p>
             </div>
 
-            <div className="mt-7 space-y-3">
+            <div className="mt-7 space-y-3 md:mt-5.5 md:space-y-2.5">
               {faqs.map((faq, index) => {
                 const isOpen = openFaq === index;
 
@@ -299,9 +299,9 @@ export default function TechnologyPage() {
                       onClick={() => setOpenFaq(isOpen ? null : index)}
                       aria-expanded={isOpen}
                       aria-controls={`faq-answer-${index}`}
-                      className="flex w-full items-center justify-between gap-5 px-5 py-5 text-left sm:px-6"
+                      className="flex w-full items-center justify-between gap-5 px-5 py-5 text-left sm:px-6 md:gap-4 md:px-5 md:py-4"
                     >
-                      <span className="text-base font-semibold leading-snug text-white sm:text-lg">
+                      <span className="text-base font-semibold leading-snug text-white sm:text-lg md:text-[17px]">
                         {faq.question}
                       </span>
 
@@ -326,7 +326,7 @@ export default function TechnologyPage() {
                       }`}
                     >
                       <div className="overflow-hidden">
-                        <p className="px-5 pb-6 pr-16 text-sm leading-relaxed text-zinc-300 sm:px-6 sm:text-base">
+                        <p className="px-5 pb-6 pr-16 text-sm leading-relaxed text-zinc-300 sm:px-6 sm:text-base md:px-5 md:pb-5 md:pr-13">
                           {faq.answer}
                         </p>
                       </div>

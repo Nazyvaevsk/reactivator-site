@@ -67,7 +67,7 @@ export default function ServicesPage() {
       <section
         className="relative mx-auto overflow-hidden bg-black"
         style={{
-          width: pageViewport ? `${pageViewport.width}px` : "100vw",
+          width: "100%",
           minHeight: pageViewport
             ? `${Math.round(pageViewport.width * 0.5625)}px`
             : "56.25vw",
@@ -85,24 +85,24 @@ export default function ServicesPage() {
           }}
         />
 
-        <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-8 pt-32 md:px-10 md:pt-32">
+        <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-8 pt-32 md:px-8 md:pt-25.5 md:pb-6.5">
           <div className="max-w-[900px]">
-<h1 className="max-w-[900px] text-5xl font-bold leading-[0.95] tracking-tight md:text-[64px]">
+<h1 className="max-w-[900px] text-5xl font-bold leading-[0.95] tracking-tight md:text-[54px]">
               После ДТП важно понять
               <br />
               <span className="text-orange-500">не только что помято, а что сместилось</span>
             </h1>
 
-            <p className="mt-6 max-w-[760px] text-base leading-relaxed text-zinc-300 md:text-lg">
+            <p className="mt-6 max-w-[760px] text-base leading-relaxed text-zinc-300 md:text-[17px] md:mt-5">
               Восстанавливаем геометрию и силовую структуру кузова после ДТП.
               Проверяем размеры, устраняем перекосы и возвращаем элементы
               в правильное положение.
             </p>
 
             <button type="button" onClick={openForm}
-              className="group mt-6 inline-flex items-center justify-center gap-4 rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)]"
+              className="group mt-6 inline-flex items-center justify-center gap-4 rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)] md:mt-5 md:gap-3 md:px-5.5 md:py-3"
             >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500 md:h-8 md:w-8">
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -130,11 +130,11 @@ export default function ServicesPage() {
             </button>
           </div>
 
-          <div className="mt-3 grid gap-3 md:grid-cols-2">
+          <div className="mt-3 grid gap-3 md:grid-cols-2 md:mt-2.5 md:gap-2.5">
             {services.map((service) => (
               <article
                 key={service.number}
-                className="group relative h-[178px] overflow-hidden rounded-[22px] border border-white/15 bg-zinc-950"
+                className="group relative h-[178px] md:h-auto md:min-h-[150px] overflow-hidden rounded-[22px] border border-white/15 bg-zinc-950"
               >
                 <div
                   aria-hidden="true"
@@ -231,22 +231,22 @@ export default function ServicesPage() {
                 <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/65 to-black/25" />
                 <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/40" />
 
-                <div className="relative flex h-full items-start justify-between px-6 py-5 md:px-7">
-                  <div className="max-w-[75%]">
-                    <div className="text-3xl font-medium leading-none text-orange-500">
+                <div className="relative flex h-full items-start justify-between px-6 py-5 md:px-5.5 md:py-4">
+                  <div className="max-w-[75%] md:max-w-[calc(100%-2rem)]">
+                    <div className="text-3xl font-medium leading-none text-orange-500 md:text-[25px]">
                       {service.number}
                     </div>
 
-                    <h2 className="mt-4 text-xl font-bold leading-tight md:text-2xl">
+                    <h2 className="mt-4 text-xl font-bold leading-tight md:text-[20px] md:mt-3">
                       {service.title}
                     </h2>
 
-                    <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400">
+                    <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400 md:mt-2.5">
                       {service.text}
                     </p>
                   </div>
 
-                  <div className="absolute bottom-4 right-4 flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-black/70 text-orange-500 transition-all duration-200 group-hover:border-orange-500 group-hover:bg-orange-500 group-hover:text-white">
+                  <div className="absolute bottom-4 right-4 flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-black/70 text-orange-500 transition-all duration-200 group-hover:border-orange-500 group-hover:bg-orange-500 group-hover:text-white md:h-9.5 md:w-9.5">
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -263,11 +263,11 @@ export default function ServicesPage() {
             ))}
           </div>
 
-          <div className="mt-3 grid gap-3 md:grid-cols-2">
-            <div className="relative overflow-hidden rounded-[22px] border border-white/10 bg-zinc-950/90 px-6 py-6 md:px-7">
+          <div className="mt-3 grid gap-3 md:grid-cols-2 md:mt-2.5 md:gap-2.5">
+            <div className="relative overflow-hidden rounded-[22px] border border-white/10 bg-zinc-950/90 px-6 py-6 md:px-5.5 md:py-5">
               <div
                 aria-hidden="true"
-                className="absolute right-5 top-5 text-5xl font-bold text-orange-500/10"
+                className="absolute right-5 top-5 text-5xl font-bold text-orange-500/10 md:text-[40px] md:leading-[40px]"
               >
                 01
               </div>
@@ -276,20 +276,20 @@ export default function ServicesPage() {
                 Наша специализация
               </p>
 
-              <h2 className="mt-3 max-w-xl text-xl font-bold leading-tight md:text-2xl">
+              <h2 className="mt-3 max-w-xl text-xl font-bold leading-tight md:text-[20px] md:mt-2.5">
                 Геометрия и силовой кузовной ремонт
               </h2>
 
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base">
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base md:mt-2.5">
                 Геометрию, стапельные работы, вытяжку и восстановление силовых
                 элементов выполняем сами и контролируем результат по размерам.
               </p>
             </div>
 
-            <div className="relative overflow-hidden rounded-[22px] border border-orange-500/20 bg-[#100d0b]/90 px-6 py-6 md:px-7">
+            <div className="relative overflow-hidden rounded-[22px] border border-orange-500/20 bg-[#100d0b]/90 px-6 py-6 md:px-5.5 md:py-5">
               <div
                 aria-hidden="true"
-                className="absolute right-5 top-5 text-5xl font-bold text-orange-500/10"
+                className="absolute right-5 top-5 text-5xl font-bold text-orange-500/10 md:text-[40px] md:leading-[40px]"
               >
                 02
               </div>
@@ -298,18 +298,18 @@ export default function ServicesPage() {
                 Если нужна окраска
               </p>
 
-              <h2 className="mt-3 max-w-xl text-xl font-bold leading-tight md:text-2xl">
+              <h2 className="mt-3 max-w-xl text-xl font-bold leading-tight md:text-[20px] md:mt-2.5">
                 Мы не держим малярку ради галочки
               </h2>
 
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base">
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base md:mt-2.5">
                 Наша специализация — геометрия и силовой кузовной ремонт.
                 Окраску подключаем отдельно у проверенного специалиста
                 после осмотра автомобиля.
               </p>
             </div>
           </div>
-          <div className="relative mt-3 overflow-hidden rounded-[22px] border border-orange-500/60 bg-[#170900]">
+          <div className="relative mt-3 overflow-hidden rounded-[22px] border border-orange-500/60 bg-[#170900] md:mt-2.5">
             <div
               className="absolute inset-0 opacity-30"
               style={{
@@ -322,8 +322,8 @@ export default function ServicesPage() {
 
             <div className="absolute inset-0 bg-[#170900]/80" />
 
-            <div className="relative flex items-center justify-between gap-8 px-7 py-6 md:px-9">
-              <div className="flex items-center gap-6">
+            <div className="relative flex items-center justify-between gap-8 px-7 py-6 md:px-7 md:gap-6.5 md:py-5">
+              <div className="flex items-center gap-6 md:gap-5">
                 <div className="hidden text-orange-500 md:block">
                   <svg
                     viewBox="0 0 24 24"
@@ -339,11 +339,11 @@ export default function ServicesPage() {
                 </div>
 
                 <div>
-                  <h2 className="text-2xl font-bold md:text-3xl">
+                  <h2 className="text-2xl font-bold md:text-[25px] md:leading-[30px]">
                     Не знаете, с чего начать?
                   </h2>
 
-                  <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-300 md:text-base">
+                  <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-300 md:text-base md:mt-1.5">
                     Отправьте фотографии автомобиля. Предварительно оценим
                     повреждения и подскажем, какие работы могут потребоваться.
                   </p>
@@ -351,9 +351,9 @@ export default function ServicesPage() {
               </div>
 
               <button type="button" onClick={openForm}
-                className="group hidden shrink-0 items-center justify-center gap-4 rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)] md:flex"
+                className="group hidden shrink-0 items-center justify-center gap-4 rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)] md:flex md:gap-3 md:px-5.5 md:py-3"
               >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500 md:h-8 md:w-8">
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"

@@ -68,17 +68,17 @@ export default function Home() {
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         <header className="absolute inset-x-0 top-0 z-20">
-          <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5">
-            <div aria-hidden="true" className="w-[250px] shrink min-w-0" />
+          <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5 md:px-5 md:py-4">
+            <div aria-hidden="true" className="w-[250px] shrink min-w-0 md:w-[185px] lg:w-[210px]" />
 
-            <nav className="hidden items-center gap-10 md:flex">
+            <nav className="hidden items-center gap-10 md:flex md:gap-3 lg:gap-8">
               <NavigationLinks />
             </nav>
 
             <button
               type="button"
               onClick={openForm}
-              className="rounded-2xl bg-orange-500 px-7 py-3 text-sm font-semibold text-white transition hover:bg-orange-400"
+              className="rounded-2xl bg-orange-500 px-7 py-3 text-sm font-semibold text-white transition hover:bg-orange-400 md:px-5.5 md:py-2.5"
             >
               Записаться
             </button>
@@ -86,8 +86,8 @@ export default function Home() {
         </header>
 
         <div className="pointer-events-none absolute inset-x-0 top-0 z-10">
-          <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-6 py-5 sm:px-10 lg:px-16">
-            <div className="text-[22px] font-black uppercase leading-none tracking-tight text-white">
+          <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-6 py-5 sm:px-10 lg:px-16 md:gap-2.5 md:px-10 md:py-4">
+            <div className="text-[22px] font-black uppercase leading-none tracking-tight text-white md:text-[18px]">
               <span className="text-orange-500">R</span>ЕАКТИВАТОР
             </div>
             <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-orange-500">
@@ -97,23 +97,23 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 flex min-h-[inherit] items-center">
-          <div className="mx-auto w-full max-w-7xl px-6 pb-10 pt-28 sm:px-10 lg:px-16">
-<h1 className="max-w-[780px] text-[clamp(2rem,4.7vw,4.25rem)] font-bold leading-[1.04] tracking-[-0.035em]">
+          <div className="mx-auto w-full max-w-7xl px-6 pb-10 pt-28 sm:px-10 lg:px-16 md:px-10 md:pb-8 md:pt-22.5">
+<h1 className="max-w-[780px] text-[clamp(2rem,4.7vw,4.25rem)] md:text-[clamp(1.75rem,3.95vw,3.57rem)] font-bold leading-[1.04] tracking-[-0.035em]">
               <span className="block text-white">Восстановление</span>
               <span className="block text-orange-500">геометрии кузова</span>
               <span className="block text-white">после ДТП</span>
             </h1>
 
-            <p className="mb-6 mt-5 max-w-[540px] text-base leading-relaxed text-zinc-200 md:text-lg">
+            <p className="mb-6 mt-5 max-w-[540px] md:max-w-[480px] text-base leading-relaxed text-zinc-200 md:text-[17px] md:mb-5 md:mt-4">
               Сложные ДТП, перекосы кузова и восстановление силовой геометрии с контролем размеров.
             </p>
 
             <button
               type="button"
               onClick={openForm}
-              className="group flex w-full items-center justify-center gap-3 rounded-2xl bg-white px-5 py-4 text-sm sm:gap-4 sm:px-7 sm:text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)] sm:w-auto"
+              className="group flex w-full items-center justify-center gap-3 rounded-2xl bg-white px-5 py-4 text-sm sm:gap-4 sm:px-7 sm:text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)] sm:w-auto md:gap-3 md:px-5.5 md:py-3"
             >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500 md:h-8 md:w-8">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="h-6 w-6">
                   <path d="M4 8h3l1.5-2h7L17 8h3v10H4V8Z" />
                   <circle cx="12" cy="13" r="3.2" />
@@ -128,7 +128,7 @@ export default function Home() {
               </svg>
             </button>
 
-            <p className="mt-3 max-w-[380px] text-xs leading-relaxed text-zinc-400 sm:text-sm">
+            <p className="mt-3 max-w-[380px] text-xs leading-relaxed text-zinc-400 sm:text-sm md:mt-2.5">
               Предварительно посмотрим повреждения по фото
             </p>
 

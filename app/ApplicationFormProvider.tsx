@@ -258,36 +258,36 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
     <ApplicationFormContext.Provider value={openForm}>
       {children}
       {isFormOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 text-white backdrop-blur-sm">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 text-white backdrop-blur-sm md:p-3">
 
-          <div className="relative max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-zinc-950 p-6 shadow-2xl md:p-9">
+          <div className="relative max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-zinc-950 p-6 shadow-2xl md:p-7">
 
             <button
               type="button"
               onClick={closeForm}
               disabled={isSending}
-              className="absolute right-5 top-5 flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800 text-2xl text-zinc-300 transition hover:bg-zinc-700 hover:text-white disabled:opacity-50"
+              className="absolute right-5 top-5 flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800 text-2xl text-zinc-300 transition hover:bg-zinc-700 hover:text-white disabled:opacity-50 md:h-9.5 md:w-9.5 md:text-[20px] md:leading-[27px]"
             >
               ×
             </button>
 
             {isSent ? (
 
-              <div className="flex min-h-[500px] flex-col items-center justify-center text-center">
+              <div className="flex min-h-[500px] md:min-h-[420px] flex-col items-center justify-center text-center">
 
-                <div className="mb-7 flex h-20 w-20 items-center justify-center rounded-full bg-white text-4xl text-black">
+                <div className="mb-7 flex h-20 w-20 items-center justify-center rounded-full bg-white text-4xl text-black md:mb-5.5 md:h-16 md:w-16 md:text-[30px] md:leading-[34px]">
                   ✓
                 </div>
 
-                <p className="mb-3 text-xs uppercase tracking-[0.35em] text-zinc-500">
+                <p className="mb-3 text-xs uppercase tracking-[0.35em] text-zinc-500 md:mb-2.5">
                   Заявка отправлена
                 </p>
 
-                <h2 className="mb-5 text-4xl font-bold">
+                <h2 className="mb-5 text-4xl font-bold md:mb-4 md:text-[30px] md:leading-[34px]">
                   Спасибо
                 </h2>
 
-                <p className="max-w-md text-lg leading-relaxed text-zinc-400">
+                <p className="max-w-md text-lg leading-relaxed text-zinc-400 md:text-[17px]">
                   Мы получили ваши фотографии и описание повреждений.
                   Свяжемся с вами по указанному телефону.
                 </p>
@@ -295,7 +295,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                 <button
                   type="button"
                   onClick={closeForm}
-                  className="mt-10 rounded-2xl bg-white px-8 py-4 text-lg text-black transition hover:bg-zinc-300"
+                  className="mt-10 rounded-2xl bg-white px-8 py-4 text-lg text-black transition hover:bg-zinc-300 md:mt-8 md:px-6.5 md:py-3 md:text-[17px] md:leading-[28px]"
                 >
                   Закрыть
                 </button>
@@ -306,19 +306,19 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
               <form onSubmit={handleSubmit} noValidate>
 
-                <p className="mb-3 text-xs uppercase tracking-[0.35em] text-zinc-500">
+                <p className="mb-3 text-xs uppercase tracking-[0.35em] text-zinc-500 md:mb-2.5">
                   Предварительная оценка
                 </p>
 
-                <h2 className="mb-12 pr-12 text-4xl font-bold md:text-5xl">
+                <h2 className="mb-12 pr-12 text-4xl font-bold md:text-[40px] md:leading-[40px] md:mb-9.5 md:pr-9.5">
                   Отправить повреждения
                 </h2>
 
                 {/* NAME */}
 
-                <div className="mb-7">
+                <div className="mb-7 md:mb-5.5">
 
-                  <label className="mb-3 block text-base text-zinc-300">
+                  <label className="mb-3 block text-base text-zinc-300 md:mb-2.5">
                     Ваше имя
                   </label>
 
@@ -331,7 +331,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                       setErrors((prev) => ({ ...prev, name: "" }));
                     }}
                     placeholder="Как к вам обращаться"
-                    className={`w-full rounded-2xl border bg-black px-6 py-5 text-lg text-white outline-none transition placeholder:text-zinc-600 ${
+                    className={`w-full rounded-2xl border bg-black px-6 py-5 text-lg md:px-5 md:py-4 md:text-[17px] text-white outline-none transition placeholder:text-zinc-600 ${
                       errors.name
                         ? "border-red-500 focus:border-red-500"
                         : "border-zinc-800 focus:border-zinc-500"
@@ -339,7 +339,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                   />
 
                   {errors.name && (
-                    <p className="mt-2 text-sm text-red-400">
+                    <p className="mt-2 text-sm text-red-400 md:mt-1.5">
                       {errors.name}
                     </p>
                   )}
@@ -348,9 +348,9 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
                 {/* PHONE */}
 
-                <div className="mb-7">
+                <div className="mb-7 md:mb-5.5">
 
-                  <label className="mb-3 block text-base text-zinc-300">
+                  <label className="mb-3 block text-base text-zinc-300 md:mb-2.5">
                     Телефон
                   </label>
 
@@ -363,7 +363,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                       setErrors((prev) => ({ ...prev, phone: "" }));
                     }}
                     placeholder="+7 900 000-00-00"
-                    className={`w-full rounded-2xl border bg-black px-6 py-5 text-lg text-white outline-none transition placeholder:text-zinc-600 ${
+                    className={`w-full rounded-2xl border bg-black px-6 py-5 text-lg md:px-5 md:py-4 md:text-[17px] text-white outline-none transition placeholder:text-zinc-600 ${
                       errors.phone
                         ? "border-red-500 focus:border-red-500"
                         : "border-zinc-800 focus:border-zinc-500"
@@ -371,7 +371,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                   />
 
                   {errors.phone && (
-                    <p className="mt-2 text-sm text-red-400">
+                    <p className="mt-2 text-sm text-red-400 md:mt-1.5">
                       {errors.phone}
                     </p>
                   )}
@@ -380,21 +380,21 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
                 {/* PHOTOS */}
 
-                <div className="mb-7">
+                <div className="mb-7 md:mb-5.5">
 
-                  <label className="mb-3 block text-base text-zinc-300">
+                  <label className="mb-3 block text-base text-zinc-300 md:mb-2.5">
                     Фотографии повреждений
                   </label>
 
                   <label
-                    className={`flex cursor-pointer flex-wrap items-center gap-5 rounded-2xl border border-dashed bg-black p-5 transition ${
+                    className={`flex cursor-pointer flex-wrap items-center gap-5 md:gap-4 rounded-2xl border border-dashed bg-black p-5 md:p-4 transition ${
                       errors.photos
                         ? "border-red-500"
                         : "border-zinc-700 hover:border-zinc-500"
                     }`}
                   >
 
-                    <span className="rounded-xl bg-white px-6 py-3 text-base text-black transition hover:bg-zinc-300">
+                    <span className="rounded-xl bg-white px-6 py-3 text-base text-black transition hover:bg-zinc-300 md:px-5 md:py-2.5">
                       Выбрать файлы
                     </span>
 
@@ -416,11 +416,11 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                   </label>
 
                   {errors.photos ? (
-                    <p className="mt-2 text-sm text-red-400">
+                    <p className="mt-2 text-sm text-red-400 md:mt-1.5">
                       {errors.photos}
                     </p>
                   ) : (
-                    <p className="mt-2 text-sm text-zinc-600">
+                    <p className="mt-2 text-sm text-zinc-600 md:mt-1.5">
                       До 10 фотографий, общий размер — до 100 МБ.
                     </p>
                   )}
@@ -429,9 +429,9 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
                 {/* DESCRIPTION */}
 
-                <div className="mb-8">
+                <div className="mb-8 md:mb-6.5">
 
-                  <label className="mb-3 block text-base text-zinc-300">
+                  <label className="mb-3 block text-base text-zinc-300 md:mb-2.5">
                     Что произошло?
                   </label>
 
@@ -444,7 +444,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                     }}
                     placeholder="Например: удар в переднюю часть, увело лонжерон..."
                     rows={5}
-                    className={`w-full resize-none rounded-2xl border bg-black px-6 py-5 text-lg text-white outline-none transition placeholder:text-zinc-600 ${
+                    className={`w-full resize-none rounded-2xl border bg-black px-6 py-5 text-lg md:px-5 md:py-4 md:text-[17px] text-white outline-none transition placeholder:text-zinc-600 ${
                       errors.description
                         ? "border-red-500 focus:border-red-500"
                         : "border-zinc-800 focus:border-zinc-500"
@@ -452,7 +452,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                   />
 
                   {errors.description && (
-                    <p className="mt-2 text-sm text-red-400">
+                    <p className="mt-2 text-sm text-red-400 md:mt-1.5">
                       {errors.description}
                     </p>
                   )}
@@ -466,7 +466,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                     type="submit"
                     disabled={isSending}
                     aria-busy={isSending}
-                    className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-5 text-base font-semibold transition sm:px-8 sm:text-lg disabled:cursor-wait ${isSending ? "bg-orange-500 text-black" : "bg-white text-black hover:bg-zinc-300"}`}
+                    className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-5 text-base font-semibold transition sm:px-8 sm:text-lg md:px-6.5 md:py-4 md:text-[17px] disabled:cursor-wait ${isSending ? "bg-orange-500 text-black" : "bg-white text-black hover:bg-zinc-300"}`}
                   >
                     {isSending && (
                       <span
@@ -478,14 +478,14 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                   </button>
 
                   {isSending && (
-                    <div role="status" aria-live="polite" aria-atomic="true" className="mt-4 text-center">
+                    <div role="status" aria-live="polite" aria-atomic="true" className="mt-4 text-center md:mt-3">
                       <p className="text-base font-semibold leading-relaxed text-orange-400">
                         Не закрывайте страницу — идёт отправка
                       </p>
-                      <p className="mt-2 text-sm text-white">
+                      <p className="mt-2 text-sm text-white md:mt-1.5">
                         Отправлено фотографий: {uploadedPhotos} из {photos.length}
                       </p>
-                      <div aria-hidden="true" className="mt-3 h-2 overflow-hidden rounded-full bg-zinc-800">
+                      <div aria-hidden="true" className="mt-3 h-2 overflow-hidden rounded-full bg-zinc-800 md:mt-2.5">
                         <div
                           className="h-full rounded-full bg-orange-500 transition-[width] duration-300 motion-reduce:transition-none"
                           style={{ width: `${(uploadedPhotos / photos.length) * 100}%` }}
@@ -495,7 +495,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                   )}
                 </div>
 
-                <p className="mt-4 text-center text-sm leading-relaxed text-zinc-600">
+                <p className="mt-4 text-center text-sm leading-relaxed text-zinc-600 md:mt-3">
                   Нажимая кнопку, вы отправляете фотографии и контактные данные
                   для связи по заявке.
                 </p>
