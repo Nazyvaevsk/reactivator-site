@@ -111,7 +111,7 @@ export default function TechnologyPage() {
   return (
     <main className="min-h-screen bg-black text-white">
       <section
-        className="relative mx-auto overflow-hidden bg-black"
+        className="relative mx-auto overflow-hidden bg-black max-lg:max-w-full"
         style={{
           width: pageViewport ? `${pageViewport.width}px` : "100vw",
           minHeight: pageViewport
@@ -131,9 +131,9 @@ export default function TechnologyPage() {
           }}
         />
 
-        <div className="relative z-10 mx-auto max-w-[1440px] px-5 pb-12 pt-28 sm:px-6 md:px-8 md:pb-13 md:pt-25.5">
+        <div className="relative z-10 mx-auto max-w-[1440px] px-5 pb-12 pt-28 sm:px-6 md:px-8 md:pb-13 md:pt-25.5 max-md:px-4 max-md:pt-26 max-md:pb-10">
           <div className="max-w-[1100px]">
-            <h1 className="text-[clamp(2rem,4.5vw,4rem)] md:text-[clamp(1.75rem,3.78vw,3.36rem)] font-bold leading-[1.08] tracking-[-0.035em]">
+            <h1 className="text-[clamp(2rem,4.5vw,4rem)] md:text-[clamp(1.75rem,3.78vw,3.36rem)] font-bold leading-[1.08] tracking-[-0.035em] max-md:text-[clamp(1.875rem,8vw,2.5rem)] max-md:leading-[1.08]">
               <span className="block">После ДТП машину тянет,</span>
               <span className="block text-orange-500">руль криво и зазоры ушли?</span>
             </h1>
@@ -156,14 +156,14 @@ export default function TechnologyPage() {
             ))}
           </div>
 
-                    <section className="mt-9 border-y border-white/10 py-6 md:mt-7 md:py-5">
+                    <section className="mt-9 border-y border-white/10 py-6 md:mt-7 md:py-5 max-md:py-5">
   <div className="grid gap-6 md:grid-cols-[0.7fr_1.3fr] md:items-center md:gap-5">
     <div>
       <p className="text-xs font-bold uppercase tracking-[0.22em] text-orange-500">
         Измерение кузова
       </p>
 
-      <h2 className="mt-2 text-2xl font-bold leading-tight tracking-[-0.025em] md:text-[25px] md:mt-1.5">
+      <h2 className="mt-2 text-2xl font-bold leading-tight tracking-[-0.025em] md:text-[25px] md:mt-1.5 max-md:text-[22px]">
         Что контролируем
         <br />
         <span className="text-orange-500">при измерении кузова</span>
@@ -187,7 +187,7 @@ export default function TechnologyPage() {
 
   <div className="mt-5 flex items-center gap-3 border-t border-white/10 pt-4 md:mt-4 md:gap-2.5 md:pt-3">
     <span className="h-2 w-2 shrink-0 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(255,106,0,0.8)]" />
-    <p className="text-sm text-zinc-300 md:text-base">
+    <p className="text-sm text-zinc-300 md:text-base max-md:text-base">
       Собственная база контрольных размеров и схем кузовов по маркам и моделям автомобилей.
     </p>
   </div>
@@ -232,11 +232,11 @@ export default function TechnologyPage() {
                     </div>
                   </div>
 
-                  <div className="max-w-[620px]"><h2 className="text-2xl font-bold leading-tight tracking-[-0.025em] md:text-[25px]">
+                  <div className="max-w-[620px]"><h2 className="text-2xl font-bold leading-tight tracking-[-0.025em] md:text-[25px] max-md:text-[22px]">
                       {step.title}
                     </h2>
 
-                    <p className="mt-3 text-sm leading-relaxed text-zinc-300 md:text-base md:mt-2.5">
+                    <p className="mt-3 text-sm leading-relaxed text-zinc-300 md:text-base md:mt-2.5 max-md:text-base">
                       {step.text}
                     </p>
                   </div>
@@ -245,13 +245,13 @@ export default function TechnologyPage() {
             </div>
           </div>
 
-          <div className="mt-7 flex flex-col gap-5 border-y border-white/10 py-6 md:flex-row md:items-center md:justify-between md:mt-5.5 md:gap-4 md:py-5">
+          <div className="mt-7 flex flex-col gap-5 border-y border-white/10 py-6 md:flex-row md:items-center md:justify-between md:max-lg:flex-col md:max-lg:items-stretch md:mt-5.5 md:gap-4 md:py-5 max-md:py-5">
             <div className="max-w-[820px]">
               <h2 className="text-xl font-bold tracking-[-0.02em] md:text-[20px] md:leading-[27px]">
                 Перекос кузова нужно найти и устранить
               </h2>
 
-              <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:text-base md:mt-1.5">
+              <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:text-base md:mt-1.5 max-md:text-base">
                 Важно не просто вытянуть металл, а понять причину отклонения,
                 вернуть кузов к правильным размерам и подтвердить результат измерениями.
               </p>
@@ -260,7 +260,7 @@ export default function TechnologyPage() {
             <button
               type="button"
               onClick={openForm}
-              className="shrink-0 rounded-2xl bg-orange-500 px-7 py-4 text-sm font-semibold text-white shadow-[0_0_18px_rgba(255,106,0,0.18)] transition-all hover:-translate-y-0.5 hover:bg-orange-400 sm:text-base md:px-5.5 md:py-3"
+              className="shrink-0 rounded-2xl bg-orange-500 max-md:w-full max-md:min-h-14 max-md:px-4 max-md:text-base px-7 py-4 text-sm font-semibold text-white shadow-[0_0_18px_rgba(255,106,0,0.18)] transition-all hover:-translate-y-0.5 hover:bg-orange-400 sm:text-base md:px-5.5 md:py-3 max-md:px-5"
             >
               Отправить фото повреждений
             </button>
@@ -272,11 +272,11 @@ export default function TechnologyPage() {
                 Вопросы и ответы
               </p>
 
-              <h2 className="mt-3 text-2xl font-bold leading-tight tracking-[-0.025em] sm:text-3xl md:text-[34px] md:mt-2.5">
+              <h2 className="mt-3 text-2xl font-bold leading-tight tracking-[-0.025em] sm:text-3xl md:text-[34px] md:mt-2.5 max-md:text-[22px]">
                 Частые вопросы после ДТП
               </h2>
 
-              <p className="mt-4 max-w-[720px] text-sm leading-relaxed text-zinc-400 md:text-base md:mt-3">
+              <p className="mt-4 max-w-[720px] text-sm leading-relaxed text-zinc-400 md:text-base md:mt-3 max-md:text-base">
                 О симптомах, скрытых перекосах и восстановлении геометрии после удара.
               </p>
             </div>
@@ -326,7 +326,7 @@ export default function TechnologyPage() {
                       }`}
                     >
                       <div className="overflow-hidden">
-                        <p className="px-5 pb-6 pr-16 text-sm leading-relaxed text-zinc-300 sm:px-6 sm:text-base md:px-5 md:pb-5 md:pr-13">
+                        <p className="px-5 pb-6 pr-16 max-md:pr-5 text-sm leading-relaxed text-zinc-300 sm:px-6 sm:text-base md:px-5 md:pb-5 md:pr-13 max-md:text-base">
                           {faq.answer}
                         </p>
                       </div>

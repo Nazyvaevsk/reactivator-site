@@ -35,7 +35,7 @@ export default function ContactsPage() {
   return (
     <main className="min-h-screen bg-black text-white">
       <section
-        className="relative mx-auto overflow-hidden bg-black"
+        className="relative mx-auto overflow-hidden bg-black max-lg:max-w-full"
         style={{
           width: pageViewport ? `${pageViewport.width}px` : "100vw",
           minHeight: pageViewport
@@ -55,13 +55,13 @@ export default function ContactsPage() {
           }}
         />
 
-        <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-8 pt-32 md:px-8 md:pb-6.5 md:pt-25.5">
+        <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-8 pt-32 md:px-8 md:pb-6.5 md:pt-25.5 max-md:px-4 max-md:pt-26 max-md:pb-10">
           <div className="max-w-[900px]">
             <div className="mb-4 text-sm font-bold uppercase tracking-[0.22em] text-orange-500 md:mb-3">
               Реактиватор · Омск
             </div>
 
-            <h1 className="text-5xl font-bold leading-[0.95] tracking-tight md:text-[54px]">
+            <h1 className="text-5xl font-bold leading-[0.95] tracking-tight md:text-[54px] max-md:text-[clamp(1.875rem,8vw,2.5rem)] max-md:leading-[1.08]">
               Связаться
               <br />
               <span className="text-orange-500">с Реактиватором</span>
@@ -73,13 +73,13 @@ export default function ContactsPage() {
             </p>
           </div>
 
-          <div className="mt-8 grid gap-3 md:grid-cols-[0.85fr_1.15fr] md:mt-6.5 md:gap-2.5">
-            <article className="relative overflow-hidden rounded-[22px] border border-white/15 bg-black/90 px-7 py-7 md:px-5.5 md:py-5.5">
+          <div className="mt-8 grid gap-3 md:grid-cols-[0.85fr_1.15fr] md:max-lg:grid-cols-1 md:mt-6.5 md:gap-2.5">
+            <article className="relative overflow-hidden rounded-[22px] border border-white/15 bg-black/90 px-7 py-7 md:px-5.5 md:py-5.5 max-md:px-5 max-md:py-5">
               <div className="text-sm font-bold uppercase tracking-[0.18em] text-orange-500">
                 Мастерская
               </div>
 
-              <h2 className="mt-3 text-3xl font-bold md:mt-2.5 md:text-[25px] md:leading-[30px]">
+              <h2 className="mt-3 text-3xl font-bold md:mt-2.5 md:text-[25px] md:leading-[30px] max-md:text-[26px] max-md:leading-tight">
                 Омск
               </h2>
 
@@ -99,7 +99,7 @@ export default function ContactsPage() {
                   </div>
                   <a
                     href="tel:+79994547470"
-                    className="mt-1 inline-block text-lg font-semibold text-white transition-colors hover:text-orange-500 md:text-[17px] md:leading-[28px]"
+                    className="mt-1 inline-block text-lg max-md:py-2 max-md:min-h-11 font-semibold text-white transition-colors hover:text-orange-500 md:text-[17px] md:leading-[28px]"
                   >
                     +7 999 454-74-70
                   </a>
@@ -112,16 +112,16 @@ export default function ContactsPage() {
               </div>
             </article>
 
-            <article className="relative overflow-hidden rounded-[22px] border border-orange-500/60 bg-gradient-to-br from-[#1a0900]/95 via-black/95 to-black px-7 py-7 md:px-7 md:py-5.5">
+            <article className="relative overflow-hidden rounded-[22px] border border-orange-500/60 bg-gradient-to-br from-[#1a0900]/95 via-black/95 to-black px-7 py-7 md:px-7 md:py-5.5 max-md:px-5 max-md:py-5">
               <div className="text-sm font-bold uppercase tracking-[0.18em] text-orange-500">
                 Быстрый способ начать
               </div>
 
-              <h2 className="mt-3 text-2xl font-bold leading-tight md:text-[25px] md:mt-2.5">
+              <h2 className="mt-3 text-2xl font-bold leading-tight md:text-[25px] md:mt-2.5 max-md:text-[22px]">
                 Покажите повреждения автомобиля
               </h2>
 
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-300 md:text-base md:mt-2.5">
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-300 md:text-base md:mt-2.5 max-md:text-base">
                 Отправьте несколько фотографий с разных ракурсов. По ним
                 предварительно поймём характер повреждений и скажем, имеет ли
                 смысл приезжать на осмотр.
@@ -130,7 +130,7 @@ export default function ContactsPage() {
               <button
                 type="button"
                 onClick={openForm}
-                className="group mt-6 inline-flex items-center justify-center gap-4 rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)] md:mt-5 md:gap-3 md:px-5.5 md:py-3"
+                className="group mt-6 inline-flex items-center justify-center gap-4 rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)] md:mt-5 md:gap-3 md:px-5.5 md:py-3 max-md:px-5 max-lg:w-full max-lg:min-h-14 max-lg:gap-2 max-lg:px-3 max-lg:[&>span:first-child]:shrink-0 max-lg:[&>svg]:shrink-0"
               >
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500 md:h-8 md:w-8">
                   <svg
@@ -161,7 +161,7 @@ export default function ContactsPage() {
             </article>
           </div>
 
-          <div className="mt-3 grid gap-3 rounded-[22px] border border-white/10 bg-black/80 px-7 py-6 md:grid-cols-4 md:px-7 md:mt-2.5 md:gap-2.5 md:py-5">
+          <div className="mt-3 grid gap-3 rounded-[22px] border border-white/10 bg-black/80 px-7 py-6 md:grid-cols-4 md:max-lg:grid-cols-2 md:px-7 md:mt-2.5 md:gap-2.5 md:py-5 max-md:px-5 max-md:py-5">
             {[
               ["01", "Отправляете фото"],
               ["02", "Смотрим повреждения"],

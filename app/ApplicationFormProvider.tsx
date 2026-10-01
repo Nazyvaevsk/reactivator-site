@@ -258,15 +258,16 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
     <ApplicationFormContext.Provider value={openForm}>
       {children}
       {isFormOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 text-white backdrop-blur-sm md:p-3">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 text-white backdrop-blur-sm md:p-3 max-md:p-2">
 
-          <div className="relative max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-zinc-950 p-6 shadow-2xl md:p-7">
+          <div role="dialog" aria-modal="true" aria-label="Заявка на оценку повреждений" className="relative max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-zinc-950 p-6 shadow-2xl md:p-7 max-md:max-h-[calc(100dvh-1rem)] max-md:overscroll-contain max-md:p-5">
 
             <button
               type="button"
               onClick={closeForm}
+              aria-label="Закрыть форму"
               disabled={isSending}
-              className="absolute right-5 top-5 flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800 text-2xl text-zinc-300 transition hover:bg-zinc-700 hover:text-white disabled:opacity-50 md:h-9.5 md:w-9.5 md:text-[20px] md:leading-[27px]"
+              className="absolute right-5 top-5 flex h-12 w-12 items-center justify-center rounded-full bg-zinc-800 text-2xl text-zinc-300 transition hover:bg-zinc-700 hover:text-white disabled:opacity-50 max-md:right-3 max-md:top-3 max-md:h-11 max-md:w-11 md:h-9.5 md:w-9.5 md:text-[20px] md:leading-[27px]"
             >
               ×
             </button>
@@ -279,7 +280,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                   ✓
                 </div>
 
-                <p className="mb-3 text-xs uppercase tracking-[0.35em] text-zinc-500 md:mb-2.5">
+                <p className="mb-3 text-xs uppercase tracking-[0.35em] text-zinc-500 md:mb-2.5 max-md:pr-12 max-md:tracking-[0.12em]">
                   Заявка отправлена
                 </p>
 
@@ -306,17 +307,17 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
               <form onSubmit={handleSubmit} noValidate>
 
-                <p className="mb-3 text-xs uppercase tracking-[0.35em] text-zinc-500 md:mb-2.5">
+                <p className="mb-3 text-xs uppercase tracking-[0.35em] text-zinc-500 md:mb-2.5 max-md:pr-12 max-md:tracking-[0.12em]">
                   Предварительная оценка
                 </p>
 
-                <h2 className="mb-12 pr-12 text-4xl font-bold md:text-[40px] md:leading-[40px] md:mb-9.5 md:pr-9.5">
+                <h2 className="mb-12 pr-12 text-4xl font-bold md:text-[40px] md:leading-[40px] md:mb-9.5 md:pr-9.5 max-md:mb-6 max-md:pr-0 max-md:text-[28px] max-md:leading-tight">
                   Отправить повреждения
                 </h2>
 
                 {/* NAME */}
 
-                <div className="mb-7 md:mb-5.5">
+                <div className="mb-7 md:mb-5.5 max-md:mb-5">
 
                   <label className="mb-3 block text-base text-zinc-300 md:mb-2.5">
                     Ваше имя
@@ -331,7 +332,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                       setErrors((prev) => ({ ...prev, name: "" }));
                     }}
                     placeholder="Как к вам обращаться"
-                    className={`w-full rounded-2xl border bg-black px-6 py-5 text-lg md:px-5 md:py-4 md:text-[17px] text-white outline-none transition placeholder:text-zinc-600 ${
+                    className={`w-full rounded-2xl border bg-black px-6 py-5 text-lg max-md:px-4 max-md:py-3 max-md:text-base md:px-5 md:py-4 md:text-[17px] text-white outline-none transition placeholder:text-zinc-600 ${
                       errors.name
                         ? "border-red-500 focus:border-red-500"
                         : "border-zinc-800 focus:border-zinc-500"
@@ -348,7 +349,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
                 {/* PHONE */}
 
-                <div className="mb-7 md:mb-5.5">
+                <div className="mb-7 md:mb-5.5 max-md:mb-5">
 
                   <label className="mb-3 block text-base text-zinc-300 md:mb-2.5">
                     Телефон
@@ -363,7 +364,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                       setErrors((prev) => ({ ...prev, phone: "" }));
                     }}
                     placeholder="+7 900 000-00-00"
-                    className={`w-full rounded-2xl border bg-black px-6 py-5 text-lg md:px-5 md:py-4 md:text-[17px] text-white outline-none transition placeholder:text-zinc-600 ${
+                    className={`w-full rounded-2xl border bg-black px-6 py-5 text-lg max-md:px-4 max-md:py-3 max-md:text-base md:px-5 md:py-4 md:text-[17px] text-white outline-none transition placeholder:text-zinc-600 ${
                       errors.phone
                         ? "border-red-500 focus:border-red-500"
                         : "border-zinc-800 focus:border-zinc-500"
@@ -380,14 +381,14 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
                 {/* PHOTOS */}
 
-                <div className="mb-7 md:mb-5.5">
+                <div className="mb-7 md:mb-5.5 max-md:mb-5">
 
                   <label className="mb-3 block text-base text-zinc-300 md:mb-2.5">
                     Фотографии повреждений
                   </label>
 
                   <label
-                    className={`flex cursor-pointer flex-wrap items-center gap-5 md:gap-4 rounded-2xl border border-dashed bg-black p-5 md:p-4 transition ${
+                    className={`flex cursor-pointer flex-wrap items-center gap-5 md:gap-4 rounded-2xl border border-dashed bg-black p-5 md:p-4 max-md:p-3 max-md:gap-3 transition ${
                       errors.photos
                         ? "border-red-500"
                         : "border-zinc-700 hover:border-zinc-500"
@@ -444,7 +445,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                     }}
                     placeholder="Например: удар в переднюю часть, увело лонжерон..."
                     rows={5}
-                    className={`w-full resize-none rounded-2xl border bg-black px-6 py-5 text-lg md:px-5 md:py-4 md:text-[17px] text-white outline-none transition placeholder:text-zinc-600 ${
+                    className={`w-full resize-none rounded-2xl border bg-black px-6 py-5 text-lg max-md:px-4 max-md:py-3 max-md:text-base md:px-5 md:py-4 md:text-[17px] text-white outline-none transition placeholder:text-zinc-600 ${
                       errors.description
                         ? "border-red-500 focus:border-red-500"
                         : "border-zinc-800 focus:border-zinc-500"
@@ -466,7 +467,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                     type="submit"
                     disabled={isSending}
                     aria-busy={isSending}
-                    className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-5 text-base font-semibold transition sm:px-8 sm:text-lg md:px-6.5 md:py-4 md:text-[17px] disabled:cursor-wait ${isSending ? "bg-orange-500 text-black" : "bg-white text-black hover:bg-zinc-300"}`}
+                    className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-5 text-base font-semibold transition sm:px-8 sm:text-lg md:px-6.5 md:py-4 md:text-[17px] max-md:min-h-14 max-md:py-3 disabled:cursor-wait ${isSending ? "bg-orange-500 text-black" : "bg-white text-black hover:bg-zinc-300"}`}
                   >
                     {isSending && (
                       <span

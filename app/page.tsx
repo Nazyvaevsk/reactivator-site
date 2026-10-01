@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useApplicationForm } from "./ApplicationFormProvider";
+import PagesHeader from "./PagesHeader";
 import NavigationLinks from "./NavigationLinks";
 
 export default function Home() {
@@ -44,7 +45,7 @@ export default function Home() {
       {/* HERO */}
 
       <section
-        className="relative mx-auto overflow-hidden"
+        className="relative mx-auto overflow-hidden max-lg:max-w-full"
         style={
           heroViewport
             ? {
@@ -67,7 +68,8 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/55" />
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        <header className="absolute inset-x-0 top-0 z-20">
+        <div className="md:hidden"><PagesHeader /></div>
+        <header className="absolute inset-x-0 top-0 z-20 max-md:hidden">
           <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5 md:px-5 md:py-4">
             <div aria-hidden="true" className="w-[250px] shrink min-w-0 md:w-[185px] lg:w-[210px]" />
 
@@ -85,7 +87,7 @@ export default function Home() {
           </div>
         </header>
 
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10">
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 max-md:hidden">
           <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-6 py-5 sm:px-10 lg:px-16 md:gap-2.5 md:px-10 md:py-4">
             <div className="text-[22px] font-black uppercase leading-none tracking-tight text-white md:text-[18px]">
               <span className="text-orange-500">R</span>ЕАКТИВАТОР
@@ -97,7 +99,7 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 flex min-h-[inherit] items-center">
-          <div className="mx-auto w-full max-w-7xl px-6 pb-10 pt-28 sm:px-10 lg:px-16 md:px-10 md:pb-8 md:pt-22.5">
+          <div className="mx-auto w-full max-w-7xl px-6 pb-10 pt-28 sm:px-10 lg:px-16 md:px-10 md:pb-8 md:pt-22.5 max-md:px-4 max-md:pt-28 max-md:pb-10">
 <h1 className="max-w-[780px] text-[clamp(2rem,4.7vw,4.25rem)] md:text-[clamp(1.75rem,3.95vw,3.57rem)] font-bold leading-[1.04] tracking-[-0.035em]">
               <span className="block text-white">Восстановление</span>
               <span className="block text-orange-500">геометрии кузова</span>
@@ -111,7 +113,7 @@ export default function Home() {
             <button
               type="button"
               onClick={openForm}
-              className="group flex w-full items-center justify-center gap-3 rounded-2xl bg-white px-5 py-4 text-sm sm:gap-4 sm:px-7 sm:text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)] sm:w-auto md:gap-3 md:px-5.5 md:py-3"
+              className="group flex w-full items-center justify-center gap-3 rounded-2xl bg-white px-5 py-4 text-sm sm:gap-4 sm:px-7 sm:text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)] max-md:gap-2 max-md:px-3 max-md:min-h-14 max-md:text-base max-md:[&>svg]:shrink-0 sm:w-auto md:gap-3 md:px-5.5 md:py-3"
             >
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500 md:h-8 md:w-8">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="h-6 w-6">
@@ -128,7 +130,7 @@ export default function Home() {
               </svg>
             </button>
 
-            <p className="mt-3 max-w-[380px] text-xs leading-relaxed text-zinc-400 sm:text-sm md:mt-2.5">
+            <p className="mt-3 max-w-[380px] text-xs leading-relaxed text-zinc-400 sm:text-sm md:mt-2.5 max-md:text-sm">
               Предварительно посмотрим повреждения по фото
             </p>
 

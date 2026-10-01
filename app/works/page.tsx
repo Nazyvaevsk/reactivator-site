@@ -34,7 +34,7 @@ export default function WorksPage() {
   return (
     <main className="min-h-screen bg-black text-white">
       <section
-        className="relative mx-auto overflow-hidden bg-black"
+        className="relative mx-auto overflow-hidden bg-black max-lg:max-w-full"
         style={{
           width: pageViewport ? `${pageViewport.width}px` : "100vw",
           minHeight: pageViewport
@@ -54,9 +54,9 @@ export default function WorksPage() {
           }}
         />
 
-        <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-16 pt-32 md:px-8 md:pb-13 md:pt-25.5">
+        <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-16 pt-32 md:px-8 md:pb-13 md:pt-25.5 max-md:px-4 max-md:pt-26 max-md:pb-10">
           <div className="max-w-[900px]">
-            <h1 className="text-5xl font-bold leading-[0.95] tracking-tight md:text-[54px]">
+            <h1 className="text-5xl font-bold leading-[0.95] tracking-tight md:text-[54px] max-md:text-[clamp(1.875rem,8vw,2.5rem)] max-md:leading-[1.08]">
               Примеры <span className="text-orange-500">работ</span>
             </h1>
 
@@ -68,7 +68,7 @@ export default function WorksPage() {
 
           <article className="mt-10 overflow-hidden rounded-[28px] border border-white/15 bg-black/80 md:mt-8">
             <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
-              <div className="relative min-h-[380px] overflow-hidden lg:min-h-[520px]">
+              <div className="relative min-h-[380px] overflow-hidden max-md:min-h-0 max-md:aspect-[4/3] lg:min-h-[520px]">
                 <img
                   src="/works/sienta-2016-before.png"
                   alt="Toyota Sienta 2016 до ремонта"
@@ -82,12 +82,12 @@ export default function WorksPage() {
                 </div>
               </div>
 
-              <div className="flex flex-col justify-center p-7 md:p-8">
+              <div className="flex flex-col justify-center p-7 md:p-8 max-md:p-5">
                 <div className="text-sm font-bold uppercase tracking-[0.2em] text-orange-500">
                   Toyota Sienta · 2016
                 </div>
 
-                <h2 className="mt-4 text-3xl font-bold leading-tight md:text-[30px] md:mt-3">
+                <h2 className="mt-4 text-3xl font-bold leading-tight md:text-[30px] md:mt-3 max-md:text-[26px] max-md:leading-tight">
                   Восстановление левой задней части кузова
                 </h2>
 
@@ -123,7 +123,7 @@ export default function WorksPage() {
               </div>
             </div>
 
-            <div className="border-t border-white/10 p-6 md:p-8">
+            <div className="border-t border-white/10 p-6 md:p-8 max-md:p-5">
               <div className="grid gap-5 lg:grid-cols-3 md:gap-4">
                 <div>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[22px] border border-white/10">
@@ -142,7 +142,7 @@ export default function WorksPage() {
                     Замена повреждённой части кузова
                   </h3>
 
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5">
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5 max-md:text-base">
                     После восстановления геометрии использовали контрактную четверть кузова для замены сильно повреждённой левой задней части.
                   </p>
                 </div>
@@ -164,7 +164,7 @@ export default function WorksPage() {
                     Восстановление геометрии
                   </h3>
 
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5">
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5 max-md:text-base">
                     Автомобиль разобрали до силовой структуры повреждённой зоны
                     и последовательно восстановили геометрию кузова на стапеле.
                   </p>
@@ -187,7 +187,7 @@ export default function WorksPage() {
                     Результат
                   </h3>
 
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5">
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5 max-md:text-base">
                     Восстановлены форма задней части кузова, проёмы и положение
                     наружных элементов.
                   </p>
@@ -198,7 +198,7 @@ export default function WorksPage() {
 
           <article className="mt-10 overflow-hidden rounded-[28px] border border-white/15 bg-black/80 md:mt-8">
             <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
-              <div className="relative min-h-[380px] overflow-hidden lg:min-h-[520px]">
+              <div className="relative min-h-[380px] overflow-hidden max-md:min-h-0 max-md:aspect-[4/3] lg:min-h-[520px]">
                 <img
                   src="/works/mercedes-w211-2003-before.png"
                   alt="Mercedes-Benz E320 W211 2003 до ремонта"
@@ -212,12 +212,12 @@ export default function WorksPage() {
                 </div>
               </div>
 
-              <div className="flex flex-col justify-center p-7 md:p-8">
+              <div className="flex flex-col justify-center p-7 md:p-8 max-md:p-5">
                 <div className="text-sm font-bold uppercase tracking-[0.2em] text-orange-500">
                   Mercedes-Benz E320 W211 · 2003
                 </div>
 
-                <h2 className="mt-4 text-3xl font-bold leading-tight md:text-[30px] md:mt-3">
+                <h2 className="mt-4 text-3xl font-bold leading-tight md:text-[30px] md:mt-3 max-md:text-[26px] max-md:leading-tight">
                   Восстановление задней части кузова
                 </h2>
 
@@ -253,7 +253,7 @@ export default function WorksPage() {
               </div>
             </div>
 
-            <div className="border-t border-white/10 p-6 md:p-8">
+            <div className="border-t border-white/10 p-6 md:p-8 max-md:p-5">
               <div className="grid gap-5 lg:grid-cols-3 md:gap-4">
                 <div>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[22px] border border-white/10">
@@ -272,7 +272,7 @@ export default function WorksPage() {
                     Разборка задней части
                   </h3>
 
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5">
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5 max-md:text-base">
                     Повреждённую заднюю часть кузова разобрали до внутренних
                     силовых элементов для восстановления геометрии и замены
                     деформированных деталей.
@@ -296,7 +296,7 @@ export default function WorksPage() {
                     Восстановленный кузов
                   </h3>
 
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5">
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5 max-md:text-base">
                     Восстановлены форма задней части кузова, проёмы и положение
                     наружных элементов.
                   </p>
@@ -319,7 +319,7 @@ export default function WorksPage() {
                     Готовый автомобиль
                   </h3>
 
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5">
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5 max-md:text-base">
                     Задняя часть кузова восстановлена и автомобиль полностью
                     собран после кузовного ремонта.
                   </p>
@@ -329,7 +329,7 @@ export default function WorksPage() {
 
           <article className="mt-10 overflow-hidden rounded-[28px] border border-white/15 bg-black/80 md:mt-8">
             <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
-              <div className="relative min-h-[380px] overflow-hidden lg:min-h-[520px]">
+              <div className="relative min-h-[380px] overflow-hidden max-md:min-h-0 max-md:aspect-[4/3] lg:min-h-[520px]">
                 <img
                   src="/works/santafe-2009-before.png"
                   alt="Hyundai Santa Fe 2009 до ремонта"
@@ -343,12 +343,12 @@ export default function WorksPage() {
                 </div>
               </div>
 
-              <div className="flex flex-col justify-center p-7 md:p-8">
+              <div className="flex flex-col justify-center p-7 md:p-8 max-md:p-5">
                 <div className="text-sm font-bold uppercase tracking-[0.2em] text-orange-500">
                   Hyundai Santa Fe CM · 2009
                 </div>
 
-                <h2 className="mt-4 text-3xl font-bold leading-tight md:text-[30px] md:mt-3">
+                <h2 className="mt-4 text-3xl font-bold leading-tight md:text-[30px] md:mt-3 max-md:text-[26px] max-md:leading-tight">
                   Восстановление передней части кузова
                 </h2>
 
@@ -384,7 +384,7 @@ export default function WorksPage() {
               </div>
             </div>
 
-            <div className="border-t border-white/10 p-6 md:p-8">
+            <div className="border-t border-white/10 p-6 md:p-8 max-md:p-5">
               <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 md:gap-4">
                 <div>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[22px] border border-white/10">
@@ -402,7 +402,7 @@ export default function WorksPage() {
                     Доступ к силовой части
                   </h3>
 
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5">
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5 max-md:text-base">
                     Переднюю часть разобрали, чтобы получить доступ к повреждённым
                     силовым элементам и оценить объём восстановления.
                   </p>
@@ -424,7 +424,7 @@ export default function WorksPage() {
                     Работа с передней частью
                   </h3>
 
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5">
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5 max-md:text-base">
                     Восстановили положение повреждённых элементов передка и
                     геометрию кузова.
                   </p>
@@ -446,7 +446,7 @@ export default function WorksPage() {
                     Контроль геометрии
                   </h3>
 
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5">
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5 max-md:text-base">
                     После основных кузовных работ проверили положение передней
                     части и подготовили автомобиль к дальнейшей сборке.
                   </p>
@@ -468,7 +468,7 @@ export default function WorksPage() {
                     Восстановленный автомобиль
                   </h3>
 
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5">
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5 max-md:text-base">
                     Передняя часть собрана, восстановлено положение наружных
                     элементов и кузовные зазоры.
                   </p>
@@ -490,7 +490,7 @@ export default function WorksPage() {
                     Готовый кузов
                   </h3>
 
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5">
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400 md:mt-1.5 max-md:text-base">
                     Восстановлены геометрия передней части и внешний вид автомобиля.
                   </p>
                 </div>
@@ -500,11 +500,11 @@ export default function WorksPage() {
 
           <section className="mt-12 md:mt-9.5">
             <div className="mb-6 md:mb-5">
-              <h2 className="text-3xl font-bold md:text-[30px] md:leading-[34px]">
+              <h2 className="text-3xl font-bold md:text-[30px] md:leading-[34px] max-md:text-[26px] max-md:leading-tight">
                 Ещё <span className="text-orange-500">работы</span>
               </h2>
 
-              <p className="mt-3 max-w-[760px] text-sm leading-relaxed text-zinc-400 md:text-base md:mt-2.5">
+              <p className="mt-3 max-w-[760px] text-sm leading-relaxed text-zinc-400 md:text-base md:mt-2.5 max-md:text-base">
                 Короткие примеры восстановления автомобилей с фотографиями до и после ремонта.
               </p>
             </div>
@@ -537,7 +537,7 @@ export default function WorksPage() {
                   </div>
                 </div>
 
-                <div className="p-6 md:p-5">
+                <div className="p-6 md:p-5 max-md:p-5">
                   <div className="text-sm font-bold uppercase tracking-[0.18em] text-orange-500">
                     Honda Orthia · 2000
                   </div>
@@ -546,7 +546,7 @@ export default function WorksPage() {
                     Восстановление передней части кузова
                   </h3>
 
-                  <p className="mt-3 text-sm leading-relaxed text-zinc-400 md:mt-2.5">
+                  <p className="mt-3 text-sm leading-relaxed text-zinc-400 md:mt-2.5 max-md:text-base">
                     Сильный фронтальный удар на трассе. Смещение стаканов передней
                     подвески и моторного щита. Восстановлена геометрия передней
                     части кузова и положение силовых элементов.
@@ -581,7 +581,7 @@ export default function WorksPage() {
                   </div>
                 </div>
 
-                <div className="p-6 md:p-5">
+                <div className="p-6 md:p-5 max-md:p-5">
                   <div className="text-sm font-bold uppercase tracking-[0.18em] text-orange-500">
                     Lada Granta · 2016
                   </div>
@@ -590,7 +590,7 @@ export default function WorksPage() {
                     Восстановление задней части кузова
                   </h3>
 
-                  <p className="mt-3 text-sm leading-relaxed text-zinc-400 md:mt-2.5">
+                  <p className="mt-3 text-sm leading-relaxed text-zinc-400 md:mt-2.5 max-md:text-base">
                     Сильный удар в заднюю часть кузова. Восстановлена геометрия задней
                     части кузова, положение наружных элементов и кузовные зазоры.
                   </p>
@@ -599,14 +599,14 @@ export default function WorksPage() {
             </div>
           </section>
 
-          <section className="mt-12 overflow-hidden rounded-[28px] border border-orange-500/30 bg-gradient-to-br from-orange-500/10 via-zinc-950/95 to-black p-7 md:p-8 md:mt-9.5">
-            <div className="flex flex-col gap-7 md:flex-row md:items-center md:justify-between md:gap-5.5">
+          <section className="mt-12 overflow-hidden rounded-[28px] border border-orange-500/30 bg-gradient-to-br from-orange-500/10 via-zinc-950/95 to-black p-7 md:p-8 md:mt-9.5 max-md:p-5">
+            <div className="flex flex-col gap-7 md:flex-row md:items-center md:justify-between md:max-lg:flex-col md:max-lg:items-stretch md:gap-5.5">
               <div className="max-w-[760px]">
                 <div className="text-sm font-bold uppercase tracking-[0.2em] text-orange-500">
                   Оценка по фотографиям
                 </div>
 
-                <h2 className="mt-3 text-3xl font-bold leading-tight md:text-[30px] md:mt-2.5">
+                <h2 className="mt-3 text-3xl font-bold leading-tight md:text-[30px] md:mt-2.5 max-md:text-[26px] max-md:leading-tight">
                   Есть похожие повреждения?
                 </h2>
 
@@ -619,7 +619,7 @@ export default function WorksPage() {
               <button
                 type="button"
                 onClick={openForm}
-                className="group inline-flex shrink-0 items-center justify-center gap-4 rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.45)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.75)] md:gap-3 md:px-5.5 md:py-3"
+                className="group inline-flex shrink-0 items-center justify-center gap-4 rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.45)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.75)] md:gap-3 md:px-5.5 md:py-3 max-md:px-5 max-lg:w-full max-lg:min-h-14 max-lg:gap-2 max-lg:px-3 max-lg:[&>span:first-child]:shrink-0 max-lg:[&>svg]:shrink-0"
               >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500 md:h-8 md:w-8">
                   <svg
