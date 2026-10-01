@@ -136,14 +136,14 @@ export default function Home() {
 
           </div>
 
-          <div className="pointer-events-none absolute right-[-2%] top-[58%] z-0 w-[58%] -translate-y-1/2 lg:hidden">
+                    <div className="pointer-events-none absolute right-[-4%] top-[55%] w-[54%] -translate-y-1/2 sm:right-[-2%] sm:w-[50%] lg:right-[3%] lg:top-1/2 lg:w-[50%]">
             <img
               src="/hero-car-overlay.png"
               alt=""
-              className="h-auto w-full opacity-80 drop-shadow-[0_0_16px_rgba(255,106,0,0.12)]"
+              className="h-auto w-full opacity-95 drop-shadow-[0_0_20px_rgba(255,106,0,0.12)]"
             />
           </div>
-          <div className="pointer-events-none absolute right-[3%] top-1/2 hidden w-[50%] -translate-y-[50%] lg:block">
+                    <div className="pointer-events-none absolute right-[-4%] top-[55%] w-[54%] -translate-y-1/2 sm:right-[-2%] sm:w-[50%] lg:right-[3%] lg:top-1/2 lg:w-[50%]">
             <img
               src="/hero-car-overlay.png"
               alt=""
