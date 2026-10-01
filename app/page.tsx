@@ -50,7 +50,7 @@ export default function Home() {
           heroViewport
             ? {
                 width: `${heroViewport.width}px`,
-                minHeight: `${heroViewport.height}px`,
+                minHeight: heroViewport.width < 768 ? `${Math.min(heroViewport.height, 680)}px` : `${heroViewport.height}px`,
               }
             : {
                 width: "100vw",
