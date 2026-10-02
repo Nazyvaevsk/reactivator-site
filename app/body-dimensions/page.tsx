@@ -141,7 +141,7 @@ export default function BodyDimensionsPage() {
 
                 <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
                   <strong className="text-white">{catalog.groupCount}</strong>{" "}
-                  автомобилей
+                  комплектов кузовных размеров
                 </span>
 
                 <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
@@ -336,6 +336,7 @@ export default function BodyDimensionsPage() {
     </main>
   );
 }
+
 
 
 
