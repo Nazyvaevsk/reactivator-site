@@ -1,8 +1,15 @@
 "use client";
 
-import { createContext, useContext, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
+import { createContext, useContext, useState, type ChangeEvent, type FormEvent, type MouseEvent, type ReactNode } from "react";
 
-const ApplicationFormContext = createContext<(() => void) | null>(null);
+type ApplicationFormOptions = {
+  mode?: "repair" | "body-dimensions";
+  description?: string;
+};
+
+type OpenApplicationForm = (optionsOrEvent?: ApplicationFormOptions | MouseEvent<HTMLElement>) => void;
+
+const ApplicationFormContext = createContext<OpenApplicationForm | null>(null);
 
 export function useApplicationForm() {
   const openForm = useContext(ApplicationFormContext);
@@ -15,10 +22,13 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
   const [isSending, setIsSending] = useState(false);
   const [uploadedPhotos, setUploadedPhotos] = useState(0);
   const [isSent, setIsSent] = useState(false);
+  const [formMode, setFormMode] = useState<"repair" | "body-dimensions">("repair");
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [description, setDescription] = useState("");
+  const [purchaseDescription, setPurchaseDescription] = useState("");
+  const formDescription = formMode === "body-dimensions" ? purchaseDescription : description;
   const [photos, setPhotos] = useState<File[]>([]);
 
   const MAX_PHOTOS = 10;
@@ -92,17 +102,21 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
       0
     );
 
-    if (photos.length === 0) {
-      newErrors.photos = "Добавьте хотя бы одну фотографию";
-    } else if (photos.length > MAX_PHOTOS) {
-      newErrors.photos = "Можно выбрать не более 10 фотографий";
-    } else if (totalPhotoSize > MAX_TOTAL_PHOTO_SIZE) {
-      newErrors.photos =
-        "Общий размер фотографий не должен превышать 100 МБ";
+    if (formMode === "repair") {
+      if (photos.length === 0) {
+        newErrors.photos = "Добавьте хотя бы одну фотографию";
+      } else if (photos.length > MAX_PHOTOS) {
+        newErrors.photos = "Можно выбрать не более 10 фотографий";
+      } else if (totalPhotoSize > MAX_TOTAL_PHOTO_SIZE) {
+        newErrors.photos =
+          "Общий размер фотографий не должен превышать 100 МБ";
+      }
     }
 
-    if (!description.trim()) {
-      newErrors.description = "Опишите, что произошло";
+    if (!formDescription.trim()) {
+      newErrors.description = formMode === "body-dimensions"
+        ? "Не указан комплект кузовных размеров"
+        : "Опишите, что произошло";
     }
 
     setErrors(newErrors);
@@ -181,7 +195,30 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
     setIsSending(true);
 
     try {
-      for (let i = 0; i < photos.length; i++) {
+      if (formMode === "body-dimensions") {
+        const formData = new FormData();
+
+        formData.append("name", name.trim());
+        formData.append("phone", phone.trim());
+        formData.append("description", formDescription.trim());
+        formData.append("mode", formMode);
+        formData.append("sendMessage", "true");
+
+        const response = await fetch("/api/send-telegram", {
+          method: "POST",
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            result.error || "Не удалось отправить заявку"
+          );
+        }
+      }
+
+      for (let i = 0; formMode === "repair" && i < photos.length; i++) {
         const photo = photos[i];
         const preparedPhoto = await preparePhotoForUpload(photo);
 
@@ -193,7 +230,8 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
         formData.append("name", name.trim());
         formData.append("phone", phone.trim());
-        formData.append("description", description.trim());
+        formData.append("description", formDescription.trim());
+        formData.append("mode", formMode);
         formData.append("photo", preparedPhoto);
         formData.append("sendMessage", i === 0 ? "true" : "false");
 
@@ -231,8 +269,12 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
       setName("");
       setPhone("");
-      setDescription("");
-      setPhotos([]);
+      if (formMode === "repair") {
+        setDescription("");
+        setPhotos([]);
+      } else {
+        setPurchaseDescription("");
+      }
       setErrors({
         name: "",
         phone: "",
@@ -257,7 +299,25 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
     setIsSent(false);
   };
 
-  const openForm = () => {
+  const openForm: OpenApplicationForm = (optionsOrEvent) => {
+    if (isSending) return;
+
+    // A direct onClick passes a React event, not form options.
+    const options = optionsOrEvent && "nativeEvent" in optionsOrEvent
+      ? undefined
+      : optionsOrEvent;
+    const mode = options?.mode ?? "repair";
+
+    setFormMode(mode);
+
+    if (mode === "body-dimensions") {
+      setPurchaseDescription(options?.description ?? "");
+    } else if (options?.description !== undefined) {
+      setDescription(options.description);
+    }
+
+    setErrors({ name: "", phone: "", photos: "", description: "" });
+
     setIsFormOpen(true);
     setIsSent(false);
   };
@@ -268,7 +328,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
       {isFormOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 text-white backdrop-blur-sm md:p-3 max-md:p-2">
 
-          <div role="dialog" aria-modal="true" aria-label="Заявка на оценку повреждений" className="relative max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-zinc-950 p-6 shadow-2xl md:p-7 max-md:max-h-[calc(100dvh-1rem)] max-md:overscroll-contain max-md:p-5">
+          <div role="dialog" aria-modal="true" aria-label={formMode === "body-dimensions" ? "Купить комплект кузовных размеров" : "Заявка на оценку повреждений"} className="relative max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-zinc-950 p-6 shadow-2xl md:p-7 max-md:max-h-[calc(100dvh-1rem)] max-md:overscroll-contain max-md:p-5">
 
             <button
               type="button"
@@ -297,8 +357,9 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                 </h2>
 
                 <p className="max-w-md text-lg leading-relaxed text-zinc-400 md:text-[17px]">
-                  Мы получили ваши фотографии и описание повреждений.
-                  Свяжемся с вами по указанному телефону.
+                  {formMode === "body-dimensions"
+                    ? "Мы получили вашу заявку на покупку комплекта кузовных размеров. Свяжемся с вами по указанному телефону."
+                    : "Мы получили ваши фотографии и описание повреждений. Свяжемся с вами по указанному телефону."}
                 </p>
 
                 <button
@@ -316,11 +377,11 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
               <form onSubmit={handleSubmit} noValidate>
 
                 <p className="mb-3 text-xs uppercase tracking-[0.35em] text-zinc-500 md:mb-2.5 max-md:pr-12 max-md:tracking-[0.12em]">
-                  Предварительная оценка
+                  {formMode === "body-dimensions" ? "Кузовные размеры" : "Предварительная оценка"}
                 </p>
 
                 <h2 className="mb-12 pr-12 text-4xl font-bold md:text-[40px] md:leading-[40px] md:mb-9.5 md:pr-9.5 max-md:mb-6 max-md:pr-0 max-md:text-[28px] max-md:leading-tight">
-                  Отправить повреждения
+                  {formMode === "body-dimensions" ? "Купить комплект кузовных размеров" : "Отправить повреждения"}
                 </h2>
 
                 {/* NAME */}
@@ -389,64 +450,68 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
                 {/* PHOTOS */}
 
-                <div className="mb-7 md:mb-5.5 max-md:mb-5">
+                {formMode === "repair" && (
+                  <div className="mb-7 md:mb-5.5 max-md:mb-5">
 
-                  <label className="mb-3 block text-base text-zinc-300 md:mb-2.5">
-                    Фотографии повреждений
-                  </label>
+                    <label className="mb-3 block text-base text-zinc-300 md:mb-2.5">
+                      Фотографии повреждений
+                    </label>
 
-                  <label
-                    className={`flex cursor-pointer flex-wrap items-center gap-5 md:gap-4 rounded-2xl border border-dashed bg-black p-5 md:p-4 max-md:p-3 max-md:gap-3 transition ${
-                      errors.photos
-                        ? "border-red-500"
-                        : "border-zinc-700 hover:border-zinc-500"
-                    }`}
-                  >
+                    <label
+                      className={`flex cursor-pointer flex-wrap items-center gap-5 md:gap-4 rounded-2xl border border-dashed bg-black p-5 md:p-4 max-md:p-3 max-md:gap-3 transition ${
+                        errors.photos
+                          ? "border-red-500"
+                          : "border-zinc-700 hover:border-zinc-500"
+                      }`}
+                    >
 
-                    <span className="rounded-xl bg-white px-6 py-3 text-base text-black transition hover:bg-zinc-300 md:px-5 md:py-2.5">
-                      Выбрать файлы
-                    </span>
+                      <span className="rounded-xl bg-white px-6 py-3 text-base text-black transition hover:bg-zinc-300 md:px-5 md:py-2.5">
+                        Выбрать файлы
+                      </span>
 
-                    <span className="text-base text-zinc-400">
-                      {photos.length > 0
-                        ? `Выбрано файлов: ${photos.length}`
-                        : "Файл не выбран"}
-                    </span>
+                      <span className="text-base text-zinc-400">
+                        {photos.length > 0
+                          ? `Выбрано файлов: ${photos.length}`
+                          : "Файл не выбран"}
+                      </span>
 
-                    <input
-                      type="file"
-                      disabled={isSending}
-                      accept="image/*"
-                      multiple
-                      onChange={handlePhotosChange}
-                      className="hidden"
-                    />
+                      <input
+                        type="file"
+                        disabled={isSending}
+                        accept="image/*"
+                        multiple
+                        onChange={handlePhotosChange}
+                        className="hidden"
+                      />
 
-                  </label>
+                    </label>
 
-                  {errors.photos ? (
-                    <p className="mt-2 text-sm text-red-400 md:mt-1.5">
-                      {errors.photos}
-                    </p>
-                  ) : (
-                    <p className="mt-2 text-sm text-zinc-600 md:mt-1.5">
-                      До 10 фотографий, общий размер — до 100 МБ.
-                    </p>
-                  )}
+                    {errors.photos ? (
+                      <p className="mt-2 text-sm text-red-400 md:mt-1.5">
+                        {errors.photos}
+                      </p>
+                    ) : (
+                      <p className="mt-2 text-sm text-zinc-600 md:mt-1.5">
+                        До 10 фотографий, общий размер — до 100 МБ.
+                      </p>
+                )}
 
                 </div>
+
+                )}
 
                 {/* DESCRIPTION */}
 
                 <div className="mb-8 md:mb-6.5">
 
                   <label className="mb-3 block text-base text-zinc-300 md:mb-2.5">
-                    Что произошло?
+                    {formMode === "body-dimensions" ? "Комплект" : "Что произошло?"}
                   </label>
 
                   <textarea
                     disabled={isSending}
-                    value={description}
+                    readOnly={formMode === "body-dimensions"}
+                    value={formDescription}
                     onChange={(e) => {
                       setDescription(e.target.value);
                       setErrors((prev) => ({ ...prev, description: "" }));
@@ -483,7 +548,13 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                         className="h-8 w-8 shrink-0 animate-spin rounded-full border-4 border-black/25 border-t-black motion-reduce:animate-none"
                       />
                     )}
-                    {isSending ? "Отправляем фотографии..." : "Отправить заявку"}
+                    {isSending
+                      ? formMode === "body-dimensions"
+                        ? "Отправляем заявку..."
+                        : "Отправляем фотографии..."
+                      : formMode === "body-dimensions"
+                        ? "Отправить заявку на покупку"
+                        : "Отправить заявку"}
                   </button>
 
                   {isSending && (
@@ -491,22 +562,27 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                       <p className="text-base font-semibold leading-relaxed text-orange-400">
                         Не закрывайте страницу — идёт отправка
                       </p>
-                      <p className="mt-2 text-sm text-white md:mt-1.5">
-                        Отправлено фотографий: {uploadedPhotos} из {photos.length}
-                      </p>
-                      <div aria-hidden="true" className="mt-3 h-2 overflow-hidden rounded-full bg-zinc-800 md:mt-2.5">
-                        <div
-                          className="h-full rounded-full bg-orange-500 transition-[width] duration-300 motion-reduce:transition-none"
-                          style={{ width: `${(uploadedPhotos / photos.length) * 100}%` }}
-                        />
-                      </div>
+                      {formMode === "repair" && (
+                        <>
+                          <p className="mt-2 text-sm text-white md:mt-1.5">
+                            Отправлено фотографий: {uploadedPhotos} из {photos.length}
+                          </p>
+                          <div aria-hidden="true" className="mt-3 h-2 overflow-hidden rounded-full bg-zinc-800 md:mt-2.5">
+                            <div
+                              className="h-full rounded-full bg-orange-500 transition-[width] duration-300 motion-reduce:transition-none"
+                              style={{ width: `${(uploadedPhotos / photos.length) * 100}%` }}
+                            />
+                          </div>
+                        </>
+                      )}
                     </div>
                   )}
                 </div>
 
                 <p className="mt-4 text-center text-sm leading-relaxed text-zinc-600 md:mt-3">
-                  Нажимая кнопку, вы отправляете фотографии и контактные данные
-                  для связи по заявке.
+                  {formMode === "body-dimensions"
+                    ? "Нажимая кнопку, вы отправляете данные комплекта и контактные данные для связи по заявке."
+                    : "Нажимая кнопку, вы отправляете фотографии и контактные данные для связи по заявке."}
                 </p>
 
               </form>

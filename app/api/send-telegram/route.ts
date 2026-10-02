@@ -26,18 +26,38 @@ export async function POST(request: NextRequest) {
     const sendMessage =
       String(formData.get("sendMessage") || "true") === "true";
 
+    const mode = String(formData.get("mode") || "repair");
+
+    if (mode !== "repair" && mode !== "body-dimensions") {
+      return NextResponse.json({ error: "Неизвестный тип заявки" }, { status: 400 });
+    }
+
     const photo = formData.get("photo");
 
-    if (!(photo instanceof File) || photo.size === 0) {
+    const hasPhoto =
+      photo instanceof File && photo.size > 0;
+
+    if (mode === "repair" && !hasPhoto) {
+      return NextResponse.json({ error: "Фотография не передана" }, { status: 400 });
+    }
+
+    if (mode === "body-dimensions" && (!sendMessage || hasPhoto || !name || !phone || !description)) {
       return NextResponse.json(
-        { error: "Фотография не передана" },
+        { error: "Для покупки укажите имя, телефон и комплект без фотографий" },
         { status: 400 }
       );
     }
 
-    if (photo.size > MAX_SINGLE_PHOTO_SIZE) {
+    if (hasPhoto && photo.size > MAX_SINGLE_PHOTO_SIZE) {
       return NextResponse.json(
         { error: "Размер одной фотографии не должен превышать 10 МБ" },
+        { status: 400 }
+      );
+    }
+
+    if (!sendMessage && !hasPhoto) {
+      return NextResponse.json(
+        { error: "Нет данных для отправки" },
         { status: 400 }
       );
     }
@@ -48,7 +68,7 @@ export async function POST(request: NextRequest) {
       message += `📞 Телефон: ${phone || "не указано"}\n`;
 
       if (description) {
-        message += `\n📝 Что произошло:\n${description}`;
+        message += `\n📝 ${mode === "body-dimensions" ? "Заявка на покупку" : "Что произошло"}:\n${description}`;
       }
 
       const messageForm = new FormData();
@@ -75,27 +95,29 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const photoForm = new FormData();
-    photoForm.append("method", "sendPhoto");
-    photoForm.append("chat_id", chatId);
-    photoForm.append("photo", photo, photo.name);
+    if (hasPhoto) {
+      const photoForm = new FormData();
+      photoForm.append("method", "sendPhoto");
+      photoForm.append("chat_id", chatId);
+      photoForm.append("photo", photo, photo.name);
 
-    const photoResponse = await fetch(RELAY_URL, {
-      method: "POST",
-      headers: {
-        "X-Relay-Secret": relaySecret,
-      },
-      body: photoForm,
-    });
+      const photoResponse = await fetch(RELAY_URL, {
+        method: "POST",
+        headers: {
+          "X-Relay-Secret": relaySecret,
+        },
+        body: photoForm,
+      });
 
-    if (!photoResponse.ok) {
-      const errorText = await photoResponse.text();
-      console.error("Relay sendPhoto error:", errorText);
+      if (!photoResponse.ok) {
+        const errorText = await photoResponse.text();
+        console.error("Relay sendPhoto error:", errorText);
 
-      return NextResponse.json(
-        { error: "Не удалось отправить фотографию" },
-        { status: 500 }
-      );
+        return NextResponse.json(
+          { error: "Не удалось отправить фотографию" },
+          { status: 500 }
+        );
+      }
     }
 
     return NextResponse.json({

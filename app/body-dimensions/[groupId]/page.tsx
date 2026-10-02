@@ -1,8 +1,9 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { useApplicationForm } from "../../ApplicationFormProvider";
 
 type Sheet = {
   sheet: number;
@@ -25,6 +26,7 @@ type GroupData = {
 };
 
 export default function BodyDimensionGroupPage() {
+  const openForm = useApplicationForm();
   const params = useParams<{ groupId: string }>();
   const groupId = params.groupId.toLowerCase();
 
@@ -74,6 +76,41 @@ export default function BodyDimensionGroupPage() {
                 <span className="rounded-full border border-white/10 px-4 py-2 text-zinc-300">
                   Листов: <strong className="text-white">{data.sheetCount}</strong>
                 </span>
+              </div>
+
+              <div className="mt-8 flex flex-col gap-5 rounded-[24px] border border-orange-500/30 bg-orange-500/5 p-6 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="text-sm font-semibold text-zinc-400">
+                    Готовый комплект кузовных размеров
+                  </p>
+
+                  <div className="mt-1 text-4xl font-black">
+                    590 ₽
+                  </div>
+
+                  <p className="mt-2 max-w-xl text-sm leading-relaxed text-zinc-400">
+                    После подтверждения оплаты вы получите временную ссылку
+                    на полный комплект с просмотром и скачиванием. Доступ — 24 часа.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    openForm({
+                      mode: "body-dimensions",
+                      description:
+                        `Покупка кузовных размеров\n` +
+                        `${data.make} ${data.model} ${data.year}` +
+                        `${data.variant ? ` / ${data.variant}` : ""}\n` +
+                        `Комплект: ${data.groupId}\n` +
+                        `Цена: 590 ₽`,
+                    })
+                  }
+                  className="shrink-0 rounded-2xl bg-orange-500 px-7 py-4 text-base font-bold text-black transition hover:bg-orange-400"
+                >
+                  Купить комплект
+                </button>
               </div>
             </div>
           )}
