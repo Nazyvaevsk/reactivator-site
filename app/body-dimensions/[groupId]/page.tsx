@@ -98,6 +98,7 @@ export default function BodyDimensionGroupPage() {
                   onClick={() =>
                     openForm({
                       mode: "body-dimensions",
+                      groupId: data.groupId,
                       description:
                         `Покупка кузовных размеров\n` +
                         `${data.make} ${data.model} ${data.year}` +

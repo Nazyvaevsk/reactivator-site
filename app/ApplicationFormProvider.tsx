@@ -5,6 +5,7 @@ import { createContext, useContext, useState, type ChangeEvent, type FormEvent, 
 type ApplicationFormMode = "repair" | "body-dimensions" | "body-dimensions-search";
 
 type ApplicationFormOptions = {
+  groupId?: string;
   mode?: ApplicationFormMode;
   description?: string;
 };
@@ -29,6 +30,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [description, setDescription] = useState("");
+  const [purchaseGroupId, setPurchaseGroupId] = useState("");
   const [purchaseDescription, setPurchaseDescription] = useState("");
   const [searchDescription, setSearchDescription] = useState("");
   const isSearch = formMode === "body-dimensions-search";
@@ -208,6 +210,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
         formData.append("phone", phone.trim());
         formData.append("description", formDescription.trim());
         formData.append("mode", formMode);
+        if (formMode === "body-dimensions") formData.append("groupId", purchaseGroupId);
         formData.append("sendMessage", "true");
 
         const response = await fetch("/api/send-telegram", {
@@ -317,6 +320,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
     const mode = options?.mode ?? "repair";
 
     setFormMode(mode);
+    setPurchaseGroupId(mode === "body-dimensions" ? options?.groupId ?? "" : "");
 
     if (mode === "body-dimensions") {
       setPurchaseDescription(options?.description ?? "");

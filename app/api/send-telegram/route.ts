@@ -1,3 +1,5 @@
+import { createBodyIssueUrl } from "@/lib/bodyIssue";
+import { getBodyDimensionsGroup } from "@/lib/bodyDimensionsData";
 import { NextRequest, NextResponse } from "next/server";
 
 const RELAY_URL =
@@ -21,7 +23,7 @@ export async function POST(request: NextRequest) {
 
     const name = String(formData.get("name") || "").trim();
     const phone = String(formData.get("phone") || "").trim();
-    const description = String(formData.get("description") || "").trim();
+    let description = String(formData.get("description") || "").trim();
 
     const sendMessage =
       String(formData.get("sendMessage") || "true") === "true";
@@ -30,6 +32,19 @@ export async function POST(request: NextRequest) {
 
     if (mode !== "repair" && mode !== "body-dimensions" && mode !== "body-dimensions-search") {
       return NextResponse.json({ error: "Неизвестный тип заявки" }, { status: 400 });
+    }
+
+    let issueUrl: string | undefined;
+    if (mode === "body-dimensions") {
+      const groupId = String(formData.get("groupId") || "").trim().toUpperCase();
+      const group = getBodyDimensionsGroup(groupId);
+      if (!group || !Object.hasOwn(group, "groupId")) {
+        return NextResponse.json({ error: "Неизвестный комплект" }, { status: 400 });
+      }
+      // The purchase identity and price must not come from editable client text.
+      description = "Покупка кузовных размеров\n" + group.make + " " + group.model + " " + group.year + " / " + (group.variant || "—") + "\nКомплект: " + group.groupId + "\nЛистов: " + group.sheetCount + "\nЦена: 590 ₽";
+      try { issueUrl = createBodyIssueUrl(group.groupId); }
+      catch { return NextResponse.json({ error: "Выдача доступа не настроена. Свяжитесь с мастером." }, { status: 503 }); }
     }
 
     const photo = formData.get("photo");
@@ -80,10 +95,18 @@ export async function POST(request: NextRequest) {
         message += `\n📝 ${mode === "body-dimensions-search" ? "Автомобиль и что нужно найти" : mode === "body-dimensions" ? "Заявка на покупку" : "Что произошло"}:\n${description}`;
       }
 
+      if (issueUrl) {
+        // Text fallback works even if the existing relay strips reply_markup.
+        message += "\n\nТолько для мастера. После проверки оплаты: " + issueUrl + "\nСлужебная ссылка действует 7 дней. Клиенту отправляйте только созданную ссылку доступа.";
+      }
       const messageForm = new FormData();
       messageForm.append("method", "sendMessage");
       messageForm.append("chat_id", chatId);
       messageForm.append("text", message);
+      if (issueUrl) {
+        messageForm.append("disable_web_page_preview", "true");
+        messageForm.append("reply_markup", JSON.stringify({ inline_keyboard: [[{ text: "Выдать доступ на 24 часа", url: issueUrl }]] }));
+      }
 
       const messageResponse = await fetch(RELAY_URL, {
         method: "POST",
@@ -93,9 +116,9 @@ export async function POST(request: NextRequest) {
         body: messageForm,
       });
 
-      if (!messageResponse.ok) {
-        const errorText = await messageResponse.text();
-        console.error("Relay sendMessage error:", errorText);
+      const relayResult = await messageResponse.json().catch(() => null);
+      if (!messageResponse.ok || relayResult?.ok === false) {
+        console.error("Relay sendMessage failed, HTTP status:", messageResponse.status);
 
         return NextResponse.json(
           { error: "Не удалось отправить заявку" },
@@ -132,8 +155,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
     });
-  } catch (error) {
-    console.error("send-telegram error:", error);
+  } catch {
+    console.error("send-telegram request failed");
 
     return NextResponse.json(
       { error: "Ошибка обработки заявки" },
