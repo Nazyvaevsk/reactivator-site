@@ -2,8 +2,10 @@
 
 import { createContext, useContext, useState, type ChangeEvent, type FormEvent, type MouseEvent, type ReactNode } from "react";
 
+type ApplicationFormMode = "repair" | "body-dimensions" | "body-dimensions-search";
+
 type ApplicationFormOptions = {
-  mode?: "repair" | "body-dimensions";
+  mode?: ApplicationFormMode;
   description?: string;
 };
 
@@ -22,13 +24,17 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
   const [isSending, setIsSending] = useState(false);
   const [uploadedPhotos, setUploadedPhotos] = useState(0);
   const [isSent, setIsSent] = useState(false);
-  const [formMode, setFormMode] = useState<"repair" | "body-dimensions">("repair");
+  const [formMode, setFormMode] = useState<ApplicationFormMode>("repair");
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [description, setDescription] = useState("");
   const [purchaseDescription, setPurchaseDescription] = useState("");
-  const formDescription = formMode === "body-dimensions" ? purchaseDescription : description;
+  const [searchDescription, setSearchDescription] = useState("");
+  const isSearch = formMode === "body-dimensions-search";
+  const formDescription = formMode === "body-dimensions"
+    ? purchaseDescription
+    : isSearch ? searchDescription : description;
   const [photos, setPhotos] = useState<File[]>([]);
 
   const MAX_PHOTOS = 10;
@@ -116,7 +122,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
     if (!formDescription.trim()) {
       newErrors.description = formMode === "body-dimensions"
         ? "Не указан комплект кузовных размеров"
-        : "Опишите, что произошло";
+        : isSearch ? "Укажите автомобиль и что нужно найти" : "Опишите, что произошло";
     }
 
     setErrors(newErrors);
@@ -195,7 +201,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
     setIsSending(true);
 
     try {
-      if (formMode === "body-dimensions") {
+      if (formMode !== "repair") {
         const formData = new FormData();
 
         formData.append("name", name.trim());
@@ -272,6 +278,8 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
       if (formMode === "repair") {
         setDescription("");
         setPhotos([]);
+      } else if (isSearch) {
+        setSearchDescription("");
       } else {
         setPurchaseDescription("");
       }
@@ -312,6 +320,8 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
     if (mode === "body-dimensions") {
       setPurchaseDescription(options?.description ?? "");
+    } else if (mode === "body-dimensions-search") {
+      setSearchDescription(options?.description ?? "");
     } else if (options?.description !== undefined) {
       setDescription(options.description);
     }
@@ -328,7 +338,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
       {isFormOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 text-white backdrop-blur-sm md:p-3 max-md:p-2">
 
-          <div role="dialog" aria-modal="true" aria-label={formMode === "body-dimensions" ? "Купить комплект кузовных размеров" : "Заявка на оценку повреждений"} className="relative max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-zinc-950 p-6 shadow-2xl md:p-7 max-md:max-h-[calc(100dvh-1rem)] max-md:overscroll-contain max-md:p-5">
+          <div role="dialog" aria-modal="true" aria-label={isSearch ? "Заказать поиск кузовных размеров" : formMode === "body-dimensions" ? "Купить комплект кузовных размеров" : "Заявка на оценку повреждений"} className="relative max-h-[95vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-zinc-950 p-6 shadow-2xl md:p-7 max-md:max-h-[calc(100dvh-1rem)] max-md:overscroll-contain max-md:p-5">
 
             <button
               type="button"
@@ -357,7 +367,9 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                 </h2>
 
                 <p className="max-w-md text-lg leading-relaxed text-zinc-400 md:text-[17px]">
-                  {formMode === "body-dimensions"
+                  {isSearch
+                    ? "Мы получили заявку на поиск кузовных размеров. Свяжемся с вами по указанному телефону."
+                    : formMode === "body-dimensions"
                     ? "Мы получили вашу заявку на покупку комплекта кузовных размеров. Свяжемся с вами по указанному телефону."
                     : "Мы получили ваши фотографии и описание повреждений. Свяжемся с вами по указанному телефону."}
                 </p>
@@ -377,11 +389,11 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
               <form onSubmit={handleSubmit} noValidate>
 
                 <p className="mb-3 text-xs uppercase tracking-[0.35em] text-zinc-500 md:mb-2.5 max-md:pr-12 max-md:tracking-[0.12em]">
-                  {formMode === "body-dimensions" ? "Кузовные размеры" : "Предварительная оценка"}
+                  {isSearch ? "Поиск по вашему автомобилю" : formMode === "body-dimensions" ? "Кузовные размеры" : "Предварительная оценка"}
                 </p>
 
                 <h2 className="mb-12 pr-12 text-4xl font-bold md:text-[40px] md:leading-[40px] md:mb-9.5 md:pr-9.5 max-md:mb-6 max-md:pr-0 max-md:text-[28px] max-md:leading-tight">
-                  {formMode === "body-dimensions" ? "Купить комплект кузовных размеров" : "Отправить повреждения"}
+                  {isSearch ? "Заказать поиск кузовных размеров" : formMode === "body-dimensions" ? "Купить комплект кузовных размеров" : "Отправить повреждения"}
                 </h2>
 
                 {/* NAME */}
@@ -505,18 +517,25 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                 <div className="mb-8 md:mb-6.5">
 
                   <label className="mb-3 block text-base text-zinc-300 md:mb-2.5">
-                    {formMode === "body-dimensions" ? "Комплект" : "Что произошло?"}
+                    {isSearch ? "Автомобиль и что нужно найти" : formMode === "body-dimensions" ? "Комплект" : "Что произошло?"}
                   </label>
 
                   <textarea
                     disabled={isSending}
+                    required
                     readOnly={formMode === "body-dimensions"}
                     value={formDescription}
                     onChange={(e) => {
-                      setDescription(e.target.value);
+                      if (isSearch) {
+                        setSearchDescription(e.target.value);
+                      } else {
+                        setDescription(e.target.value);
+                      }
                       setErrors((prev) => ({ ...prev, description: "" }));
                     }}
-                    placeholder="Например: удар в переднюю часть, увело лонжерон..."
+                    placeholder={isSearch
+                      ? "Укажите марку, модель, год выпуска и какие кузовные размеры нужны. При необходимости добавьте тип кузова или VIN."
+                      : "Например: удар в переднюю часть, увело лонжерон..."}
                     rows={5}
                     className={`w-full resize-none rounded-2xl border bg-black px-6 py-5 text-lg max-md:px-4 max-md:py-3 max-md:text-base md:px-5 md:py-4 md:text-[17px] text-white outline-none transition placeholder:text-zinc-600 ${
                       errors.description
@@ -549,10 +568,12 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                       />
                     )}
                     {isSending
-                      ? formMode === "body-dimensions"
+                      ? formMode !== "repair"
                         ? "Отправляем заявку..."
                         : "Отправляем фотографии..."
-                      : formMode === "body-dimensions"
+                      : isSearch
+                        ? "Отправить заявку на поиск"
+                        : formMode === "body-dimensions"
                         ? "Отправить заявку на покупку"
                         : "Отправить заявку"}
                   </button>
@@ -580,7 +601,9 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
                 </div>
 
                 <p className="mt-4 text-center text-sm leading-relaxed text-zinc-600 md:mt-3">
-                  {formMode === "body-dimensions"
+                  {isSearch
+                    ? "Нажимая кнопку, вы отправляете описание автомобиля и контактные данные для связи по заявке на поиск."
+                    : formMode === "body-dimensions"
                     ? "Нажимая кнопку, вы отправляете данные комплекта и контактные данные для связи по заявке."
                     : "Нажимая кнопку, вы отправляете фотографии и контактные данные для связи по заявке."}
                 </p>

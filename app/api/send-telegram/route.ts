@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     const mode = String(formData.get("mode") || "repair");
 
-    if (mode !== "repair" && mode !== "body-dimensions") {
+    if (mode !== "repair" && mode !== "body-dimensions" && mode !== "body-dimensions-search") {
       return NextResponse.json({ error: "Неизвестный тип заявки" }, { status: 400 });
     }
 
@@ -48,6 +48,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (mode === "body-dimensions-search" && (!sendMessage || hasPhoto || !name || !phone || !description)) {
+      return NextResponse.json(
+        { error: "Для поиска укажите имя, телефон, автомобиль и что нужно найти без фотографий" },
+        { status: 400 }
+      );
+    }
+
     if (hasPhoto && photo.size > MAX_SINGLE_PHOTO_SIZE) {
       return NextResponse.json(
         { error: "Размер одной фотографии не должен превышать 10 МБ" },
@@ -63,12 +70,14 @@ export async function POST(request: NextRequest) {
     }
 
     if (sendMessage) {
-      let message = "🚗 НОВАЯ ЗАЯВКА С САЙТА\n\n";
+      let message = mode === "body-dimensions-search"
+        ? "🔎 ЗАЯВКА НА ПОИСК КУЗОВНЫХ РАЗМЕРОВ\n\n"
+        : "🚗 НОВАЯ ЗАЯВКА С САЙТА\n\n";
       message += `👤 Имя: ${name || "не указано"}\n`;
       message += `📞 Телефон: ${phone || "не указано"}\n`;
 
       if (description) {
-        message += `\n📝 ${mode === "body-dimensions" ? "Заявка на покупку" : "Что произошло"}:\n${description}`;
+        message += `\n📝 ${mode === "body-dimensions-search" ? "Автомобиль и что нужно найти" : mode === "body-dimensions" ? "Заявка на покупку" : "Что произошло"}:\n${description}`;
       }
 
       const messageForm = new FormData();

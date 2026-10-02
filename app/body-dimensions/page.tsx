@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
+import { useApplicationForm } from "../ApplicationFormProvider";
 
 type Group = {
   id: string;
@@ -44,6 +44,7 @@ type CatalogIndex = {
 };
 
 export default function BodyDimensionsPage() {
+  const openForm = useApplicationForm();
   const [catalog, setCatalog] = useState<CatalogIndex | null>(null);
   const [brandName, setBrandName] = useState("");
   const [modelName, setModelName] = useState("");
@@ -332,6 +333,33 @@ export default function BodyDimensionsPage() {
             )}
           </>
         )}
+        <div className="mt-8 rounded-[22px] border border-orange-500/25 bg-zinc-950 p-6 md:flex md:items-center md:justify-between md:gap-8 max-md:p-5">
+          <div className="max-w-3xl">
+            <h2 className="text-xl font-bold md:text-2xl">
+              Не нашли нужный автомобиль?
+            </h2>
+            <p className="mt-3 text-lg font-semibold text-orange-400">
+              Поиск кузовных размеров — от 2500 ₽
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-zinc-400">
+              Наличие и точная цена проверяются до 2 часов в рабочее время. Предоплата — только после подтверждения наличия у источника.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => openForm({
+              mode: "body-dimensions-search",
+              description: [
+                selectedBrand && `Марка: ${selectedBrand.brand}`,
+                selectedModel && `Модель: ${selectedModel.model}`,
+                selectedYear && `Год: ${selectedYear.year}`,
+              ].filter(Boolean).join("\n"),
+            })}
+            className="mt-5 inline-flex min-h-12 w-full shrink-0 items-center justify-center rounded-xl bg-orange-500 px-6 py-3 font-semibold text-black transition hover:bg-orange-400 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-500 md:mt-0 md:w-auto"
+          >
+            Заказать поиск
+          </button>
+        </div>
       </section>
     </main>
   );
