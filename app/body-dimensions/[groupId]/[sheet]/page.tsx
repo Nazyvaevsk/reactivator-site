@@ -11,11 +11,9 @@ import {
 
 type Sheet = {
   sheet: number;
-  sourceSheet?: number;
   cardId: string;
   sourceType: string;
   sourcePage: number;
-  assetKey: string;
 };
 
 type GroupData = {
@@ -105,8 +103,15 @@ export default function BodyDimensionSheetPage() {
       ? data.sheets[currentIndex + 1]
       : null;
 
-  const assetUrl = currentSheet
-    ? `/body-dimensions/${currentSheet.assetKey}`
+  // Public previews use internal sheet numbers, independent of source SVG names.
+  const previewUrl = data && currentSheet
+    ? `/body-dimensions/previews/${[
+        data.make,
+        data.model,
+        String(data.year),
+        data.groupId,
+        `sheet_${String(currentSheet.sheet).padStart(3, "0")}.webp`,
+      ].map(encodeURIComponent).join("/")}`
     : "";
 
   function resetView() {
@@ -320,12 +325,12 @@ export default function BodyDimensionSheetPage() {
               </div>
 
               <a
-                href={assetUrl}
+                href={previewUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="rounded-2xl border border-white/15 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white transition hover:border-orange-500 hover:text-orange-500"
               >
-                Открыть SVG отдельно
+                Открыть превью отдельно
               </a>
             </div>
           )}
@@ -401,7 +406,7 @@ export default function BodyDimensionSheetPage() {
               }`}
             >
               <img
-                src={assetUrl}
+                src={previewUrl}
                 alt={`${data?.make} ${data?.model} ${data?.year} — лист ${currentSheet.sheet}`}
                 draggable={false}
                 className="pointer-events-none block max-h-full max-w-full object-contain"

@@ -10,7 +10,6 @@ type Sheet = {
   cardId: string;
   sourceType: string;
   sourcePage: number;
-  assetKey: string;
 };
 
 type GroupData = {
@@ -168,7 +167,7 @@ export default function BodyDimensionGroupPage() {
                   <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-5">
                     <div className="flex items-center gap-2 text-sm text-zinc-400">
                       <span className="h-2 w-2 rounded-full bg-orange-500" />
-                      Открыть карту
+                      Открыть превью
                     </div>
 
                     <span className="text-xl text-orange-500 transition group-hover:translate-x-1">
