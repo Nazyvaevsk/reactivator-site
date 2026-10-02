@@ -1,5 +1,5 @@
 ﻿import type { Metadata } from "next";
-import PagesHeader from "../PagesHeader";
+import BodyDimensionsHeader from "./BodyDimensionsHeader";
 
 export const metadata: Metadata = {
   title: "Кузовные размеры | Реактиватор",
@@ -14,7 +14,7 @@ export default function BodyDimensionsLayout({
 }>) {
   return (
     <>
-      <PagesHeader />
+      <BodyDimensionsHeader />
       {children}
     </>
   );
