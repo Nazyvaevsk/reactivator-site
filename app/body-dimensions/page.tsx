@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 
 type Group = {
   id: string;
@@ -291,9 +292,10 @@ export default function BodyDimensionsPage() {
 
                 <div className="grid gap-4 lg:grid-cols-2">
                   {selectedYear.groups.map((group) => (
-                    <article
+                    <a
                       key={group.id}
-                      className="group relative overflow-hidden rounded-[22px] border border-white/10 bg-zinc-950 p-6 transition hover:border-orange-500/50"
+                      href={`/body-dimensions/${group.id.toLowerCase()}`}
+                      className="group relative block cursor-pointer overflow-hidden rounded-[22px] border border-white/10 bg-zinc-950 p-6 transition hover:-translate-y-0.5 hover:border-orange-500/60"
                     >
                       <div
                         aria-hidden="true"
@@ -323,7 +325,7 @@ export default function BodyDimensionsPage() {
                           Карта подготовлена
                         </div>
                       </div>
-                    </article>
+                    </a>
                   ))}
                 </div>
               </div>
@@ -334,3 +336,6 @@ export default function BodyDimensionsPage() {
     </main>
   );
 }
+
+
+

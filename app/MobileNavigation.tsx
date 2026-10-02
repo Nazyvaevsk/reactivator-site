@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
@@ -8,9 +8,10 @@ const menuItems = [
   { number: "01", href: "/", label: "Главная" },
   { number: "02", href: "/services", label: "Услуги" },
   { number: "03", href: "/technology", label: "Технология" },
-  { number: "04", href: "/works", label: "Примеры работ" },
-  { number: "05", href: "/about", label: "О нас" },
-  { number: "06", href: "/contacts", label: "Контакты" },
+  { number: "04", href: "/body-dimensions", label: "Кузовные размеры" },
+  { number: "05", href: "/works", label: "Примеры работ" },
+  { number: "06", href: "/about", label: "О нас" },
+  { number: "07", href: "/contacts", label: "Контакты" },
 ];
 
 export default function MobileNavigation() {
