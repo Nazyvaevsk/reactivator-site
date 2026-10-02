@@ -84,29 +84,7 @@ if (!group) {
   process.exit(1);
 }
 
-const missing = [];
-
-for (const sheet of group.sheets) {
-  const relativeAsset = sheet.assetKey.replace(/^groups[\\/]/i, "");
-
-  const filePath = path.resolve(
-    privateRoot,
-    relativeAsset
-  );
-
-  if (
-    !filePath.startsWith(privateRoot + path.sep) ||
-    !fs.existsSync(filePath)
-  ) {
-    missing.push(path.basename(sheet.assetKey));
-  }
-}
-
-if (missing.length > 0) {
-  console.error(`Комплект ${groupId} пока не готов к выдаче.`);
-  console.error(`Нет оригиналов: ${missing.join(", ")}`);
-  process.exit(1);
-}
+// Originals live in R2; link generation validates metadata, not object availability.
 
 const expiresAt =
   Math.floor(Date.now() / 1000) + 24 * 60 * 60;

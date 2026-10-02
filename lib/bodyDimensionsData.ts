@@ -1,3 +1,4 @@
+import "server-only";
 ﻿import fs from "fs";
 import path from "path";
 
@@ -69,34 +70,18 @@ export function getBodyDimensionsGroup(
   return index.groups[groupId.toUpperCase()] ?? null;
 }
 
-export function getPrivateSheetPath(
+export function getSheetObjectKey(
   group: BodyDimensionsGroup,
   sheetFile: string
 ): string | null {
   const sheet = group.sheets.find(
-    (item) => path.basename(item.assetKey) === sheetFile
+    (item) => item.assetKey.replace(/\\/g, "/").split("/").pop() === sheetFile
   );
-
-  if (!sheet) {
+  if (!sheet) return null;
+  const key = sheet.assetKey.replace(/\\/g, "/");
+  const parts = key.split("/");
+  if (parts[0] !== "groups" || parts.some((part) => !part || part === "." || part === "..")) {
     return null;
   }
-
-  const relativeAsset = sheet.assetKey.replace(/^groups[\\/]/i, "");
-
-  const privateRoot = path.resolve(
-    process.cwd(),
-    "private",
-    "body-dimensions"
-  );
-
-  const filePath = path.resolve(privateRoot, relativeAsset);
-
-  if (
-    filePath !== privateRoot &&
-    !filePath.startsWith(privateRoot + path.sep)
-  ) {
-    return null;
-  }
-
-  return filePath;
+  return key;
 }

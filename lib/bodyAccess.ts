@@ -28,7 +28,7 @@ export function verifyBodyAccess(
     .update(payload)
     .digest("hex");
 
-  if (sig.length !== expected.length) {
+  if (!/^[a-f0-9]{64}$/i.test(sig)) {
     return false;
   }
 

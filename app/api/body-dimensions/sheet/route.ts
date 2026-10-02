@@ -1,11 +1,14 @@
+import { readR2Sheet } from "@/lib/bodyDimensionsR2";
 ﻿import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+
+
 import { verifyBodyAccess } from "@/lib/bodyAccess";
 import {
   getBodyDimensionsGroup,
-  getPrivateSheetPath,
+  getSheetObjectKey,
 } from "@/lib/bodyDimensionsData";
+
+export const runtime = "nodejs";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -29,15 +32,20 @@ export async function GET(request: NextRequest) {
     return new NextResponse("Комплект не найден", { status: 404 });
   }
 
-  const filePath = getPrivateSheetPath(group, sheetFile);
-
-  if (!filePath || !fs.existsSync(filePath)) {
-    return new NextResponse("Лист не найден", { status: 404 });
+  const key = getSheetObjectKey(group, sheetFile);
+  if (!key) return new NextResponse("Лист не найден", { status: 404 });
+  let svg: Uint8Array;
+  try {
+    const result = await readR2Sheet(key);
+    if (!result) return new NextResponse("Лист не найден", { status: 404 });
+    svg = result;
+  } catch {
+    return new NextResponse("Хранилище временно недоступно", {
+      status: 503, headers: { "Cache-Control": "private, no-store" },
+    });
   }
 
-  const svg = fs.readFileSync(filePath, "utf8");
-
-  return new NextResponse(svg, {
+  return new NextResponse(new Uint8Array(svg), {
     status: 200,
     headers: {
       "Content-Type": "image/svg+xml; charset=utf-8",

@@ -1,12 +1,15 @@
+import { readR2Sheet } from "@/lib/bodyDimensionsR2";
 ﻿import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+
+
 import AdmZip from "adm-zip";
 import { verifyBodyAccess } from "@/lib/bodyAccess";
 import {
   getBodyDimensionsGroup,
-  getPrivateSheetPath,
+  getSheetObjectKey,
 } from "@/lib/bodyDimensionsData";
+
+export const runtime = "nodejs";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -27,18 +30,18 @@ export async function GET(request: NextRequest) {
 
   const zip = new AdmZip();
 
-  for (const sheet of group.sheets) {
-    const sheetFile = path.basename(sheet.assetKey);
-    const filePath = getPrivateSheetPath(group, sheetFile);
-
-    if (!filePath || !fs.existsSync(filePath)) {
-      return new NextResponse(
-        `Не найден ${sheetFile}`,
-        { status: 404 }
-      );
+  try {
+    for (const sheet of group.sheets) {
+      const sheetFile = sheet.assetKey.replace(/\\/g, "/").split("/").pop()!;
+      const key = getSheetObjectKey(group, sheetFile);
+      const content = key ? await readR2Sheet(key) : null;
+      if (!content) return new NextResponse("Лист не найден", { status: 404 });
+      zip.addFile(sheetFile, Buffer.from(content));
     }
-
-    zip.addLocalFile(filePath);
+  } catch {
+    return new NextResponse("Хранилище временно недоступно", {
+      status: 503, headers: { "Cache-Control": "private, no-store" },
+    });
   }
 
   const buffer = zip.toBuffer();
