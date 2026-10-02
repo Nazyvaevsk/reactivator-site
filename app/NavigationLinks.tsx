@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const links = [
   { href: "/services", label: "Услуги" },
   { href: "/technology", label: "Технология" },
+  { href: "/body-dimensions", label: "Кузовные размеры" },
   { href: "/works", label: "Примеры работ" },
   { href: "/about", label: "О нас" },
   { href: "/contacts", label: "Контакты" },
@@ -15,7 +16,7 @@ export default function NavigationLinks({ mobile = false, onNavigate }: { mobile
   const pathname = usePathname();
 
   return links.map(({ href, label }) => {
-    const active = pathname === href;
+    const active = pathname === href || pathname.startsWith(`${href}/`);
     return (
       <Link
         key={href}
@@ -29,3 +30,4 @@ export default function NavigationLinks({ mobile = false, onNavigate }: { mobile
     );
   });
 }
+
