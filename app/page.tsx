@@ -108,7 +108,7 @@ export default function Home() {
 
             <div className="pointer-events-none mx-auto mt-4 mb-1 w-[88%] md:hidden">
               <img
-                src="/hero-car-overlay.png"
+                src="/hero-car-overlay.webp"
                 alt=""
                 className="h-auto w-full opacity-75 drop-shadow-[0_0_18px_rgba(255,106,0,0.10)]"
               />
@@ -146,7 +146,7 @@ export default function Home() {
 
           <div className="pointer-events-none absolute right-[-5%] top-[51%] w-[60%] -translate-y-1/2 sm:right-[-2%] sm:top-[44%] sm:w-[50%] lg:right-[3%] lg:top-1/2 lg:w-[50%] max-md:hidden">
             <img
-              src="/hero-car-overlay.png"
+              src="/hero-car-overlay.webp"
               alt=""
               className="h-auto w-full opacity-75 drop-shadow-[0_0_18px_rgba(255,106,0,0.10)]"
             />

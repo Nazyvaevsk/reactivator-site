@@ -18,6 +18,18 @@ const nextConfig: NextConfig = {
         { key: "Referrer-Policy", value: "no-referrer" },
         { key: "X-Frame-Options", value: "DENY" },
       ] },
+      { source: "/hero.jpg", headers: [
+        { key: "Cache-Control", value: "public, max-age=86400" },
+      ] },
+      { source: "/hero-mobile.jpg", headers: [
+        { key: "Cache-Control", value: "public, max-age=86400" },
+      ] },
+      { source: "/hero-car-overlay.webp", headers: [
+        { key: "Cache-Control", value: "public, max-age=86400" },
+      ] },
+      { source: "/logo.png", headers: [
+        { key: "Cache-Control", value: "public, max-age=86400" },
+      ] },
       { source: "/api/:path*", headers: [
         { key: "Cache-Control", value: "private, no-store" },
         { key: "Referrer-Policy", value: "no-referrer" },
