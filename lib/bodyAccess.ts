@@ -7,7 +7,7 @@ export function verifyBodyAccess(
 ) {
   const secret = process.env.BODY_DIMENSIONS_ACCESS_SECRET;
 
-  if (!secret || !groupId || !exp || !sig) {
+  if (!secret || !/^[A-Za-z0-9_-]{1,64}$/.test(groupId) || !/^[0-9]{10}$/.test(exp) || !sig) {
     return false;
   }
 
@@ -17,7 +17,7 @@ export function verifyBodyAccess(
     return false;
   }
 
-  if (Math.floor(Date.now() / 1000) > expiresAt) {
+  if (Math.floor(Date.now() / 1000) >= expiresAt) {
     return false;
   }
 

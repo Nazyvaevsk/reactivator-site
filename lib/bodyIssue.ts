@@ -1,6 +1,7 @@
 import "server-only";
 import crypto from "node:crypto";
 
+// A valid master token can issue fresh 24-hour access repeatedly until expiry.
 const ISSUE_TTL = 7 * 24 * 60 * 60;
 export const ACCESS_TTL = 24 * 60 * 60;
 

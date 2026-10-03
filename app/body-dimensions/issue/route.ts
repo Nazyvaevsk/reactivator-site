@@ -1,3 +1,4 @@
+import { rateLimit } from "@/lib/rateLimit";
 import crypto from "node:crypto";
 import { bodyIssueConfig, createIssuedBodyAccess, verifyBodyIssueToken } from "@/lib/bodyIssue";
 import { getBodyDimensionsGroup } from "@/lib/bodyDimensionsData";
@@ -54,6 +55,8 @@ document.getElementById('copy').addEventListener('click', copy);
 }
 
 export async function POST(request: Request) {
+  const limited = rateLimit(request, "body-issue", 30, 10 * 60_000, 300);
+  if (limited) return limited;
   const json = (data: unknown, status = 200) => Response.json(data, { status, headers });
   try {
     const { origin } = bodyIssueConfig();

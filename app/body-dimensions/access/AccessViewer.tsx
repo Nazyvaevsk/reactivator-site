@@ -52,12 +52,48 @@ export default function AccessViewer({
 
   const sheet = sheets[index];
 
-  const src =
+  const [src, setSrc] = useState("");
+  const [error, setError] = useState("");
+  const [downloading, setDownloading] = useState(false);
+  const sheetUrl =
     `/api/body-dimensions/sheet` +
     `?group=${encodeURIComponent(group)}` +
     `&exp=${encodeURIComponent(exp)}` +
-    `&sig=${encodeURIComponent(sig)}` +
     `&sheet=${encodeURIComponent(sheet)}`;
+
+  useEffect(() => {
+    const controller = new AbortController();
+    let blobUrl = "";
+    setSrc("");
+    setError("");
+    fetch(sheetUrl, { headers: { Authorization: "Bearer " + sig }, cache: "no-store", referrerPolicy: "no-referrer", signal: controller.signal })
+      .then(async response => {
+        if (!response.ok) throw new Error(response.status === 429 ? "Слишком много запросов. Подождите минуту." : "Не удалось загрузить лист. Проверьте срок доступа.");
+        const blob = await response.blob();
+        if (controller.signal.aborted) return;
+        blobUrl = URL.createObjectURL(blob);
+        setSrc(blobUrl);
+      }).catch(error => { if (!controller.signal.aborted) setError(error.message); });
+    return () => { controller.abort(); if (blobUrl) URL.revokeObjectURL(blobUrl); };
+  }, [sheetUrl, sig]);
+
+  const download = async () => {
+    setDownloading(true);
+    setError("");
+    try {
+      const response = await fetch("/api/body-dimensions/download?" + new URLSearchParams({ group, exp }), {
+        headers: { Authorization: "Bearer " + sig }, cache: "no-store", referrerPolicy: "no-referrer",
+      });
+      if (!response.ok) throw new Error(response.status === 429 ? "Слишком много скачиваний. Попробуйте позже." : "Не удалось скачать комплект.");
+      const url = URL.createObjectURL(await response.blob());
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = group + ".zip";
+      anchor.click();
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } catch (error) { setError(error instanceof Error ? error.message : "Ошибка скачивания"); }
+    finally { setDownloading(false); }
+  };
 
   const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -171,17 +207,13 @@ export default function AccessViewer({
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <a
-              href={
-                `/api/body-dimensions/download` +
-                `?group=${encodeURIComponent(group)}` +
-                `&exp=${encodeURIComponent(exp)}` +
-                `&sig=${encodeURIComponent(sig)}`
-              }
+            <button
+              onClick={download}
+              disabled={downloading}
               className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-bold text-black hover:bg-orange-400"
             >
-              Скачать комплект
-            </a>
+              {downloading ? "Скачивание…" : "Скачать комплект"}
+            </button>
 
             <button
               onClick={reset}
@@ -220,7 +252,8 @@ export default function AccessViewer({
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
       >
-        <img
+        {error && <p role="alert">{error}</p>}
+        {src && <img
           src={src}
           alt={`Лист ${index + 1}`}
           draggable={false}
@@ -229,7 +262,7 @@ export default function AccessViewer({
             transform: `translate(${x}px, ${y}px) scale(${scale})`,
             transformOrigin: "center center",
           }}
-        />
+        />}
       </div>
 
       <div className="border-t border-white/10 bg-black px-4 py-3 text-center text-xs text-zinc-500">

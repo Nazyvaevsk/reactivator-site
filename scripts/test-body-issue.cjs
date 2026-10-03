@@ -13,10 +13,11 @@ const env = {
 function load(file, mocks = {}) {
   const source = ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText;
   const exports = {};
-  vm.runInNewContext(source, { exports, require: id => id === 'server-only' ? {} : mocks[id] ?? require(id), process: { env }, Buffer, URL, URLSearchParams, Response, Request, FormData, File, console, fetch: async (...args) => mocks.fetch(...args) }, { filename: file });
+  vm.runInNewContext(source, { exports, require: id => id === 'server-only' ? {} : mocks[id] ?? require(id), process: { env }, Buffer, URL, URLSearchParams, Response, Request, FormData, File, AbortSignal, console, fetch: async (...args) => mocks.fetch(...args) }, { filename: file });
   return exports;
 }
 async function main() {
+  const limiter = load('lib/rateLimit.ts');
   const lib = load('lib/bodyIssue.ts');
   const access = load('lib/bodyAccess.ts');
   const now = Math.floor(Date.now()/1000);
@@ -27,6 +28,8 @@ async function main() {
   assert.equal(lib.verifyBodyIssueToken(token, now+7*86400), null);
   assert.equal(lib.verifyBodyIssueToken(token, now-1), null);
   env.MASTER_CHAT_ID='456'; assert.equal(lib.verifyBodyIssueToken(token, now), null); env.MASTER_CHAT_ID='123';
+  assert.equal(lib.verifyBodyIssueToken(token, now+6*86400), 'S04435');
+  assert.equal(lib.verifyBodyIssueToken(token, now+6*86400), 'S04435');
   const issued = lib.createIssuedBodyAccess('S04435', now);
   assert.equal(issued.expiresAt-now, 86400);
   const url = new URL(issued.url);
@@ -37,7 +40,7 @@ async function main() {
   assert.equal(lib.verifyBodyIssueToken('S04435.'+(now+86400)+'.'+'a'.repeat(32)+'.'+url.searchParams.get('sig'),now),null);
   const group = {groupId:'S04435',make:'Acura',model:'Test',year:'2000',sheetCount:3};
   const data = {getBodyDimensionsGroup: id => id === 'S04435' ? group : null};
-  const route = load('app/body-dimensions/issue/route.ts', {'@/lib/bodyIssue':lib,'@/lib/bodyDimensionsData':data});
+  const route = load('app/body-dimensions/issue/route.ts', {'@/lib/rateLimit':limiter,'@/lib/bodyIssue':lib,'@/lib/bodyDimensionsData':data});
   const page = route.GET(); const html=await page.text();
   assert.match(page.headers.get('cache-control'),/no-store/);
   assert.match(page.headers.get('content-security-policy'),/frame-ancestors 'none'/);
@@ -51,9 +54,10 @@ async function main() {
   assert.equal((await post({token,action:'invalid'})).status,400);
   assert.equal((await post({token:'x'.repeat(3000),action:'issue'})).status,413);
   assert.equal((await post({token:new URL(lib.createBodyIssueUrl('UNKNOWN')).hash.slice(1),action:'issue'})).status,404);
+  assert.equal((await post({token,action:'issue'})).status,200);
   let sent;
-  const telegram = load('app/api/send-telegram/route.ts',{'@/lib/bodyIssue':lib,'@/lib/bodyDimensionsData':data,'next/server':{NextResponse:Response},fetch:async (url,opts)=>{sent=opts.body;return Response.json({ok:true});}});
-  const submit=async (id)=>{const form=new FormData();for(const [k,v] of Object.entries({mode:'body-dimensions',groupId:id,name:'Test',phone:'1234567890',description:'Forged group and price'}))form.set(k,v);return telegram.POST(new Request('https://example.test/api/send-telegram',{method:'POST',body:form}));};
+  const telegram = load('app/api/send-telegram/route.ts',{'@/lib/rateLimit':limiter,'@/lib/bodyIssue':lib,'@/lib/bodyDimensionsData':data,'next/server':{NextResponse:Response},fetch:async (url,opts)=>{sent=opts.body;return Response.json({ok:true});}});
+  const submit=async (id)=>{const form=new FormData();for(const [k,v] of Object.entries({mode:'body-dimensions',groupId:id,name:'Test',phone:'1234567890',description:'Forged group and price'}))form.set(k,v);return telegram.POST(new Request('https://example.test/api/send-telegram',{method:'POST',headers:{origin:'https://reactivator55.ru'},body:form}));};
   response=await submit('S04435');assert.equal(response.status,200);
   assert.deepEqual(await response.json(),{success:true});
   assert.match(sent.get('text'),/Комплект: S04435/);assert.ok(!sent.get('text').includes('Forged'));

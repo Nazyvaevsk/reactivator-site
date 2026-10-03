@@ -1,5 +1,6 @@
+import { rateLimit, withCapacity } from "@/lib/rateLimit";
 import { readR2Sheet } from "@/lib/bodyDimensionsR2";
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 
 import { verifyBodyAccess } from "@/lib/bodyAccess";
@@ -11,11 +12,17 @@ import {
 export const runtime = "nodejs";
 
 export async function GET(request: NextRequest) {
+  return withCapacity("sheet", 16, () => serve(request));
+}
+
+async function serve(request: NextRequest) {
+  const limited = rateLimit(request, "sheet", 120, 60_000, 1200);
+  if (limited) return limited;
   const { searchParams } = new URL(request.url);
 
   const groupId = searchParams.get("group") ?? "";
   const exp = searchParams.get("exp") ?? "";
-  const sig = searchParams.get("sig") ?? "";
+  const sig = request.headers.get("authorization")?.replace(/^Bearer /, "") ?? searchParams.get("sig") ?? "";
   const sheetFile = searchParams.get("sheet") ?? "";
 
   if (!verifyBodyAccess(groupId, exp, sig)) {

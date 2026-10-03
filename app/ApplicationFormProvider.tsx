@@ -231,10 +231,6 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
         const photo = photos[i];
         const preparedPhoto = await preparePhotoForUpload(photo);
 
-        console.log(
-          `Фото ${i + 1}/${photos.length} ${photo.name}: ${(photo.size / 1024 / 1024).toFixed(2)} MB → ${(preparedPhoto.size / 1024 / 1024).toFixed(2)} MB`
-        );
-
         const formData = new FormData();
 
         formData.append("name", name.trim());

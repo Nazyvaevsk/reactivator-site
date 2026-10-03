@@ -1,3 +1,4 @@
+import { rateLimit, withCapacity } from "@/lib/rateLimit";
 import { createBodyIssueUrl } from "@/lib/bodyIssue";
 import { getBodyDimensionsGroup } from "@/lib/bodyDimensionsData";
 import { NextRequest, NextResponse } from "next/server";
@@ -11,7 +12,46 @@ const MAX_NAME_LENGTH = 80;
 const MAX_PHONE_LENGTH = 40;
 const MAX_DESCRIPTION_LENGTH = 2000;
 
+// Use public origins, not the internal URL or forwarded headers behind Caddy.
+const ALLOWED_ORIGINS = new Set([
+  "https://reactivator55.ru",
+  "https://www.reactivator55.ru",
+]);
+
+function isAllowedOrigin(origin: string | null): boolean {
+  if (!origin) return false;
+  if (ALLOWED_ORIGINS.has(origin)) return true;
+  if (process.env.NODE_ENV !== "development") return false;
+
+  try {
+    const url = new URL(origin);
+    return (
+      origin === url.origin &&
+      (url.protocol === "http:" || url.protocol === "https:") &&
+      ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(request: NextRequest) {
+  return withCapacity("telegram", 8, () => submit(request));
+}
+
+async function submit(request: NextRequest) {
+  // Reject cross-site submissions before reading the body or contacting Telegram.
+  if (
+    request.headers.get("sec-fetch-site") === "cross-site" ||
+    !isAllowedOrigin(request.headers.get("origin"))
+  ) {
+    return NextResponse.json(
+      { error: "Отправка с этого источника запрещена" },
+      { status: 403 }
+    );
+  }
+  const limited = rateLimit(request, "telegram-upload", 30, 10 * 60_000, 300);
+  if (limited) return limited;
   try {
     const chatId = process.env.MASTER_CHAT_ID;
     const relaySecret = process.env.RELAY_SECRET;
@@ -237,6 +277,8 @@ export async function POST(request: NextRequest) {
     }
 
     if (sendMessage) {
+      const limited = rateLimit(request, "telegram-message", 3, 10 * 60_000, 60);
+      if (limited) return limited;
       let message =
         mode === "body-dimensions-search"
           ? "🔎 ЗАЯВКА НА ПОИСК КУЗОВНЫХ РАЗМЕРОВ\n\n"
@@ -290,6 +332,7 @@ export async function POST(request: NextRequest) {
           "X-Relay-Secret": relaySecret,
         },
         body: messageForm,
+        signal: AbortSignal.timeout(20_000),
       });
 
       const relayResult = await messageResponse
@@ -321,6 +364,7 @@ export async function POST(request: NextRequest) {
           "X-Relay-Secret": relaySecret,
         },
         body: photoForm,
+        signal: AbortSignal.timeout(20_000),
       });
 
       if (!photoResponse.ok) {
@@ -347,11 +391,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-}
-
-export async function GET() {
-  return NextResponse.json({
-    ok: true,
-    route: "send-telegram",
-  });
 }
