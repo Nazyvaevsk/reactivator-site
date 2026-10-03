@@ -15,15 +15,20 @@ declare global {
 export default function YandexMetrika() {
   const pathname = usePathname();
   const firstRender = useRef(true);
+  const isPrivateAccess = pathname === "/body-dimensions/access";
 
   useEffect(() => {
+    if (isPrivateAccess) return;
+
     if (firstRender.current) {
       firstRender.current = false;
       return;
     }
 
     window.ym?.(COUNTER_ID, "hit", window.location.href);
-  }, [pathname]);
+  }, [pathname, isPrivateAccess]);
+
+  if (isPrivateAccess) return null;
 
   return (
     <>

@@ -1,10 +1,14 @@
-﻿"use client";
+"use client";
 
 import Script from "next/script";
+import { usePathname } from "next/navigation";
 
 const GA_ID = "G-JE35JG8S9M";
 
 export default function GoogleAnalytics() {
+  const pathname = usePathname();
+
+  if (pathname === "/body-dimensions/access") return null;
   return (
     <>
       <Script
