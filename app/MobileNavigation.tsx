@@ -9,9 +9,10 @@ const menuItems = [
   { number: "02", href: "/services", label: "Услуги" },
   { number: "03", href: "/technology", label: "Технология" },
   { number: "04", href: "/body-dimensions", label: "Кузовные размеры" },
-  { number: "05", href: "/works", label: "Примеры работ" },
-  { number: "06", href: "/about", label: "О нас" },
-  { number: "07", href: "/contacts", label: "Контакты" },
+  { number: "05", href: "/shop", label: "Магазин" },
+  { number: "06", href: "/works", label: "Примеры работ" },
+  { number: "07", href: "/about", label: "О нас" },
+  { number: "08", href: "/contacts", label: "Контакты" },
 ];
 
 export default function MobileNavigation() {

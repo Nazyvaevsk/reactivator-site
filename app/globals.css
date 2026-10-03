@@ -24,3 +24,10 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Smooth anchor scrolling only on the shop page. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(#shop-page) {
+    scroll-behavior: smooth;
+  }
+}
