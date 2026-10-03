@@ -6,6 +6,10 @@ const RELAY_URL =
   "https://reactivator-telegram-relay.nazyvaevsk.workers.dev";
 
 const MAX_SINGLE_PHOTO_SIZE = 10 * 1024 * 1024;
+const MAX_REQUEST_SIZE = 12 * 1024 * 1024;
+const MAX_NAME_LENGTH = 80;
+const MAX_PHONE_LENGTH = 40;
+const MAX_DESCRIPTION_LENGTH = 2000;
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,60 +23,208 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const formData = await request.formData();
+    const contentType = request.headers.get("content-type") ?? "";
+    if (!contentType.toLowerCase().startsWith("multipart/form-data")) {
+      return NextResponse.json(
+        { error: "Неверный формат запроса" },
+        { status: 415 }
+      );
+    }
+
+    const contentLength = Number(request.headers.get("content-length"));
+    if (
+      Number.isFinite(contentLength) &&
+      contentLength > MAX_REQUEST_SIZE
+    ) {
+      return NextResponse.json(
+        { error: "Запрос слишком большой" },
+        { status: 413 }
+      );
+    }
+
+    const reader = request.body?.getReader();
+    if (!reader) {
+      return NextResponse.json(
+        { error: "Неверный запрос" },
+        { status: 400 }
+      );
+    }
+
+    const chunks: Uint8Array[] = [];
+    let receivedSize = 0;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      receivedSize += value.byteLength;
+
+      if (receivedSize > MAX_REQUEST_SIZE) {
+        await reader.cancel();
+        return NextResponse.json(
+          { error: "Запрос слишком большой" },
+          { status: 413 }
+        );
+      }
+
+      chunks.push(value);
+    }
+
+    const boundedRequest = new Request(request.url, {
+      method: "POST",
+      headers: request.headers,
+      body: Buffer.concat(chunks),
+    });
+
+    const formData = await boundedRequest.formData();
 
     const name = String(formData.get("name") || "").trim();
     const phone = String(formData.get("phone") || "").trim();
     let description = String(formData.get("description") || "").trim();
 
-    const sendMessage =
-      String(formData.get("sendMessage") || "true") === "true";
-
-    const mode = String(formData.get("mode") || "repair");
-
-    if (mode !== "repair" && mode !== "body-dimensions" && mode !== "body-dimensions-search") {
-      return NextResponse.json({ error: "Неизвестный тип заявки" }, { status: 400 });
+    if (!name || name.length > MAX_NAME_LENGTH) {
+      return NextResponse.json(
+        { error: "Укажите имя длиной до 80 символов" },
+        { status: 400 }
+      );
     }
 
-    let issueUrl: string | undefined;
-    if (mode === "body-dimensions") {
-      const groupId = String(formData.get("groupId") || "").trim().toUpperCase();
-      const group = getBodyDimensionsGroup(groupId);
-      if (!group || !Object.hasOwn(group, "groupId")) {
-        return NextResponse.json({ error: "Неизвестный комплект" }, { status: 400 });
-      }
-      // The purchase identity and price must not come from editable client text.
-      description = "Покупка кузовных размеров\n" + group.make + " " + group.model + " " + group.year + " / " + (group.variant || "—") + "\nКомплект: " + group.groupId + "\nЛистов: " + group.sheetCount + "\nЦена: 590 ₽";
-      try { issueUrl = createBodyIssueUrl(group.groupId); }
-      catch { return NextResponse.json({ error: "Выдача доступа не настроена. Свяжитесь с мастером." }, { status: 503 }); }
+    if (!phone || phone.length > MAX_PHONE_LENGTH) {
+      return NextResponse.json(
+        { error: "Укажите корректный номер телефона" },
+        { status: 400 }
+      );
+    }
+
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (phoneDigits.length < 10 || phoneDigits.length > 15) {
+      return NextResponse.json(
+        { error: "Укажите корректный номер телефона" },
+        { status: 400 }
+      );
+    }
+
+    const sendMessageRaw = String(
+      formData.get("sendMessage") ?? "true"
+    );
+
+    if (sendMessageRaw !== "true" && sendMessageRaw !== "false") {
+      return NextResponse.json(
+        { error: "Неверный параметр отправки" },
+        { status: 400 }
+      );
+    }
+
+    const sendMessage = sendMessageRaw === "true";
+    const mode = String(formData.get("mode") || "repair");
+
+    if (
+      mode !== "repair" &&
+      mode !== "body-dimensions" &&
+      mode !== "body-dimensions-search"
+    ) {
+      return NextResponse.json(
+        { error: "Неизвестный тип заявки" },
+        { status: 400 }
+      );
     }
 
     const photo = formData.get("photo");
-
-    const hasPhoto =
-      photo instanceof File && photo.size > 0;
-
-    if (mode === "repair" && !hasPhoto) {
-      return NextResponse.json({ error: "Фотография не передана" }, { status: 400 });
-    }
-
-    if (mode === "body-dimensions" && (!sendMessage || hasPhoto || !name || !phone || !description)) {
-      return NextResponse.json(
-        { error: "Для покупки укажите имя, телефон и комплект без фотографий" },
-        { status: 400 }
-      );
-    }
-
-    if (mode === "body-dimensions-search" && (!sendMessage || hasPhoto || !name || !phone || !description)) {
-      return NextResponse.json(
-        { error: "Для поиска укажите имя, телефон, автомобиль и что нужно найти без фотографий" },
-        { status: 400 }
-      );
-    }
+    const hasPhoto = photo instanceof File && photo.size > 0;
 
     if (hasPhoto && photo.size > MAX_SINGLE_PHOTO_SIZE) {
       return NextResponse.json(
         { error: "Размер одной фотографии не должен превышать 10 МБ" },
+        { status: 400 }
+      );
+    }
+
+    if (hasPhoto && !photo.type.toLowerCase().startsWith("image/")) {
+      return NextResponse.json(
+        { error: "Можно отправлять только изображения" },
+        { status: 400 }
+      );
+    }
+
+    if (mode !== "body-dimensions") {
+      if (!description || description.length > MAX_DESCRIPTION_LENGTH) {
+        return NextResponse.json(
+          { error: "Описание обязательно и не должно превышать 2000 символов" },
+          { status: 400 }
+        );
+      }
+    }
+
+    let issueUrl: string | undefined;
+
+    if (mode === "body-dimensions") {
+      const groupId = String(
+        formData.get("groupId") || ""
+      ).trim().toUpperCase();
+
+      const group = getBodyDimensionsGroup(groupId);
+
+      if (!group || !Object.hasOwn(group, "groupId")) {
+        return NextResponse.json(
+          { error: "Неизвестный комплект" },
+          { status: 400 }
+        );
+      }
+
+      description =
+        "Покупка кузовных размеров\n" +
+        group.make +
+        " " +
+        group.model +
+        " " +
+        group.year +
+        " / " +
+        (group.variant || "—") +
+        "\nКомплект: " +
+        group.groupId +
+        "\nЛистов: " +
+        group.sheetCount +
+        "\nЦена: 590 ₽";
+
+      try {
+        issueUrl = createBodyIssueUrl(group.groupId);
+      } catch {
+        return NextResponse.json(
+          {
+            error:
+              "Выдача доступа не настроена. Свяжитесь с мастером.",
+          },
+          { status: 503 }
+        );
+      }
+    }
+
+    if (mode === "repair" && !hasPhoto) {
+      return NextResponse.json(
+        { error: "Фотография не передана" },
+        { status: 400 }
+      );
+    }
+
+    if (mode === "body-dimensions" && (!sendMessage || hasPhoto)) {
+      return NextResponse.json(
+        {
+          error:
+            "Для покупки укажите имя, телефон и комплект без фотографий",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (
+      mode === "body-dimensions-search" &&
+      (!sendMessage || hasPhoto)
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "Для поиска укажите имя, телефон, автомобиль и что нужно найти без фотографий",
+        },
         { status: 400 }
       );
     }
@@ -85,27 +237,51 @@ export async function POST(request: NextRequest) {
     }
 
     if (sendMessage) {
-      let message = mode === "body-dimensions-search"
-        ? "🔎 ЗАЯВКА НА ПОИСК КУЗОВНЫХ РАЗМЕРОВ\n\n"
-        : "🚗 НОВАЯ ЗАЯВКА С САЙТА\n\n";
-      message += `👤 Имя: ${name || "не указано"}\n`;
-      message += `📞 Телефон: ${phone || "не указано"}\n`;
+      let message =
+        mode === "body-dimensions-search"
+          ? "🔎 ЗАЯВКА НА ПОИСК КУЗОВНЫХ РАЗМЕРОВ\n\n"
+          : "🚗 НОВАЯ ЗАЯВКА С САЙТА\n\n";
+
+      message += `👤 Имя: ${name}\n`;
+      message += `📞 Телефон: ${phone}\n`;
 
       if (description) {
-        message += `\n📝 ${mode === "body-dimensions-search" ? "Автомобиль и что нужно найти" : mode === "body-dimensions" ? "Заявка на покупку" : "Что произошло"}:\n${description}`;
+        message += `\n📝 ${
+          mode === "body-dimensions-search"
+            ? "Автомобиль и что нужно найти"
+            : mode === "body-dimensions"
+              ? "Заявка на покупку"
+              : "Что произошло"
+        }:\n${description}`;
       }
 
       if (issueUrl) {
-        // Text fallback works even if the existing relay strips reply_markup.
-        message += "\n\nТолько для мастера. После проверки оплаты: " + issueUrl + "\nСлужебная ссылка действует 7 дней. Клиенту отправляйте только созданную ссылку доступа.";
+        message +=
+          "\n\nТолько для мастера. После проверки оплаты: " +
+          issueUrl +
+          "\nСлужебная ссылка действует 7 дней. Клиенту отправляйте только созданную ссылку доступа.";
       }
+
       const messageForm = new FormData();
       messageForm.append("method", "sendMessage");
       messageForm.append("chat_id", chatId);
       messageForm.append("text", message);
+
       if (issueUrl) {
         messageForm.append("disable_web_page_preview", "true");
-        messageForm.append("reply_markup", JSON.stringify({ inline_keyboard: [[{ text: "Выдать доступ на 24 часа", url: issueUrl }]] }));
+        messageForm.append(
+          "reply_markup",
+          JSON.stringify({
+            inline_keyboard: [
+              [
+                {
+                  text: "Выдать доступ на 24 часа",
+                  url: issueUrl,
+                },
+              ],
+            ],
+          })
+        );
       }
 
       const messageResponse = await fetch(RELAY_URL, {
@@ -116,9 +292,15 @@ export async function POST(request: NextRequest) {
         body: messageForm,
       });
 
-      const relayResult = await messageResponse.json().catch(() => null);
+      const relayResult = await messageResponse
+        .json()
+        .catch(() => null);
+
       if (!messageResponse.ok || relayResult?.ok === false) {
-        console.error("Relay sendMessage failed, HTTP status:", messageResponse.status);
+        console.error(
+          "Relay sendMessage failed, HTTP status:",
+          messageResponse.status
+        );
 
         return NextResponse.json(
           { error: "Не удалось отправить заявку" },
@@ -142,8 +324,10 @@ export async function POST(request: NextRequest) {
       });
 
       if (!photoResponse.ok) {
-        const errorText = await photoResponse.text();
-        console.error("Relay sendPhoto error:", errorText);
+        console.error(
+          "Relay sendPhoto failed, HTTP status:",
+          photoResponse.status
+        );
 
         return NextResponse.json(
           { error: "Не удалось отправить фотографию" },
