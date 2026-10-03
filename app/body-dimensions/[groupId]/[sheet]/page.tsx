@@ -10,6 +10,7 @@ import {
 } from "react";
 
 type Sheet = {
+  assetKey: string;
   sheet: number;
   cardId: string;
   sourceType: string;
@@ -34,6 +35,11 @@ type Point = {
 
 const MIN_SCALE = 1;
 const MAX_SCALE = 6;
+
+const PREVIEW_BASE_URL = (
+  process.env.NEXT_PUBLIC_BODY_PREVIEW_BASE_URL?.trim() ||
+  "/body-dimensions/previews"
+).replace(/\/+$/, "");
 
 function clampScale(value: number) {
   return Math.min(MAX_SCALE, Math.max(MIN_SCALE, value));
@@ -103,15 +109,13 @@ export default function BodyDimensionSheetPage() {
       ? data.sheets[currentIndex + 1]
       : null;
 
-  // Public previews use internal sheet numbers, independent of source SVG names.
-  const previewUrl = data && currentSheet
-    ? `/body-dimensions/previews/${[
-        data.make,
-        data.model,
-        String(data.year),
-        data.groupId,
+  // Match uploaded previews: asset directory + logical sheet, all lowercase.
+  // Source SVG filenames may use different sheet numbers.
+  const previewUrl = currentSheet
+    ? `${PREVIEW_BASE_URL}/${[
+        ...currentSheet.assetKey.replace(/\\/g, "/").split("/").slice(1, -1),
         `sheet_${String(currentSheet.sheet).padStart(3, "0")}.webp`,
-      ].map(encodeURIComponent).join("/")}`
+      ].map((part) => encodeURIComponent(part.toLowerCase())).join("/")}`
     : "";
 
   function resetView() {
