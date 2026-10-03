@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const metadata = ["./private/body-dimensions/access-index.json"];
+const isVercel = process.env.VERCEL === "1";
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   async headers() {
@@ -10,6 +11,7 @@ const nextConfig: NextConfig = {
         { key: "X-Frame-Options", value: "SAMEORIGIN" },
         { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
         { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+        ...(isVercel ? [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }] : []),
       ] },
       { source: "/:path((?!body-dimensions/issue$).*)", headers: [
         { key: "Content-Security-Policy", value: "object-src 'none'; base-uri 'self'; frame-ancestors 'self'" },
