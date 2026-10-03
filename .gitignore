@@ -42,3 +42,16 @@ next-env.d.ts
 
 # Private body-dimensions originals
 /private/
+
+# Local body-dimensions migration outputs
+/BODY_PREVIEWS_GENERATED/
+/BODY_ASSET_MATCH_REPORT.txt
+/BODY_EXPORT_INSPECTION.txt
+/BODY_JSON_PATH_INSPECTION.txt
+/BODY_PREVIEW_COMPARE_REPORT.txt
+/BODY_PREVIEW_REPAIR_ERRORS.txt
+/BODY_R2_UPLOAD_ERRORS.log
+/BODY_R2_UPLOAD_MANIFEST.json
+/BODY_R2_VERIFY_REPORT.txt
+/BODY_SVG_LOCATION_INSPECTION.txt
+/scripts/preview-upload-reports/
