@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
+import ShopLaunchButton from "@/components/shop/ShopLaunchButton";
 import { usePathname } from "next/navigation";
 
 const menuItems = [
@@ -94,6 +95,15 @@ export default function MobileNavigation() {
           {menuItems.map((item) => {
             const active =
               item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+
+            if (item.href === "/shop") {
+              return (
+                <ShopLaunchButton key={item.href} className="group flex min-h-14 w-full items-center gap-4 py-3 text-left focus-visible:outline-2 focus-visible:outline-orange-500">
+                  <span className={`w-6 text-xs font-bold ${active ? "text-orange-500" : "text-zinc-600"}`}>{item.number}</span>
+                  <span className={`text-[17px] font-semibold transition ${active ? "text-orange-500" : "text-white group-hover:text-orange-400"}`}>{item.label}</span>
+                </ShopLaunchButton>
+              );
+            }
 
             return (
               <Link
