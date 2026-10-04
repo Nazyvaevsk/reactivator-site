@@ -83,6 +83,17 @@ export default function BodyDimensionsPage() {
     [selectedModel, yearName],
   );
 
+  function handleSearchOrder() {
+    openForm({
+      mode: "body-dimensions-search",
+      description: [
+        selectedBrand && `Марка: ${selectedBrand.brand}`,
+        selectedModel && `Модель: ${selectedModel.model}`,
+        selectedYear && `Год: ${selectedYear.year}`,
+      ].filter(Boolean).join("\n"),
+    });
+  }
+
   function handleBrandChange(value: string) {
     setBrandName(value);
     setModelName("");
@@ -234,45 +245,54 @@ export default function BodyDimensionsPage() {
               </label>
             </div>
 
-            {!brandName && (
+            {(!selectedBrand || !selectedModel || !selectedYear) && (
               <div className="mt-8 rounded-[22px] border border-white/10 bg-zinc-950/70 px-6 py-7">
-                <p className="text-sm text-zinc-400">
-                  Начните с выбора марки автомобиля.
-                </p>
+                {!brandName && (
+                  <p className="text-sm text-zinc-400">
+                    Начните с выбора марки автомобиля.
+                  </p>
+                )}
+
+                {selectedBrand && !selectedModel && (
+                  <p className="text-sm text-zinc-400">
+                    В базе для{" "}
+                    <strong className="text-white">{selectedBrand.brand}</strong>{" "}
+                    доступно моделей:{" "}
+                    <strong className="text-white">
+                      {selectedBrand.modelCount}
+                    </strong>
+                    .
+                  </p>
+                )}
+
+                {selectedModel && (
+                  <p className="text-sm text-zinc-400">
+                    Для{" "}
+                    <strong className="text-white">
+                      {selectedBrand?.brand} {selectedModel.model}
+                    </strong>{" "}
+                    доступно годов выпуска:{" "}
+                    <strong className="text-white">
+                      {selectedModel.yearCount}
+                    </strong>
+                    .
+                  </p>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleSearchOrder}
+                  className="group mt-4 flex min-h-11 w-fit max-w-full cursor-pointer flex-col items-start gap-1 rounded-xl border border-orange-500/20 px-4 py-3 text-left text-sm leading-relaxed transition hover:border-orange-500/50 hover:bg-orange-500/5 focus-visible:border-orange-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-500 motion-reduce:transition-none"
+                >
+                  <span className="text-zinc-300">Не нашли свой автомобиль?</span>
+                  <span className="font-bold text-orange-400 group-hover:text-orange-300 group-focus-visible:text-orange-300">
+                    Заказать поиск размеров <span aria-hidden="true">→</span>
+                  </span>
+                </button>
               </div>
             )}
 
-            {selectedBrand && !selectedModel && (
-              <div className="mt-8 rounded-[22px] border border-white/10 bg-zinc-950/70 px-6 py-7">
-                <p className="text-sm text-zinc-400">
-                  В базе для{" "}
-                  <strong className="text-white">{selectedBrand.brand}</strong>{" "}
-                  доступно моделей:{" "}
-                  <strong className="text-white">
-                    {selectedBrand.modelCount}
-                  </strong>
-                  .
-                </p>
-              </div>
-            )}
-
-            {selectedModel && !selectedYear && (
-              <div className="mt-8 rounded-[22px] border border-white/10 bg-zinc-950/70 px-6 py-7">
-                <p className="text-sm text-zinc-400">
-                  Для{" "}
-                  <strong className="text-white">
-                    {selectedBrand?.brand} {selectedModel.model}
-                  </strong>{" "}
-                  доступно годов выпуска:{" "}
-                  <strong className="text-white">
-                    {selectedModel.yearCount}
-                  </strong>
-                  .
-                </p>
-              </div>
-            )}
-
-            {selectedYear && (
+            {selectedYear && selectedYear.groups.length > 0 && (
               <div className="mt-9">
                 <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
                   <div>
@@ -296,7 +316,7 @@ export default function BodyDimensionsPage() {
                     <a
                       key={group.id}
                       href={`/body-dimensions/${group.id.toLowerCase()}`}
-                      className="group relative block cursor-pointer overflow-hidden rounded-[22px] border border-white/10 bg-zinc-950 p-6 transition hover:-translate-y-0.5 hover:border-orange-500/60"
+                      className="group relative block cursor-pointer overflow-hidden rounded-[22px] border border-orange-500/25 bg-zinc-950 p-6 transition hover:border-orange-500/70 hover:shadow-[0_0_24px_rgba(249,115,22,0.10)] focus-visible:border-orange-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-500 motion-safe:hover:-translate-y-0.5 motion-reduce:transition-none"
                     >
                       <div
                         aria-hidden="true"
@@ -321,9 +341,14 @@ export default function BodyDimensionsPage() {
                           </div>
                         </div>
 
-                        <div className="mt-6 flex items-center gap-3 border-t border-white/10 pt-5 text-sm text-zinc-500">
-                          <span className="inline-block h-2 w-2 rounded-full bg-orange-500" />
-                          Карта подготовлена
+                        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-5 text-sm">
+                          <span className="inline-flex items-center gap-3 text-zinc-500">
+                            <span aria-hidden="true" className="inline-block h-2 w-2 rounded-full bg-orange-500" />
+                            Карта подготовлена
+                          </span>
+                          <span className="inline-flex items-center gap-2 font-semibold text-orange-400 group-hover:text-orange-300 group-focus-visible:text-orange-300">
+                            Открыть карту <span aria-hidden="true">→</span>
+                          </span>
                         </div>
                       </div>
                     </a>
@@ -333,33 +358,28 @@ export default function BodyDimensionsPage() {
             )}
           </>
         )}
-        <div className="mt-8 rounded-[22px] border border-orange-500/25 bg-zinc-950 p-6 md:flex md:items-center md:justify-between md:gap-8 max-md:p-5">
-          <div className="max-w-3xl">
-            <h2 className="text-xl font-bold md:text-2xl">
-              Не нашли нужный автомобиль?
-            </h2>
-            <p className="mt-3 text-lg font-semibold text-orange-400">
-              Поиск кузовных размеров — от 2500 ₽
-            </p>
-            <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-              Наличие и точная цена проверяются до 2 часов в рабочее время. Предоплата — только после подтверждения наличия у источника.
-            </p>
+        {selectedBrand && selectedModel && selectedYear && selectedYear.groups.length === 0 && (
+          <div className="mt-8 rounded-[22px] border border-orange-500/25 bg-zinc-950 p-6 md:flex md:items-center md:justify-between md:gap-8 max-md:p-5">
+            <div className="max-w-3xl">
+              <h2 className="text-xl font-bold md:text-2xl">
+                Не нашли кузовные размеры для вашего автомобиля?
+              </h2>
+              <p className="mt-3 text-lg font-semibold text-orange-400">
+                Поиск кузовных размеров — от 2500 ₽
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-400">
+                Наличие и точная цена проверяются до 2 часов в рабочее время. Предоплата — только после подтверждения наличия у источника.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleSearchOrder}
+              className="mt-5 inline-flex min-h-12 w-full shrink-0 items-center justify-center rounded-xl bg-orange-500 px-6 py-3 font-semibold text-black transition hover:bg-orange-400 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-500 md:mt-0 md:w-auto"
+            >
+              Заказать поиск
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={() => openForm({
-              mode: "body-dimensions-search",
-              description: [
-                selectedBrand && `Марка: ${selectedBrand.brand}`,
-                selectedModel && `Модель: ${selectedModel.model}`,
-                selectedYear && `Год: ${selectedYear.year}`,
-              ].filter(Boolean).join("\n"),
-            })}
-            className="mt-5 inline-flex min-h-12 w-full shrink-0 items-center justify-center rounded-xl bg-orange-500 px-6 py-3 font-semibold text-black transition hover:bg-orange-400 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-500 md:mt-0 md:w-auto"
-          >
-            Заказать поиск
-          </button>
-        </div>
+        )}
       </section>
     </main>
   );

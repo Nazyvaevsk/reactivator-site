@@ -143,7 +143,7 @@ export default function BodyDimensionGroupPage() {
                 <Link
                   key={sheet.sheet}
                   href={`/body-dimensions/${groupId}/${sheet.sheet}`}
-                  className="group relative block overflow-hidden rounded-[22px] border border-white/10 bg-zinc-950 p-6 transition hover:-translate-y-0.5 hover:border-orange-500/60"
+                  className="group relative block cursor-pointer overflow-hidden rounded-[22px] border border-orange-500/25 bg-zinc-950 p-6 transition hover:border-orange-500/70 hover:shadow-[0_0_24px_rgba(249,115,22,0.10)] focus-visible:border-orange-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-500 motion-safe:hover:-translate-y-0.5 motion-reduce:transition-none"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div>
@@ -165,14 +165,9 @@ export default function BodyDimensionGroupPage() {
                     </span>
                   </div>
 
-                  <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-5">
-                    <div className="flex items-center gap-2 text-sm text-zinc-400">
-                      <span className="h-2 w-2 rounded-full bg-orange-500" />
-                      Открыть превью
-                    </div>
-
-                    <span className="text-xl text-orange-500 transition group-hover:translate-x-1">
-                      →
+                  <div className="mt-6 flex items-center justify-end border-t border-white/10 pt-5">
+                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-orange-400 group-hover:text-orange-300 group-focus-visible:text-orange-300">
+                      Открыть лист <span aria-hidden="true">→</span>
                     </span>
                   </div>
                 </Link>
