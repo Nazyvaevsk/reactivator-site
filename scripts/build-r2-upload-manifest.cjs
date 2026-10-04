@@ -51,7 +51,8 @@ for (const jsonFile of jsonFiles) {
 
     const localPath = path.join(
       SOURCE_ROOT,
-      ...key.split("/")
+      // R2 retains its physical key; the local brand folder uses the corrected name.
+      ...key.replace(/^groups\/CHANG AN\//, "groups/CHANGAN/").split("/")
     );
 
     if (!fs.existsSync(localPath)) {
