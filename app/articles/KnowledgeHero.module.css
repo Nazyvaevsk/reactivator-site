@@ -42,7 +42,7 @@
 }
 .copy { max-width: 610px; }
 @media (max-width: 767px) {
-  .content { padding: 108px 16px 64px; }
+  .content { padding: 108px 16px 40px; }
   .copy { max-width: 540px; }
   .geometry { width: 620px; right: -385px; opacity: .38; }
   .art { background: radial-gradient(ellipse 350px 420px at 115% 120px, rgb(234 88 12 / 12%), transparent); }
