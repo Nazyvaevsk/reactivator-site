@@ -5,16 +5,8 @@ import Link from "next/link";
 import ShopLaunchButton from "@/components/shop/ShopLaunchButton";
 import { usePathname } from "next/navigation";
 
-const menuItems = [
-  { number: "01", href: "/", label: "Главная" },
-  { number: "02", href: "/services", label: "Услуги" },
-  { number: "03", href: "/technology", label: "Технология" },
-  { number: "04", href: "/body-dimensions", label: "Кузовные размеры" },
-  { number: "05", href: "/shop", label: "Магазин" },
-  { number: "06", href: "/works", label: "Примеры работ" },
-  { number: "07", href: "/about", label: "О нас" },
-  { number: "08", href: "/contacts", label: "Контакты" },
-];
+import { navigationLinks } from "@/lib/navigation";
+const menuItems = [{ href: "/", label: "Главная" }, ...navigationLinks].map((item, index) => ({ ...item, number: String(index + 1).padStart(2, "0") }));
 
 export default function MobileNavigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +31,7 @@ export default function MobileNavigation() {
       }
     };
 
-    const desktop = window.matchMedia("(min-width: 768px)");
+    const desktop = window.matchMedia("(min-width: 1280px)");
     const closeOnDesktop = () => {
       if (desktop.matches) setIsOpen(false);
     };
@@ -56,7 +48,7 @@ export default function MobileNavigation() {
   }, [isOpen]);
 
   return (
-    <div ref={root} className="md:hidden">
+    <div ref={root} className="xl:hidden">
       <button
         ref={toggle}
         type="button"

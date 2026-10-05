@@ -1,4 +1,5 @@
 ﻿import type { MetadataRoute } from "next";
+import { getPosts } from "@/lib/knowledge";
 import { getPublicBodyGroups } from "@/lib/bodyDimensionsPublic";
 import { BODY_SITE_URL, bodyGroupPath } from "@/lib/bodyDimensionsSeo";
 
@@ -66,6 +67,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    { url: baseUrl + "/articles", changeFrequency: "weekly", priority: 0.8 },
+    ...getPosts().map(post => ({ url: baseUrl + "/articles/" + post.slug, lastModified: new Date(post.date), changeFrequency: "monthly" as const, priority: 0.7 })),
     { url: baseUrl + "/body-dimensions" },
     ...getPublicBodyGroups().flatMap(group => [
       { url: baseUrl + bodyGroupPath(group) },

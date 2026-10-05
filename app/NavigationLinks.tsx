@@ -4,15 +4,7 @@ import Link from "next/link";
 import ShopLaunchButton from "@/components/shop/ShopLaunchButton";
 import { usePathname } from "next/navigation";
 
-const links = [
-  { href: "/services", label: "Услуги" },
-  { href: "/technology", label: "Технология" },
-  { href: "/body-dimensions", label: "Кузовные размеры" },
-  { href: "/shop", label: "Магазин" },
-  { href: "/works", label: "Примеры работ" },
-  { href: "/about", label: "О нас" },
-  { href: "/contacts", label: "Контакты" },
-];
+import { navigationLinks as links } from "@/lib/navigation";
 
 export default function NavigationLinks({ mobile = false, onNavigate }: { mobile?: boolean; onNavigate?: () => void }) {
   const pathname = usePathname();

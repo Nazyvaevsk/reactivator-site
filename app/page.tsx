@@ -68,12 +68,12 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/55" />
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        <div className="md:hidden"><PagesHeader /></div>
-        <header className="absolute inset-x-0 top-0 z-20 max-md:hidden">
+        <div className="xl:hidden"><PagesHeader /></div>
+        <header className="absolute inset-x-0 top-0 z-20 max-xl:hidden">
           <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5 md:px-5 md:py-4">
             <div aria-hidden="true" className="w-[250px] shrink min-w-0 md:w-[185px] lg:w-[210px]" />
 
-            <nav className="hidden items-center gap-10 md:flex md:gap-3 lg:gap-8">
+            <nav className="hidden items-center gap-5 xl:flex">
               <NavigationLinks />
             </nav>
 
@@ -87,7 +87,7 @@ export default function Home() {
           </div>
         </header>
 
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 max-md:hidden">
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 max-xl:hidden">
           <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-6 py-5 sm:px-10 lg:px-16 md:gap-2.5 md:px-10 md:py-4">
             <div className="text-[22px] font-black uppercase leading-none tracking-tight text-white md:text-[18px]">
               <span className="text-orange-500">R</span>ЕАКТИВАТОР
