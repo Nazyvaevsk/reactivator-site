@@ -7,6 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "indexnow": "node scripts/indexnow-submit.cjs",
+    "indexnow:file": "node scripts/indexnow-submit.cjs --file",
+    "indexnow:dry": "node scripts/indexnow-submit.cjs --dry-run",
     "prebuild": "node scripts/build-body-access-index.cjs"
   },
   "dependencies": {
