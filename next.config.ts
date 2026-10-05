@@ -17,8 +17,15 @@ const nextConfig: NextConfig = {
         { key: "Content-Security-Policy", value: "object-src 'none'; base-uri 'self'; frame-ancestors 'self'" },
       ] },
       { source: "/body-dimensions/issue", headers: [
+        { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
         { key: "Referrer-Policy", value: "no-referrer" },
         { key: "X-Frame-Options", value: "DENY" },
+      ] },
+      { source: "/body-dimensions/groups/:path*", headers: [
+        { key: "X-Robots-Tag", value: "noindex" },
+      ] },
+      { source: "/body-dimensions/body-dimensions-index.json", headers: [
+        { key: "X-Robots-Tag", value: "noindex" },
       ] },
       { source: "/hero.jpg", headers: [
         { key: "Cache-Control", value: "public, max-age=86400" },
@@ -57,6 +64,7 @@ const nextConfig: NextConfig = {
     ];
   },
   outputFileTracingIncludes: {
+    "/body-dimensions/*": ["./public/body-dimensions/body-dimensions-index.json", "./public/body-dimensions/groups/*.json"],
     "/api/send-telegram": metadata,
     "/body-dimensions/issue": metadata,
     "/body-dimensions/access": metadata,

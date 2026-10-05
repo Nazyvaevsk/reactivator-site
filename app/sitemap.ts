@@ -1,7 +1,9 @@
 ﻿import type { MetadataRoute } from "next";
+import { getPublicBodyGroups } from "@/lib/bodyDimensionsPublic";
+import { BODY_SITE_URL, bodyGroupPath } from "@/lib/bodyDimensionsSeo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://www.reactivator55.ru";
+  const baseUrl = BODY_SITE_URL;
 
   return [
     {
@@ -64,6 +66,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    { url: baseUrl + "/body-dimensions" },
+    ...getPublicBodyGroups().flatMap(group => [
+      { url: baseUrl + bodyGroupPath(group) },
+      ...group.sheets.map(sheet => ({ url: baseUrl + bodyGroupPath(group, sheet.sheet) })),
+    ]),
   ];
 }
 

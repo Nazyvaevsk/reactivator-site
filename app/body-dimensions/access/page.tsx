@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 ﻿import AccessViewer from "./AccessViewer";
 import { verifyBodyAccess } from "@/lib/bodyAccess";
 import { getBodyDimensionsGroup } from "@/lib/bodyDimensionsData";
+
+export const metadata: Metadata = {
+  title: "Временный доступ к комплекту",
+  robots: { index: false, follow: false, noarchive: true },
+  alternates: { canonical: null },
+};
 
 type Props = {
   searchParams: Promise<{
