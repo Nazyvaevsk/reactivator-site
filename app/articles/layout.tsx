@@ -1,4 +1,13 @@
 import PagesHeader from "../PagesHeader";
+import KnowledgeBackground from "./KnowledgeBackground";
+import styles from "./KnowledgeHero.module.css";
+
 export default function ArticlesLayout({ children }: { children: React.ReactNode }) {
-  return <div className="relative min-h-screen bg-black text-white"><PagesHeader />{children}</div>;
+  return (
+    <div className={styles.shell + " text-white"}>
+      <KnowledgeBackground />
+      <PagesHeader />
+      {children}
+    </div>
+  );
 }
