@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: "/:path*",
+        source: "/:path((?!favicon\\.ico$).*)",
         has: [{ type: "host", value: "reactivator55.ru" }],
         destination: "https://www.reactivator55.ru/:path*",
         permanent: true,
