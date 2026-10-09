@@ -1,136 +1,64 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useApplicationForm } from "../ApplicationFormProvider";
+import PhotoGuide from "./PhotoGuide";
 
 export default function ContactsPage() {
   const openForm = useApplicationForm();
 
-  const [pageViewport, setPageViewport] = useState<{
-    width: number;
-    height: number;
-  } | null>(null);
-
-  useEffect(() => {
-    const baseDpr = window.devicePixelRatio || 1;
-
-    const syncPageViewport = () => {
-      const currentDpr = window.devicePixelRatio || baseDpr;
-      const zoomRatio = currentDpr / baseDpr;
-
-      setPageViewport({
-        width: Math.round(window.innerWidth * zoomRatio),
-        height: Math.round(window.innerHeight * zoomRatio),
-      });
-    };
-
-    syncPageViewport();
-    window.addEventListener("resize", syncPageViewport);
-
-    return () => {
-      window.removeEventListener("resize", syncPageViewport);
-    };
-  }, []);
-
   return (
     <main className="min-h-screen bg-black text-white">
-      <section
-        className="relative mx-auto overflow-hidden bg-black max-lg:max-w-full"
-        style={{
-          width: pageViewport ? `${pageViewport.width}px` : "100vw",
-          minHeight: pageViewport
-            ? `${Math.round(pageViewport.width * 0.5625)}px`
-            : "56.25vw",
-          backgroundImage: "url('/hero.jpg')",
-          backgroundSize: "100% 100%",
-          backgroundPosition: "center top",
-        }}
-      >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-0"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, #000 0%, rgba(0,0,0,0.92) 18%, rgba(0,0,0,0.58) 48%, rgba(0,0,0,0.18) 78%), linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.38) 48%, #000 100%)",
-          }}
-        />
+      <div className="mx-auto max-w-[1440px] px-4 pb-10 pt-26 md:px-8 md:pb-12 md:pt-25.5">
+        <header className="rounded-[22px] border border-white/15 bg-zinc-950 px-5 py-5 md:px-7 md:py-6">
+          <p className="text-sm font-bold uppercase tracking-[0.18em] text-orange-500">
+            Реактиватор · Омск
+          </p>
+          <h1 className="mt-3 text-[clamp(1.875rem,4vw,3rem)] font-bold leading-tight tracking-tight">
+            Связаться с Реактиватором
+          </h1>
+          <p className="mt-3 text-base leading-relaxed text-zinc-300 md:text-lg">
+            Оценим предварительную стоимость кузовных работ по фотографиям.
+          </p>
+        </header>
 
-        <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-8 pt-32 md:px-8 md:pb-6.5 md:pt-25.5 max-md:px-4 max-md:pt-26 max-md:pb-10">
-          <div className="max-w-[900px]">
-            <div className="mb-4 text-sm font-bold uppercase tracking-[0.22em] text-orange-500 md:mb-3">
-              Реактиватор · Омск
-            </div>
-
-            <h1 className="text-5xl font-bold leading-[0.95] tracking-tight md:text-[54px] max-md:text-[clamp(1.875rem,8vw,2.5rem)] max-md:leading-[1.08]">
-              Связаться
-              <br />
-              <span className="text-orange-500">с Реактиватором</span>
-            </h1>
-
-            <p className="mt-6 max-w-[720px] text-base leading-relaxed text-zinc-300 md:text-[17px] md:mt-5">
-              Пришлите фотографии повреждений. Посмотрим характер повреждений,
-              сориентируем по ситуации и договоримся о дальнейших действиях.
-            </p>
-          </div>
-
-          <div className="mt-8 grid gap-3 md:grid-cols-[0.85fr_1.15fr] md:max-lg:grid-cols-1 md:mt-6.5 md:gap-2.5">
-            <article className="relative overflow-hidden rounded-[22px] border border-white/15 bg-black/90 px-7 py-7 md:px-5.5 md:py-5.5 max-md:px-5 max-md:py-5">
-              <div className="text-sm font-bold uppercase tracking-[0.18em] text-orange-500">
-                Мастерская
+        <div className="mt-4 grid items-start gap-4 lg:grid-cols-2">
+          <article className="rounded-[22px] border border-white/15 bg-zinc-950 px-5 py-5 md:px-7 md:py-6">
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-orange-500">Контакты</p>
+            <h2 className="mt-3 text-2xl font-bold">Омск</h2>
+            <dl className="mt-3 grid gap-3 sm:grid-cols-2">
+              <div>
+                <dt className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500">Адрес</dt>
+                <dd className="mt-1 text-base font-semibold">ул. 3-я Молодёжная, 81/2</dd>
               </div>
-
-              <h2 className="mt-3 text-3xl font-bold md:mt-2.5 md:text-[25px] md:leading-[30px] max-md:text-[26px] max-md:leading-tight">
-                Омск
-              </h2>
-
-              <div className="mt-6 space-y-5 md:mt-5 md:space-y-4">
-                <div>
-                  <div className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500">
-                    Адрес
-                  </div>
-                  <div className="mt-1 text-lg font-semibold text-white md:text-[17px] md:leading-[28px]">
-                    ул. 3-я Молодёжная, 81/2
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500">
-                    Телефон
-                  </div>
-                  <a
-                    href="tel:+79994547470"
-                    className="mt-1 inline-block text-lg max-md:py-2 max-md:min-h-11 font-semibold text-white transition-colors hover:text-orange-500 md:text-[17px] md:leading-[28px]"
-                  >
+              <div>
+                <dt className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500">Телефон</dt>
+                <dd>
+                  <a href="tel:+79994547470" className="inline-flex min-h-11 items-center text-base font-semibold transition-colors hover:text-orange-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-500">
                     +7 999 454-74-70
                   </a>
-                </div>
+                </dd>
               </div>
-
-              <div className="mt-7 flex items-center gap-3 border-t border-white/10 pt-5 text-sm text-zinc-300 md:mt-5.5 md:gap-2.5 md:pt-4">
-                <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.9)]" />
-                Посещение по предварительной договорённости
-              </div>
-            </article>
-
-            <article className="relative overflow-hidden rounded-[22px] border border-orange-500/60 bg-gradient-to-br from-[#1a0900]/95 via-black/95 to-black px-7 py-7 md:px-7 md:py-5.5 max-md:px-5 max-md:py-5">
-              <div className="text-sm font-bold uppercase tracking-[0.18em] text-orange-500">
-                Быстрый способ начать
-              </div>
-
-              <h2 className="mt-3 text-2xl font-bold leading-tight md:text-[25px] md:mt-2.5 max-md:text-[22px]">
-                Покажите повреждения автомобиля
-              </h2>
-
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-300 md:text-base md:mt-2.5 max-md:text-base">
-                Отправьте несколько фотографий с разных ракурсов. По ним
-                предварительно поймём характер повреждений и скажем, имеет ли
-                смысл приезжать на осмотр.
+            </dl>
+            <div className="mt-3 border-t border-white/10 pt-4 text-sm leading-relaxed text-zinc-300">
+              <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-zinc-500">Режим посещения</h3>
+              <p className="mt-2 flex items-start gap-3">
+                <span aria-hidden="true" className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.9)]" />
+                Посещение мастерской — по предварительной договорённости.
               </p>
+              <p className="mt-3"><span className="font-semibold text-white">Время для связи:</span> ежедневно с 10:00 до 19:00.</p>
+            </div>
+          </article>
 
+          <article className="rounded-[22px] border border-orange-500/60 bg-gradient-to-br from-[#1a0900] to-zinc-950 px-5 py-5 md:px-7 md:py-6">
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-orange-500">Оценка по фото</p>
+            <h2 className="mt-3 text-2xl font-bold leading-tight">Покажите повреждения автомобиля</h2>
+            <p className="mt-3 text-base leading-relaxed text-zinc-300">
+              Пришлите фото с нескольких ракурсов — рассчитаем предварительную стоимость работ.
+            </p>
               <button
                 type="button"
                 onClick={openForm}
-                className="group mt-6 inline-flex items-center justify-center gap-4 rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)] md:mt-5 md:gap-3 md:px-5.5 md:py-3 max-md:px-5 max-lg:w-full max-lg:min-h-14 max-lg:gap-2 max-lg:px-3 max-lg:[&>span:first-child]:shrink-0 max-lg:[&>svg]:shrink-0"
+                className="group mt-5 flex w-full items-center justify-center gap-4 rounded-2xl bg-white px-7 py-4 text-base font-bold text-black shadow-[0_0_18px_rgba(255,106,0,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-500 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.8)] md:mt-5 md:gap-3 md:px-5.5 md:py-3 max-md:px-5 max-lg:w-full max-lg:min-h-14 max-lg:gap-2 max-lg:px-3 max-lg:[&>span:first-child]:shrink-0 max-lg:[&>svg]:shrink-0"
               >
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500 text-white transition-colors group-hover:bg-white group-hover:text-orange-500 md:h-8 md:w-8">
                   <svg
@@ -158,24 +86,14 @@ export default function ContactsPage() {
                   <path d="m13 6 6 6-6 6" />
                 </svg>
               </button>
-            </article>
-          </div>
-
-          <div className="mt-3 grid gap-3 rounded-[22px] border border-white/10 bg-black/80 px-7 py-6 md:grid-cols-4 md:max-lg:grid-cols-2 md:px-7 md:mt-2.5 md:gap-2.5 md:py-5 max-md:px-5 max-md:py-5">
-            {[
-              ["01", "Отправляете фото"],
-              ["02", "Смотрим повреждения"],
-              ["03", "Договариваемся об осмотре"],
-              ["04", "Определяем дальнейшие работы"],
-            ].map(([number, text]) => (
-              <div key={number} className="flex items-start gap-4 md:gap-3">
-                <span className="text-lg font-medium text-orange-500 md:text-[17px] md:leading-[28px]">{number}</span>
-                <span className="text-sm leading-relaxed text-zinc-300">{text}</span>
-              </div>
-            ))}
-          </div>
+            <p className="mt-4 text-sm leading-relaxed text-zinc-400">
+              Заявку с фотографиями можно отправить через сайт в любое время.
+            </p>
+          </article>
         </div>
-      </section>
+
+        <PhotoGuide />
+      </div>
     </main>
   );
 }

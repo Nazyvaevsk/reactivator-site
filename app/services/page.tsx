@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useApplicationForm } from "../ApplicationFormProvider";
 
 export default function ServicesPage() {
@@ -34,28 +35,24 @@ export default function ServicesPage() {
   const services = [
     {
       number: "01",
-      href: "/services/geometriya-kuzova",
       title: "Восстановление геометрии кузова",
       text: "Устраняем перекосы после ДТП и возвращаем контрольные точки к правильным размерам.",
       when: ["машину тянет", "не выставляется развал", "колесо ушло"],
     },
     {
       number: "02",
-      href: "/services/stapelnye-raboty",
       title: "Стапельные работы после ДТП",
       text: "Вытягиваем и восстанавливаем смещённые силовые элементы кузова на стапеле.",
       when: ["сильный удар", "кузов повело", "смещены силовые элементы"],
     },
     {
       number: "03",
-      href: "/services/kontrol-geometrii",
       title: "Контроль геометрии и размеров",
       text: "Проверяем контрольные точки, диагонали и положение элементов кузова до и после ремонта.",
       when: ["сомнения после ДТП", "неровные зазоры", "нужен финальный контроль"],
     },
     {
       number: "04",
-      href: "/services/lokalnye-kuzovnye-raboty",
       title: "Локальные кузовные работы",
       text: "Выполняем отдельные кузовные работы, когда повреждение не требует восстановления всей геометрии.",
       when: ["локальное повреждение", "проём", "отдельный элемент кузова"],
@@ -134,7 +131,7 @@ export default function ServicesPage() {
             {services.map((service) => (
               <article
                 key={service.number}
-                className="group relative h-[178px] max-md:h-auto max-md:min-h-0 md:h-auto md:min-h-[150px] overflow-hidden rounded-[22px] border border-white/15 bg-zinc-950"
+                className="relative h-[178px] max-md:h-auto max-md:min-h-0 md:h-auto md:min-h-[150px] overflow-hidden rounded-[22px] border border-white/15 bg-zinc-950"
               >
                 <div
                   aria-hidden="true"
@@ -245,22 +242,29 @@ export default function ServicesPage() {
                       {service.text}
                     </p>
                   </div>
-
-                  <div className="absolute bottom-4 right-4 flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-black/70 text-orange-500 transition-all duration-200 group-hover:border-orange-500 group-hover:bg-orange-500 group-hover:text-white md:h-9.5 md:w-9.5">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="h-6 w-6"
-                    >
-                      <path d="M5 12h14" />
-                      <path d="m13 6 6 6-6 6" />
-                    </svg>
-                  </div>
                 </div>
               </article>
             ))}
+          </div>
+
+          <div className="mt-3 flex justify-center md:mt-2.5">
+            <Link
+              href="/works"
+              className="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl border border-orange-500 bg-orange-500 px-6 py-3 text-center text-base font-bold text-black transition-colors duration-200 hover:border-orange-400 hover:bg-orange-400 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-500 max-md:w-full"
+            >
+              <span>Посмотреть реальные ремонты</span>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="h-5 w-5 shrink-0"
+              >
+                <path d="M5 12h13" />
+                <path d="m13 6 6 6-6 6" />
+              </svg>
+            </Link>
           </div>
 
           <div className="mt-3 grid gap-3 md:grid-cols-2 md:mt-2.5 md:gap-2.5">
