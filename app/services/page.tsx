@@ -387,6 +387,74 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
+      <CustomerReviews />
     </main>
+  );
+}
+
+const customerReviews = [
+  {
+    name: "Алексей",
+    text: "Очень ответственный и грамотный специалист. А самое главное делает всё на высшем уровне",
+    reply: "Алексей, благодарю за высокую оценку и добрые слова! Рад был помочь разобраться в ситуации. Для меня важно не просто выполнить ремонт, а прежде всего правильно определить причину проблемы и предложить действительно необходимое решение. Удачи вам на дорогах!",
+  },
+  {
+    name: "Andrej Lavrov",
+    text: "Спасибо мастеру за работу. Работа выполнена на высоте, выполнена в обговоренный срок.",
+    reply: "Спасибо за высокую оценку и доверие! Рад, что вы остались довольны результатом и сроками. Обращайтесь, если понадобится помощь с автомобилем. Удачи на дорогах!",
+  },
+  {
+    name: "Виктория",
+    text: "Без проблем устранили зазор дверей",
+    reply: "Спасибо за отзыв и за доверие! 🤝 Рад, что смог помочь. Выставили зазоры дверей, заменили закисшие болты замков, всё сделали аккуратно и как положено. Самое приятное — когда клиент уезжает довольным результатом. Удачи на дорогах и пусть автомобиль радует только исправной работой! 🚙",
+  },
+];
+
+function CustomerReviews() {
+  return (
+    <section aria-labelledby="customer-reviews-title" className="mx-auto max-w-[1440px] px-6 pb-10 md:px-8 max-md:px-4">
+      <div className="rounded-[22px] border border-orange-500/20 bg-[#101010] p-5 md:p-7">
+        <h2 id="customer-reviews-title" className="text-2xl font-bold md:text-3xl">
+          Отзывы клиентов
+        </h2>
+
+        <div className="mt-5 w-fit rounded-2xl border border-orange-500/40 bg-[#18130f] px-5 py-3">
+          <div className="flex items-center gap-3">
+            <span className="text-3xl font-bold">5,0</span>
+            <span role="img" aria-label="5 из 5 звёзд" className="text-xl text-orange-500">★★★★★</span>
+          </div>
+          <p className="mt-1 text-sm text-zinc-400">39 оценок · Авито</p>
+        </div>
+
+        <div className="mt-5 grid gap-4 lg:grid-cols-3">
+          {customerReviews.map((review) => (
+            <article key={review.name} className="min-w-0 rounded-2xl border border-white/10 bg-zinc-900 p-5">
+              <h3 className="text-lg font-bold">{review.name}</h3>
+              <p className="mt-2 text-xl text-orange-500">
+                <span role="img" aria-label="5 из 5 звёзд">★★★★★</span>
+              </p>
+              <blockquote className="mt-4 text-base leading-relaxed text-zinc-100">
+                <p>{review.text}</p>
+              </blockquote>
+              <div className="mt-5 border-t border-white/10 pt-4">
+                <p className="text-sm font-semibold text-orange-500">Ответ «Реактиватор | Евгений»</p>
+                <p className="mt-2 text-base leading-relaxed text-zinc-300">{review.reply}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-5 flex justify-center">
+          <a
+            href="https://www.avito.ru/brands/i43690834/all/predlozheniya_uslug"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg text-base font-semibold text-orange-500 transition-colors hover:text-orange-400 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-500"
+          >
+            Все отзывы на Авито <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
   );
 }
