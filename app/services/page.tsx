@@ -85,15 +85,13 @@ export default function ServicesPage() {
         <div className="relative z-10 mx-auto max-w-[1440px] px-6 pb-8 pt-32 md:px-8 md:pt-25.5 md:pb-6.5 max-md:px-4 max-md:pt-26 max-md:pb-10">
           <div className="max-w-[900px]">
 <h1 className="max-w-[900px] text-5xl font-bold leading-[0.95] tracking-tight md:text-[54px] max-md:text-[clamp(1.875rem,8vw,2.5rem)] max-md:leading-[1.08]">
-              После ДТП важно понять
-              <br />
-              <span className="text-orange-500">не только что помято, а что сместилось</span>
+              Стапельный ремонт и{" "}
+              <span className="text-orange-500">восстановление геометрии кузова после ДТП</span>
             </h1>
 
             <p className="mt-6 max-w-[760px] text-base leading-relaxed text-zinc-300 md:text-[17px] md:mt-5">
-              Восстанавливаем геометрию и силовую структуру кузова после ДТП.
-              Проверяем размеры, устраняем перекосы и возвращаем элементы
-              в правильное положение.
+              Исправляем перекосы кузова, восстанавливаем положение силовых элементов
+              и проверяем контрольные размеры. Работаем на стапеле с контролем геометрии.
             </p>
 
             <button type="button" onClick={openForm}
