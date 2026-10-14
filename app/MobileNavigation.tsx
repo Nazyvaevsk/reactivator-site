@@ -31,7 +31,7 @@ export default function MobileNavigation() {
       }
     };
 
-    const desktop = window.matchMedia("(min-width: 1280px)");
+    const desktop = window.matchMedia("(min-width: 64rem)");
     const closeOnDesktop = () => {
       if (desktop.matches) setIsOpen(false);
     };
@@ -48,7 +48,7 @@ export default function MobileNavigation() {
   }, [isOpen]);
 
   return (
-    <div ref={root} className="xl:hidden">
+    <div ref={root} className="lg:hidden">
       <button
         ref={toggle}
         type="button"
