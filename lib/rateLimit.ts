@@ -20,14 +20,20 @@ export function consumeLimit(key: string, limit: number, windowMs: number, now =
 export function clientKey(request: Request): string {
   // Trust only the rightmost hop supplied by Caddy, never the caller's leftmost value.
   // The application port MUST be reachable only by the reverse proxy.
-  const raw = request.headers.get("x-forwarded-for")?.split(",").pop()?.trim() ?? "";
-  if (!isIP(raw)) return "unknown";
+  // Override only after verifying the managed ingress strips caller-supplied values.
+  const header = process.env.CLIENT_IP_HEADER === "x-real-ip" ? "x-real-ip" : "x-forwarded-for";
+  const raw = request.headers.get(header)?.split(",").pop()?.trim() ?? "";
+  // Scoped IPv6 literals are not public visitor addresses and are not URL-safe.
+  if (!isIP(raw) || raw.includes("%")) return "unknown";
   const normalized = raw.includes(":") ? new URL("http://[" + raw + "]").hostname : raw;
   return createHash("sha256").update(normalized).digest("hex");
 }
 export function rateLimit(request: Request, scope: string, limit: number, windowMs: number, globalLimit: number): Response | null {
+  const key = clientKey(request);
+  // Missing ingress metadata must not place every visitor in one three-message bucket.
+  // The global cap still applies. A verified ingress header is a release prerequisite.
   const retry = consumeLimit(scope + ":all", globalLimit, windowMs) ||
-    consumeLimit(scope + ":" + clientKey(request), limit, windowMs);
+    (key === "unknown" ? 0 : consumeLimit(scope + ":" + key, limit, windowMs));
   return retry ? Response.json({ error: "Слишком много запросов. Попробуйте позже." }, {
     status: 429, headers: { "Retry-After": String(retry), "Cache-Control": "private, no-store" },
   }) : null;

@@ -1,4 +1,5 @@
-import { rateLimit } from "@/lib/rateLimit";
+import { rateLimit, withCapacity } from "@/lib/rateLimit";
+import { BodyReadError, readBoundedBody } from "@/lib/boundedBody";
 import crypto from "node:crypto";
 import { bodyIssueConfig, createIssuedBodyAccess, verifyBodyIssueToken } from "@/lib/bodyIssue";
 import { getBodyDimensionsGroup } from "@/lib/bodyDimensionsData";
@@ -55,6 +56,10 @@ document.getElementById('copy').addEventListener('click', copy);
 }
 
 export async function POST(request: Request) {
+  return withCapacity("body-issue", 8, () => issue(request));
+}
+
+async function issue(request: Request) {
   const limited = rateLimit(request, "body-issue", 30, 10 * 60_000, 300);
   if (limited) return limited;
   const json = (data: unknown, status = 200) => Response.json(data, { status, headers });
@@ -65,19 +70,9 @@ export async function POST(request: Request) {
     }
     if (!request.headers.get("content-type")?.startsWith("application/json")) return json({ error: "Неверный запрос" }, 415);
     // Bound actual streamed bytes as well as Content-Length.
-    const reader = request.body?.getReader();
-    if (!reader) return json({ error: "Неверный запрос" }, 400);
-    const chunks: Uint8Array[] = [];
-    let size = 0;
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      size += value.byteLength;
-      if (size > 2048) { await reader.cancel(); return json({ error: "Запрос слишком большой" }, 413); }
-      chunks.push(value);
-    }
+    const bytes = await readBoundedBody(request, 2048);
     let body;
-    try { body = JSON.parse(Buffer.concat(chunks).toString("utf8")); } catch { return json({ error: "Неверный запрос" }, 400); }
+    try { body = JSON.parse(bytes.toString("utf8")); } catch { return json({ error: "Неверный запрос" }, 400); }
     if (!body || (body.action !== "inspect" && body.action !== "issue")) return json({ error: "Неверное действие" }, 400);
     const groupId = verifyBodyIssueToken(body.token);
     if (!groupId) return json({ error: "Служебная ссылка недействительна или истекла. Используйте ручной генератор." }, 403);
@@ -85,7 +80,8 @@ export async function POST(request: Request) {
     if (!group) return json({ error: "Комплект не найден" }, 404);
     if (body.action === "inspect") return json({ label: `${group.make} ${group.model} ${group.year} / ${group.variant || '—'} · ${group.groupId} · ${group.sheetCount} листов · 590 ₽` });
     return json(createIssuedBodyAccess(groupId));
-  } catch {
+  } catch (error) {
+    if (error instanceof BodyReadError) return json({ error: "Запрос слишком большой, пустой или передавался слишком долго." }, error.status);
     // Never log request bodies, signed URLs or configuration secrets.
     return json({ error: "Выдача временно недоступна. Проверьте настройки сервера." }, 503);
   }

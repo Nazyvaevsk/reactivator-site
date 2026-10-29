@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useState, type ChangeEvent, type FormEvent, type MouseEvent, type ReactNode } from "react";
+import { createContext, useContext, useRef, useState, type ChangeEvent, type FormEvent, type MouseEvent, type ReactNode } from "react";
+import { normalizePhone, validName, validDescription } from "@/lib/contactValidation";
 
 type ApplicationFormMode = "repair" | "body-dimensions" | "body-dimensions-search";
 
@@ -38,6 +39,8 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
     ? purchaseDescription
     : isSearch ? searchDescription : description;
   const [photos, setPhotos] = useState<File[]>([]);
+  const [website, setWebsite] = useState("");
+  const pending = useRef<{ snapshot: string; id: string; token: string } | null>(null);
 
   const MAX_PHOTOS = 10;
   const MAX_TOTAL_PHOTO_SIZE = 100 * 1024 * 1024;
@@ -93,16 +96,12 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
       description: "",
     };
 
-    if (!name.trim()) {
-      newErrors.name = "Введите ваше имя";
+    if (!validName(name.trim())) {
+      newErrors.name = "Укажите имя от 2 до 80 символов без цифр и ссылок";
     }
 
-    const phoneDigits = phone.replace(/\D/g, "");
-
-    if (!phone.trim()) {
-      newErrors.phone = "Введите номер телефона";
-    } else if (phoneDigits.length < 10) {
-      newErrors.phone = "Введите корректный номер телефона";
+    if (!normalizePhone(phone)) {
+      newErrors.phone = "Укажите мобильный номер: +7, 8 или 10 цифр с 9";
     }
 
     const totalPhotoSize = photos.reduce(
@@ -121,10 +120,10 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
       }
     }
 
-    if (!formDescription.trim()) {
+    if (formMode === "body-dimensions" ? !formDescription.trim() : !validDescription(formDescription.trim())) {
       newErrors.description = formMode === "body-dimensions"
         ? "Не указан комплект кузовных размеров"
-        : isSearch ? "Укажите автомобиль и что нужно найти" : "Опишите, что произошло";
+        : isSearch ? "Укажите автомобиль и запрос: от 5 до 2000 символов" : "Опишите, что произошло: от 5 до 2000 символов";
     }
 
     setErrors(newErrors);
@@ -203,6 +202,10 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
     setIsSending(true);
 
     try {
+      const snapshot = JSON.stringify([formMode, name.trim(), phone.trim(), formDescription.trim(), purchaseGroupId,
+        photos.map(file => [file.name, file.size, file.lastModified])]);
+      if (pending.current?.snapshot !== snapshot) pending.current = { snapshot, id: crypto.randomUUID(), token: "" };
+      const submission = pending.current;
       if (formMode !== "repair") {
         const formData = new FormData();
 
@@ -212,6 +215,8 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
         formData.append("mode", formMode);
         if (formMode === "body-dimensions") formData.append("groupId", purchaseGroupId);
         formData.append("sendMessage", "true");
+        formData.append("submissionId", submission.id);
+        formData.append("website", website);
 
         const response = await fetch("/api/send-telegram", {
           method: "POST",
@@ -239,6 +244,11 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
         formData.append("mode", formMode);
         formData.append("photo", preparedPhoto);
         formData.append("sendMessage", i === 0 ? "true" : "false");
+        formData.append("submissionId", submission.id);
+        formData.append("uploadToken", submission.token);
+        formData.append("photoIndex", String(i));
+        formData.append("photoCount", String(photos.length));
+        formData.append("website", website);
 
         const response = await fetch("/api/send-telegram", {
           method: "POST",
@@ -252,6 +262,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
             result.error || `Не удалось отправить фотографию ${i + 1}`
           );
         }
+        submission.token = result.uploadToken;
         setUploadedPhotos(i + 1);
       }
 
@@ -271,6 +282,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
       }
 
       setIsSent(true);
+      pending.current = null;
 
       setName("");
       setPhone("");
@@ -386,7 +398,11 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
             ) : (
 
-              <form onSubmit={handleSubmit} noValidate>
+              <form onSubmit={handleSubmit} noValidate className="ym-disable-keys">
+                <div aria-hidden="true" className="absolute -left-[10000px] h-px w-px overflow-hidden">
+                  <label>Ваш сайт<input name="website" type="text" tabIndex={-1} autoComplete="off"
+                    value={website} onChange={e => setWebsite(e.target.value)} /></label>
+                </div>
 
                 <p className="mb-3 text-xs uppercase tracking-[0.35em] text-zinc-500 md:mb-2.5 max-md:pr-12 max-md:tracking-[0.12em]">
                   {isSearch ? "Поиск по вашему автомобилю" : formMode === "body-dimensions" ? "Кузовные размеры" : "Предварительная оценка"}
@@ -438,6 +454,8 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
 
                   <input
                     type="tel"
+                    maxLength={40}
+                    autoComplete="tel"
                     disabled={isSending}
                     value={phone}
                     onChange={(e) => {

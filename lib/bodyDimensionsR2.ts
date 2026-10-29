@@ -1,4 +1,5 @@
 import "server-only";
+import { readBoundedBody } from "./boundedBody";
 import { GetObjectCommand, S3Client, S3ServiceException } from "@aws-sdk/client-s3";
 
 let client: S3Client | undefined;
@@ -21,14 +22,17 @@ function getClient() {
 }
 
 // No public URLs or local-original fallback. Call only after access verification.
-export async function readR2Sheet(key: string): Promise<Uint8Array | null> {
+export async function readR2Sheet(key: string, timeoutMs = 15_000): Promise<Uint8Array | null> {
   try {
+    const deadline = Date.now() + timeoutMs;
     const result = await getClient().send(new GetObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME || "reactivator-body-dimensions",
       Key: key,
-    }), { abortSignal: AbortSignal.timeout(15_000) });
+    }), { abortSignal: AbortSignal.timeout(timeoutMs) });
     if (!result.Body) throw new Error("R2 returned an empty response body");
-    return await result.Body.transformToByteArray();
+    const remaining = deadline - Date.now();
+    if (remaining <= 0) throw new Error("Storage deadline exceeded");
+    return await readBoundedBody(new Response(result.Body.transformToWebStream()), 16 * 1024 * 1024, remaining);
   } catch (error) {
     if (error instanceof S3ServiceException && error.name === "NoSuchKey") return null;
     // Do not propagate SDK diagnostics, credentials or signed requests to clients/logs.

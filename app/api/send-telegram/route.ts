@@ -1,3 +1,7 @@
+import { normalizePhone, validName, validDescription } from "@/lib/contactValidation";
+import { BodyReadError, readBoundedBody } from "@/lib/boundedBody";
+import { acquireSubmission, digest, SubmissionError, validatePhoto } from "@/lib/applicationUploads";
+import { randomUUID } from "node:crypto";
 import { rateLimit, withCapacity } from "@/lib/rateLimit";
 import { createBodyIssueUrl } from "@/lib/bodyIssue";
 import { getBodyDimensionsGroup } from "@/lib/bodyDimensionsData";
@@ -6,11 +10,8 @@ import { NextRequest, NextResponse } from "next/server";
 const RELAY_URL =
   "https://reactivator-telegram-relay.nazyvaevsk.workers.dev";
 
-const MAX_SINGLE_PHOTO_SIZE = 10 * 1024 * 1024;
 const MAX_REQUEST_SIZE = 12 * 1024 * 1024;
-const MAX_NAME_LENGTH = 80;
-const MAX_PHONE_LENGTH = 40;
-const MAX_DESCRIPTION_LENGTH = 2000;
+export const runtime = "nodejs";
 
 // Use public origins, not the internal URL or forwarded headers behind Caddy.
 const ALLOWED_ORIGINS = new Set([
@@ -36,7 +37,15 @@ function isAllowedOrigin(origin: string | null): boolean {
 }
 
 export async function POST(request: NextRequest) {
-  return withCapacity("telegram", 8, () => submit(request));
+  const requestId = randomUUID();
+  const started = Date.now();
+  const response = await withCapacity("telegram", 8, () => submit(request));
+  response.headers.set("Cache-Control", "private, no-store");
+  response.headers.set("X-Request-ID", requestId);
+  // Metadata only: never log PII, bodies, credentials, upload tokens or signed URLs.
+  console.info(JSON.stringify({ event: "application", requestId, at: new Date().toISOString(),
+    status: response.status, durationMs: Date.now() - started }));
+  return response;
 }
 
 async function submit(request: NextRequest) {
@@ -71,78 +80,30 @@ async function submit(request: NextRequest) {
       );
     }
 
-    const contentLength = Number(request.headers.get("content-length"));
-    if (
-      Number.isFinite(contentLength) &&
-      contentLength > MAX_REQUEST_SIZE
-    ) {
-      return NextResponse.json(
-        { error: "Запрос слишком большой" },
-        { status: 413 }
-      );
-    }
-
-    const reader = request.body?.getReader();
-    if (!reader) {
-      return NextResponse.json(
-        { error: "Неверный запрос" },
-        { status: 400 }
-      );
-    }
-
-    const chunks: Uint8Array[] = [];
-    let receivedSize = 0;
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      receivedSize += value.byteLength;
-
-      if (receivedSize > MAX_REQUEST_SIZE) {
-        await reader.cancel();
-        return NextResponse.json(
-          { error: "Запрос слишком большой" },
-          { status: 413 }
-        );
-      }
-
-      chunks.push(value);
-    }
-
+    const bytes = await readBoundedBody(request, MAX_REQUEST_SIZE);
     const boundedRequest = new Request(request.url, {
-      method: "POST",
-      headers: request.headers,
-      body: Buffer.concat(chunks),
+      method: "POST", headers: { "content-type": contentType }, body: new Uint8Array(bytes),
     });
 
-    const formData = await boundedRequest.formData();
+    let formData: FormData;
+    try { formData = await boundedRequest.formData(); }
+    catch { throw new SubmissionError(400, "Неверный формат данных заявки."); }
 
+    // Reject duplicate or file-valued scalar fields rather than coercing them.
+    for (const key of ["name", "phone", "description", "mode", "groupId", "sendMessage", "website",
+      "submissionId", "uploadToken", "photoIndex", "photoCount"]) {
+      const values = formData.getAll(key);
+      if (values.length > 1 || values.some(value => typeof value !== "string")) {
+        throw new SubmissionError(400, "Неверные поля заявки.");
+      }
+    }
+    if (formData.getAll("photo").length > 1) throw new SubmissionError(400, "Отправляйте фото по одному.");
+    if (String(formData.get("website") || "").trim()) throw new SubmissionError(400, "Не удалось отправить заявку.");
     const name = String(formData.get("name") || "").trim();
-    const phone = String(formData.get("phone") || "").trim();
+    const phone = normalizePhone(String(formData.get("phone") || "").trim());
     let description = String(formData.get("description") || "").trim();
-
-    if (!name || name.length > MAX_NAME_LENGTH) {
-      return NextResponse.json(
-        { error: "Укажите имя длиной до 80 символов" },
-        { status: 400 }
-      );
-    }
-
-    if (!phone || phone.length > MAX_PHONE_LENGTH) {
-      return NextResponse.json(
-        { error: "Укажите корректный номер телефона" },
-        { status: 400 }
-      );
-    }
-
-    const phoneDigits = phone.replace(/\D/g, "");
-    if (phoneDigits.length < 10 || phoneDigits.length > 15) {
-      return NextResponse.json(
-        { error: "Укажите корректный номер телефона" },
-        { status: 400 }
-      );
-    }
+    if (!validName(name)) throw new SubmissionError(400, "Укажите имя от 2 до 80 символов без цифр и ссылок.");
+    if (!phone) throw new SubmissionError(400, "Укажите российский мобильный номер: +7, 8 или 10 цифр с 9.");
 
     const sendMessageRaw = String(
       formData.get("sendMessage") ?? "true"
@@ -172,28 +133,11 @@ async function submit(request: NextRequest) {
     const photo = formData.get("photo");
     const hasPhoto = photo instanceof File && photo.size > 0;
 
-    if (hasPhoto && photo.size > MAX_SINGLE_PHOTO_SIZE) {
-      return NextResponse.json(
-        { error: "Размер одной фотографии не должен превышать 10 МБ" },
-        { status: 400 }
-      );
+    if (photo !== null && !hasPhoto) throw new SubmissionError(400, "Неверная фотография.");
+    if (mode !== "body-dimensions" && !validDescription(description)) {
+      throw new SubmissionError(400, "Опишите запрос: от 5 до 2000 символов без управляющих знаков.");
     }
-
-    if (hasPhoto && !photo.type.toLowerCase().startsWith("image/")) {
-      return NextResponse.json(
-        { error: "Можно отправлять только изображения" },
-        { status: 400 }
-      );
-    }
-
-    if (mode !== "body-dimensions") {
-      if (!description || description.length > MAX_DESCRIPTION_LENGTH) {
-        return NextResponse.json(
-          { error: "Описание обязательно и не должно превышать 2000 символов" },
-          { status: 400 }
-        );
-      }
-    }
+    const verifiedPhoto = hasPhoto ? await validatePhoto(photo as File) : null;
 
     let issueUrl: string | undefined;
 
@@ -276,114 +220,118 @@ async function submit(request: NextRequest) {
       );
     }
 
-    if (sendMessage) {
-      const limited = rateLimit(request, "telegram-message", 3, 10 * 60_000, 60);
-      if (limited) return limited;
-      let message =
-        mode === "body-dimensions-search"
-          ? "🔎 ЗАЯВКА НА ПОИСК КУЗОВНЫХ РАЗМЕРОВ\n\n"
-          : "🚗 НОВАЯ ЗАЯВКА С САЙТА\n\n";
-
-      message += `👤 Имя: ${name}\n`;
-      message += `📞 Телефон: ${phone}\n`;
-
-      if (description) {
-        message += `\n📝 ${
+    const suppliedId = String(formData.get("submissionId") || "");
+    if (suppliedId && !/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(suppliedId)) throw new SubmissionError(400, "Неверный идентификатор заявки.");
+    if (String(formData.get("uploadToken") || "").length > 64) throw new SubmissionError(400, "Неверный токен загрузки.");
+    const photoCountRaw = String(formData.get("photoCount") ?? (mode === "repair" ? "10" : "0"));
+    const photoIndexRaw = String(formData.get("photoIndex") ?? "0");
+    if (!/^\d{1,2}$/.test(photoCountRaw) || !/^\d{1,2}$/.test(photoIndexRaw)) throw new SubmissionError(400, "Неверный номер фото.");
+    const maximum = Number(photoCountRaw), photoIndex = Number(photoIndexRaw);
+    if ((mode === "repair" && (maximum < 1 || maximum > 10 || photoIndex >= maximum || (sendMessage && photoIndex !== 0))) ||
+        (mode !== "repair" && maximum !== 0)) throw new SubmissionError(400, "Неверное количество фотографий.");
+    const fingerprint = digest(JSON.stringify([mode, name.toLowerCase(), phone, description, maximum]));
+    // Legacy first requests remain accepted. Subsequent photos must present a server receipt.
+    const id = suppliedId || randomUUID();
+    const state = acquireSubmission(id, fingerprint, String(formData.get("uploadToken") || ""), sendMessage, maximum);
+    try {
+      if (sendMessage && state.text === "new") {
+        const limited = rateLimit(request, "telegram-message", 3, 10 * 60_000, 60);
+        if (limited) return limited;
+        let message =
           mode === "body-dimensions-search"
-            ? "Автомобиль и что нужно найти"
-            : mode === "body-dimensions"
-              ? "Заявка на покупку"
-              : "Что произошло"
-        }:\n${description}`;
-      }
+            ? "🔎 ЗАЯВКА НА ПОИСК КУЗОВНЫХ РАЗМЕРОВ\n\n"
+            : "🚗 НОВАЯ ЗАЯВКА С САЙТА\n\n";
 
-      if (issueUrl) {
-        message +=
-          "\n\nТолько для мастера. После проверки оплаты: " +
-          issueUrl +
-          "\nСлужебная ссылка действует 7 дней. Клиенту отправляйте только созданную ссылку доступа.";
-      }
+        message += `👤 Имя: ${name}\n`;
+        message += `📞 Телефон: ${phone}\n`;
 
-      const messageForm = new FormData();
-      messageForm.append("method", "sendMessage");
-      messageForm.append("chat_id", chatId);
-      messageForm.append("text", message);
+        if (description) {
+          message += `\n📝 ${
+            mode === "body-dimensions-search"
+              ? "Автомобиль и что нужно найти"
+              : mode === "body-dimensions"
+                ? "Заявка на покупку"
+                : "Что произошло"
+          }:\n${description}`;
+        }
 
-      if (issueUrl) {
-        messageForm.append("disable_web_page_preview", "true");
-        messageForm.append(
-          "reply_markup",
-          JSON.stringify({
-            inline_keyboard: [
-              [
-                {
-                  text: "Выдать доступ на 24 часа",
-                  url: issueUrl,
-                },
+        if (issueUrl) {
+          message +=
+            "\n\nТолько для мастера. После проверки оплаты: " +
+            issueUrl +
+            "\nСлужебная ссылка действует 7 дней. Клиенту отправляйте только созданную ссылку доступа.";
+        }
+
+        const messageForm = new FormData();
+        messageForm.append("method", "sendMessage");
+        messageForm.append("chat_id", chatId);
+        messageForm.append("text", message);
+
+        if (issueUrl) {
+          messageForm.append("disable_web_page_preview", "true");
+          messageForm.append(
+            "reply_markup",
+            JSON.stringify({
+              inline_keyboard: [
+                [
+                  {
+                    text: "Выдать доступ на 24 часа",
+                    url: issueUrl,
+                  },
+                ],
               ],
-            ],
-          })
-        );
+            })
+          );
+        }
+
+        // An ambiguous network failure must not automatically send the text again.
+        state.text = "uncertain";
+        const messageResponse = await fetch(RELAY_URL, {
+          method: "POST", headers: { "X-Relay-Secret": relaySecret },
+          body: messageForm, signal: AbortSignal.timeout(20_000),
+        });
+        const relayResult = await messageResponse.json().catch(() => null);
+        if (!messageResponse.ok || relayResult?.ok !== true) {
+          console.error("Relay sendMessage failed, HTTP status:", messageResponse.status);
+          throw new SubmissionError(502, "Доставка заявки не подтверждена. Свяжитесь с мастером, не отправляйте повторно.");
+        }
+        state.text = "sent";
       }
-
-      const messageResponse = await fetch(RELAY_URL, {
-        method: "POST",
-        headers: {
-          "X-Relay-Secret": relaySecret,
-        },
-        body: messageForm,
-        signal: AbortSignal.timeout(20_000),
-      });
-
-      const relayResult = await messageResponse
-        .json()
-        .catch(() => null);
-
-      if (!messageResponse.ok || relayResult?.ok === false) {
-        console.error(
-          "Relay sendMessage failed, HTTP status:",
-          messageResponse.status
-        );
-
-        return NextResponse.json(
-          { error: "Не удалось отправить заявку" },
-          { status: 500 }
-        );
+      if (state.text !== "sent") throw new SubmissionError(403, "Сначала отправьте заявку.");
+      if (verifiedPhoto) {
+        if (state.uncertainPhotos.has(photoIndex)) throw new SubmissionError(409, "Доставка фото не подтверждена. Свяжитесь с мастером.");
+        const previous = state.photos.get(photoIndex);
+        if (previous && previous !== verifiedPhoto.hash) throw new SubmissionError(409, "Нельзя заменить уже отправленную фотографию.");
+        if (!previous) {
+          if (photoIndex !== state.photos.size || state.photos.size >= maximum || state.bytes + verifiedPhoto.bytes.length > 100 * 1024 * 1024) {
+            throw new SubmissionError(400, "Нарушен порядок или лимит фотографий.");
+          }
+          const photoForm = new FormData();
+          photoForm.append("method", "sendPhoto");
+          photoForm.append("chat_id", chatId);
+          photoForm.append("photo", new Blob([new Uint8Array(verifiedPhoto.bytes)], { type: verifiedPhoto.mime }), verifiedPhoto.filename);
+          state.uncertainPhotos.add(photoIndex);
+          const photoResponse = await fetch(RELAY_URL, {
+            method: "POST", headers: { "X-Relay-Secret": relaySecret },
+            body: photoForm, signal: AbortSignal.timeout(20_000),
+          });
+          const result = await photoResponse.json().catch(() => null);
+          if (!photoResponse.ok || result?.ok !== true) {
+            console.error("Relay sendPhoto failed, HTTP status:", photoResponse.status);
+            throw new SubmissionError(502, "Доставка фото не подтверждена. Свяжитесь с мастером.");
+          }
+          state.uncertainPhotos.delete(photoIndex);
+          state.photos.set(photoIndex, verifiedPhoto.hash);
+          state.bytes += verifiedPhoto.bytes.length;
+        }
       }
-    }
-
-    if (hasPhoto) {
-      const photoForm = new FormData();
-      photoForm.append("method", "sendPhoto");
-      photoForm.append("chat_id", chatId);
-      photoForm.append("photo", photo, photo.name);
-
-      const photoResponse = await fetch(RELAY_URL, {
-        method: "POST",
-        headers: {
-          "X-Relay-Secret": relaySecret,
-        },
-        body: photoForm,
-        signal: AbortSignal.timeout(20_000),
-      });
-
-      if (!photoResponse.ok) {
-        console.error(
-          "Relay sendPhoto failed, HTTP status:",
-          photoResponse.status
-        );
-
-        return NextResponse.json(
-          { error: "Не удалось отправить фотографию" },
-          { status: 500 }
-        );
-      }
-    }
-
-    return NextResponse.json({
-      success: true,
-    });
-  } catch {
+      return NextResponse.json(suppliedId || mode === "repair"
+        ? { success: true, submissionId: id, uploadToken: state.token }
+        : { success: true });
+    } finally { state.busy = false; }
+  } catch (error) {
+    if (error instanceof BodyReadError) return NextResponse.json({ error: "Запрос слишком большой, пустой или передавался слишком долго." }, { status: error.status });
+    if (error instanceof SubmissionError) return NextResponse.json({ error: error.message }, { status: error.status });
     console.error("send-telegram request failed");
 
     return NextResponse.json(

@@ -57,7 +57,7 @@ function getAccessIndex(): AccessIndex | null {
 export function getBodyDimensionsGroup(
   groupId: string
 ): BodyDimensionsGroup | null {
-  if (!/^[A-Za-z0-9_-]+$/.test(groupId)) {
+  if (!/^[A-Za-z0-9_-]{1,64}$/.test(groupId)) {
     return null;
   }
 
@@ -67,7 +67,8 @@ export function getBodyDimensionsGroup(
     return null;
   }
 
-  return index.groups[groupId.toUpperCase()] ?? null;
+  const key = groupId.toUpperCase();
+  return Object.hasOwn(index.groups, key) ? index.groups[key] : null;
 }
 
 export function getSheetObjectKey(

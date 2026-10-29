@@ -13,7 +13,7 @@ const env = {
 function load(file, mocks = {}) {
   const source = ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText;
   const exports = {};
-  vm.runInNewContext(source, { exports, require: id => id === 'server-only' ? {} : mocks[id] ?? require(id), process: { env }, Buffer, URL, URLSearchParams, Response, Request, FormData, File, AbortSignal, console, fetch: async (...args) => mocks.fetch(...args) }, { filename: file });
+  vm.runInNewContext(source, { exports, require: id => id === 'server-only' ? {} : mocks[id] ?? (id.startsWith('@/lib/') || id.startsWith('./') ? load('lib/' + id.split('/').pop() + '.ts', mocks) : require(id)), process: { env }, Buffer, URL, URLSearchParams, Response, Request, FormData, File, AbortSignal, Blob, setTimeout, clearTimeout, console, fetch: async (...args) => mocks.fetch(...args) }, { filename: file });
   return exports;
 }
 async function main() {
@@ -57,7 +57,7 @@ async function main() {
   assert.equal((await post({token,action:'issue'})).status,200);
   let sent;
   const telegram = load('app/api/send-telegram/route.ts',{'@/lib/rateLimit':limiter,'@/lib/bodyIssue':lib,'@/lib/bodyDimensionsData':data,'next/server':{NextResponse:Response},fetch:async (url,opts)=>{sent=opts.body;return Response.json({ok:true});}});
-  const submit=async (id)=>{const form=new FormData();for(const [k,v] of Object.entries({mode:'body-dimensions',groupId:id,name:'Test',phone:'1234567890',description:'Forged group and price'}))form.set(k,v);return telegram.POST(new Request('https://example.test/api/send-telegram',{method:'POST',headers:{origin:'https://reactivator55.ru'},body:form}));};
+  const submit=async (id)=>{const form=new FormData();for(const [k,v] of Object.entries({mode:'body-dimensions',groupId:id,name:'Test',phone:'+79512345678',description:'Forged group and price'}))form.set(k,v);return telegram.POST(new Request('https://example.test/api/send-telegram',{method:'POST',headers:{origin:'https://reactivator55.ru'},body:form}));};
   response=await submit('S04435');assert.equal(response.status,200);
   assert.deepEqual(await response.json(),{success:true});
   assert.match(sent.get('text'),/Комплект: S04435/);assert.ok(!sent.get('text').includes('Forged'));

@@ -7,7 +7,7 @@ export function verifyBodyAccess(
 ) {
   const secret = process.env.BODY_DIMENSIONS_ACCESS_SECRET;
 
-  if (!secret || !/^[A-Za-z0-9_-]{1,64}$/.test(groupId) || !/^[0-9]{10}$/.test(exp) || !sig) {
+  if (!secret || typeof groupId !== "string" || typeof exp !== "string" || typeof sig !== "string" || !/^[A-Za-z0-9_-]{1,64}$/.test(groupId) || !/^[0-9]{10}$/.test(exp) || !sig) {
     return false;
   }
 

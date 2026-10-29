@@ -36,13 +36,18 @@ async function serve(request: NextRequest) {
   }
 
   const zip = new AdmZip();
+  const deadline = Date.now() + 60_000;
+  let totalBytes = 0;
 
   try {
     for (const sheet of group.sheets) {
+      if (Date.now() >= deadline) throw new Error("Download deadline exceeded");
       const sheetFile = sheet.assetKey.replace(/\\/g, "/").split("/").pop()!;
       const key = getSheetObjectKey(group, sheetFile);
-      const content = key ? await readR2Sheet(key) : null;
+      const content = key ? await readR2Sheet(key, Math.max(1, Math.min(15_000, deadline - Date.now()))) : null;
       if (!content) return new NextResponse("Лист не найден", { status: 404 });
+      totalBytes += content.byteLength;
+      if (totalBytes > 128 * 1024 * 1024) throw new Error("Archive size limit exceeded");
       zip.addFile(sheetFile, Buffer.from(content));
     }
   } catch {
@@ -51,6 +56,8 @@ async function serve(request: NextRequest) {
     });
   }
 
+  // Stored SVG files avoid synchronous compression monopolising the Node event loop.
+  for (const entry of zip.getEntries()) entry.header.method = 0;
   const buffer = zip.toBuffer();
   const body = new Uint8Array(buffer);
 
