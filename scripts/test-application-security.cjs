@@ -19,6 +19,7 @@ function harness(options = {}) {
     } }).outputText;
     vm.runInNewContext(code, { exports, require: id => {
       if (id === 'server-only') return {};
+      if (id === 'sharp' && options.missingSharp) throw Error('native binary unavailable');
       if (id === 'next/server') return { NextResponse: Response };
       if (options.modules?.[id]) return options.modules[id];
       if (id.startsWith('@/')) return load(id.slice(2) + '.ts');
@@ -107,6 +108,15 @@ async function main() {
     assert.equal((await other.post({ ...repair, photoCount: '1' }, new File([content], 'photo.' + format))).status, 200);
     assert.equal(other.calls[1].photo.type, 'image/' + format);
   }
+  const missingSharp = harness({ missingSharp: true });
+  assert.equal((await missingSharp.post({ ...repair, photoCount: '1' }, image())).status, 503);
+  assert.equal(missingSharp.calls.length, 0);
+  for (const status of [413, 429, 500, 502, 504]) {
+    const failed = harness({ fetch: () => new Response('', { status }) });
+    assert.equal((await failed.post(repair, image())).status, 502);
+    assert.equal((await failed.post(repair, image())).status, 409);
+    assert.equal(failed.calls.length, 1);
+  }
   const large = harness();
   assert.equal((await large.post(repair, new File([Buffer.alloc(10 * 1024 * 1024 + 1)], 'large.jpg'))).status, 400);
   assert.equal(large.calls.length, 0);
@@ -181,4 +191,5 @@ async function main() {
   storageMode = 'error'; await assert.rejects(r2.readR2Sheet('groups/A/sheet_001.svg'), error => error.message === 'Body dimensions storage is unavailable');
   console.log('PASS: phone, honeypot, validation, Origin limits, deduplication, ten bound photos, retry/concurrency, decoded formats, relay errors, deadlines, expiry and unknown-IP global limits.');
 }
-main().catch(error => { console.error(error); process.exitCode = 1; });
+module.exports = { harness };
+if (require.main === module) main().catch(error => { console.error(error); process.exitCode = 1; });

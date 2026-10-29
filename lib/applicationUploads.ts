@@ -1,6 +1,5 @@
 import "server-only";
 import { createHash, randomBytes } from "node:crypto";
-import sharp from "sharp";
 
 export class SubmissionError extends Error {
   constructor(public status: number, message: string) { super(message); }
@@ -48,6 +47,11 @@ export function acquireSubmission(id: string, fingerprint: string, token: string
 export async function validatePhoto(file: File): Promise<{ bytes: Buffer; hash: string; filename: string; mime: string }> {
   if (!file.size || file.size > 10 * 1024 * 1024) throw new SubmissionError(400, "Фотография должна быть не больше 10 МБ.");
   const bytes = Buffer.from(await file.arrayBuffer());
+  // Load inside the handler so a missing native binary produces diagnostic JSON,
+  // rather than failing route-module initialization with an empty framework 500.
+  let sharp: typeof import("sharp").default;
+  try { sharp = (await import("sharp")).default; }
+  catch { throw new SubmissionError(503, "Обработка фотографий временно недоступна. Свяжитесь с мастером."); }
   // Decode with an existing dependency; bound pixels/time and reject SVG/animation.
   try {
     const image = sharp(bytes, { limitInputPixels: 40_000_000, failOn: "warning", animated: true }).timeout({ seconds: 5 });

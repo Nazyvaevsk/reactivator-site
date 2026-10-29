@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useRef, useState, type ChangeEvent, type FormEvent, type MouseEvent, type ReactNode } from "react";
+import { ApplicationRequestError, sendApplicationRequest } from "@/lib/applicationRequest";
 import { normalizePhone, validName, validDescription } from "@/lib/contactValidation";
 
 type ApplicationFormMode = "repair" | "body-dimensions" | "body-dimensions-search";
@@ -218,18 +219,7 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
         formData.append("submissionId", submission.id);
         formData.append("website", website);
 
-        const response = await fetch("/api/send-telegram", {
-          method: "POST",
-          body: formData,
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            result.error || "Не удалось отправить заявку"
-          );
-        }
+        await sendApplicationRequest(formData);
       }
 
       for (let i = 0; formMode === "repair" && i < photos.length; i++) {
@@ -250,19 +240,8 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
         formData.append("photoCount", String(photos.length));
         formData.append("website", website);
 
-        const response = await fetch("/api/send-telegram", {
-          method: "POST",
-          body: formData,
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            result.error || `Не удалось отправить фотографию ${i + 1}`
-          );
-        }
-        submission.token = result.uploadToken;
+        const result = await sendApplicationRequest(formData);
+        submission.token = result.uploadToken!;
         setUploadedPhotos(i + 1);
       }
 
@@ -301,7 +280,9 @@ export default function ApplicationFormProvider({ children }: { children: ReactN
         description: "",
       });
     } catch (error) {
-      console.error(error);
+      if (error instanceof ApplicationRequestError) {
+        console.error("application_request_failed", error.diagnostic);
+      }
       alert(
         error instanceof Error
           ? error.message

@@ -39,16 +39,23 @@ function isAllowedOrigin(origin: string | null): boolean {
 export async function POST(request: NextRequest) {
   const requestId = randomUUID();
   const started = Date.now();
-  const response = await withCapacity("telegram", 8, () => submit(request));
+  const context = { stage: "entry", requestId };
+  console.info(JSON.stringify({ event: "application_start", requestId }));
+  let response: Response;
+  try {
+    response = await withCapacity("telegram", 8, () => submit(request, context));
+  } catch {
+    response = NextResponse.json({ error: "Ошибка обработки заявки" }, { status: 500 });
+  }
   response.headers.set("Cache-Control", "private, no-store");
   response.headers.set("X-Request-ID", requestId);
   // Metadata only: never log PII, bodies, credentials, upload tokens or signed URLs.
   console.info(JSON.stringify({ event: "application", requestId, at: new Date().toISOString(),
-    status: response.status, durationMs: Date.now() - started }));
+    stage: context.stage, status: response.status, durationMs: Date.now() - started }));
   return response;
 }
 
-async function submit(request: NextRequest) {
+async function submit(request: NextRequest, context: { stage: string; requestId: string }) {
   // Reject cross-site submissions before reading the body or contacting Telegram.
   if (
     request.headers.get("sec-fetch-site") === "cross-site" ||
@@ -80,11 +87,13 @@ async function submit(request: NextRequest) {
       );
     }
 
+    context.stage = "read-body";
     const bytes = await readBoundedBody(request, MAX_REQUEST_SIZE);
     const boundedRequest = new Request(request.url, {
       method: "POST", headers: { "content-type": contentType }, body: new Uint8Array(bytes),
     });
 
+    context.stage = "parse-multipart";
     let formData: FormData;
     try { formData = await boundedRequest.formData(); }
     catch { throw new SubmissionError(400, "Неверный формат данных заявки."); }
@@ -137,6 +146,7 @@ async function submit(request: NextRequest) {
     if (mode !== "body-dimensions" && !validDescription(description)) {
       throw new SubmissionError(400, "Опишите запрос: от 5 до 2000 символов без управляющих знаков.");
     }
+    context.stage = "validate-photo";
     const verifiedPhoto = hasPhoto ? await validatePhoto(photo as File) : null;
 
     let issueUrl: string | undefined;
@@ -232,6 +242,7 @@ async function submit(request: NextRequest) {
     const fingerprint = digest(JSON.stringify([mode, name.toLowerCase(), phone, description, maximum]));
     // Legacy first requests remain accepted. Subsequent photos must present a server receipt.
     const id = suppliedId || randomUUID();
+    context.stage = "session";
     const state = acquireSubmission(id, fingerprint, String(formData.get("uploadToken") || ""), sendMessage, maximum);
     try {
       if (sendMessage && state.text === "new") {
@@ -286,15 +297,8 @@ async function submit(request: NextRequest) {
 
         // An ambiguous network failure must not automatically send the text again.
         state.text = "uncertain";
-        const messageResponse = await fetch(RELAY_URL, {
-          method: "POST", headers: { "X-Relay-Secret": relaySecret },
-          body: messageForm, signal: AbortSignal.timeout(20_000),
-        });
-        const relayResult = await messageResponse.json().catch(() => null);
-        if (!messageResponse.ok || relayResult?.ok !== true) {
-          console.error("Relay sendMessage failed, HTTP status:", messageResponse.status);
-          throw new SubmissionError(502, "Доставка заявки не подтверждена. Свяжитесь с мастером, не отправляйте повторно.");
-        }
+        context.stage = "relay-message";
+        await sendRelay(messageForm, relaySecret, context);
         state.text = "sent";
       }
       if (state.text !== "sent") throw new SubmissionError(403, "Сначала отправьте заявку.");
@@ -311,20 +315,14 @@ async function submit(request: NextRequest) {
           photoForm.append("chat_id", chatId);
           photoForm.append("photo", new Blob([new Uint8Array(verifiedPhoto.bytes)], { type: verifiedPhoto.mime }), verifiedPhoto.filename);
           state.uncertainPhotos.add(photoIndex);
-          const photoResponse = await fetch(RELAY_URL, {
-            method: "POST", headers: { "X-Relay-Secret": relaySecret },
-            body: photoForm, signal: AbortSignal.timeout(20_000),
-          });
-          const result = await photoResponse.json().catch(() => null);
-          if (!photoResponse.ok || result?.ok !== true) {
-            console.error("Relay sendPhoto failed, HTTP status:", photoResponse.status);
-            throw new SubmissionError(502, "Доставка фото не подтверждена. Свяжитесь с мастером.");
-          }
+          context.stage = "relay-photo";
+          await sendRelay(photoForm, relaySecret, context);
           state.uncertainPhotos.delete(photoIndex);
           state.photos.set(photoIndex, verifiedPhoto.hash);
           state.bytes += verifiedPhoto.bytes.length;
         }
       }
+      context.stage = "complete";
       return NextResponse.json(suppliedId || mode === "repair"
         ? { success: true, submissionId: id, uploadToken: state.token }
         : { success: true });
@@ -339,4 +337,23 @@ async function submit(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+// Never retry an ambiguous upstream delivery: Telegram has no idempotency key.
+async function sendRelay(body: FormData, secret: string, context: { stage: string; requestId: string }) {
+  let status: number | undefined;
+  let kind = "network";
+  try {
+    const response = await fetch(RELAY_URL, {
+      method: "POST", headers: { "X-Relay-Secret": secret }, body,
+      signal: AbortSignal.timeout(20_000),
+    });
+    status = response.status;
+    kind = "response";
+    const result = await response.json().catch(() => null);
+    if (response.ok && result?.ok === true) return;
+  } catch { /* Log metadata only; native fetch errors can contain sensitive details. */ }
+  console.error(JSON.stringify({ event: "application_relay_failed", requestId: context.requestId,
+    stage: context.stage, status, kind }));
+  throw new SubmissionError(502, "Доставка не подтверждена. Свяжитесь с мастером, не создавайте новую заявку.");
 }
