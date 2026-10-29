@@ -12,7 +12,7 @@
     "indexnow": "node scripts/indexnow-submit.cjs",
     "indexnow:file": "node scripts/indexnow-submit.cjs --file",
     "indexnow:dry": "node scripts/indexnow-submit.cjs --dry-run",
-    "prebuild": "node scripts/check-sharp.cjs && node scripts/build-body-access-index.cjs",
+    "prebuild": "node scripts/check-sharp.cjs && node scripts/prepare-photo-codec.cjs && node scripts/build-body-access-index.cjs",
     "test": "node scripts/test-all.cjs",
     "test:application:production": "node scripts/test-application-production.cjs && node scripts/test-application-production.cjs --missing-sharp",
     "prestart": "node scripts/check-sharp.cjs",
@@ -21,6 +21,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1145.0",
     "adm-zip": "^0.6.1",
+    "libheif-js": "1.23.5",
     "next": "^16.4.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -35,6 +36,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "^16.4.3",
+    "playwright": "1.64.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

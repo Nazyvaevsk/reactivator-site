@@ -1,0 +1,11 @@
+Photo conversion uses the unmodified libheif-js 1.23.5 WASM bundle.
+Copyright Kiril Vatev and the libheif/libde265 contributors.
+License: GNU Lesser General Public License v3.
+License text: /photo-codecs/LICENSE-libheif-js.txt
+Corresponding source and build scripts:
+https://github.com/catdad-experiments/libheif-js/tree/v1.23.5
+https://github.com/strukturag/libheif/tree/v1.23.5
+https://github.com/strukturag/libde265
+Package: https://registry.npmjs.org/libheif-js/-/libheif-js-1.23.5.tgz
+The browser loads this independent library only when preparing HEIC/HEIF.
+Photos are converted locally and are never sent to a conversion service.

@@ -1,0 +1,10 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const root = path.dirname(require.resolve('libheif-js/package.json'));
+const version = require('libheif-js/package.json').version;
+if (version !== '1.23.5') throw Error('Review worker, security and notices before upgrading libheif');
+const out = path.resolve('public/photo-codecs');
+fs.mkdirSync(out, { recursive: true });
+fs.copyFileSync(path.join(root, 'libheif-wasm/libheif-bundle.js'), path.join(out, `libheif-${version}.js`));
+fs.copyFileSync(path.join(root, 'LICENSE'), path.join(out, 'LICENSE-libheif-js.txt'));
+console.log('Prepared self-hosted HEIF decoder ' + version);

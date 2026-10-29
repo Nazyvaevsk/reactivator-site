@@ -26,7 +26,7 @@ function client(fetch, fastTimers = false) {
     const exports = {}; modules.set(file, exports);
     vm.runInNewContext(ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: {
       module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX,
-    } }).outputText, { exports, require: id => id === 'react' ? react : id.startsWith('@/') ? load(id.slice(2) + '.ts') : require(id),
+    } }).outputText, { exports, require: id => id === 'react' ? react : id === '../lib/preparePhoto' ? { preparePhotoForUpload: async file => file } : id.startsWith('@/') ? load(id.slice(2) + '.ts') : require(id),
       Error, fetch, FormData, File, Blob, AbortController, setTimeout: fastTimers ? (fn, ms) => setTimeout(fn, Math.min(ms, 10)) : setTimeout, clearTimeout, crypto: require('node:crypto').webcrypto,
       window: {}, alert: value => alerts.push(value), console: { error: (...args) => logs.push(args) },
     });
